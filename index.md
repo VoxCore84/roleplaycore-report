@@ -14,7 +14,18 @@ Data Quality & Optimization Summary
 **March 5, 2026 | WoW 12.x / Midnight, Build 66220**
 
 {: .highlight }
-> **TL;DR** — Imported ~1M rows from LoreWalkerTDB, repaired 103K hotfix entries, removed 10.6M redundant rows (97.8%), fixed 78K NPCs, added 1.6M item locale translations, and cut server startup from 3m24s → 17s. All tooling is open and reproducible.
+> **TL;DR**
+>
+> | What | Result |
+> |------|--------|
+> | **Imported** | ~1M rows from LoreWalkerTDB |
+> | **Repaired** | 103K hotfix entries across 388 tables |
+> | **Removed** | 10.6M redundant rows (97.8% of hotfix DB) |
+> | **Fixed** | 78K NPC corrections (levels, factions, flags) |
+> | **Localized** | 1.6M item translations across 10 languages |
+> | **Startup** | 3m24s → **17s** (92% faster) |
+>
+> All tooling is open and reproducible.
 
 ---
 
