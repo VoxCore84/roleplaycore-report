@@ -12,7 +12,7 @@ Direct read/write access to all five databases. Every query, audit, and fix runs
 
 ### Wago DB2
 
-1,097 game data tables from Wago.tools, searchable in natural language. Replaces manual CSV grep for spell, item, creature, and content tuning lookups. Six query tools: search, lookup, describe, query, validate, and table listing.
+1,094 game data tables from Wago.tools, searchable in natural language. Replaces manual CSV grep for spell, item, creature, and content tuning lookups. Six query tools: search, lookup, describe, query, validate, and table listing.
 
 ### Code Intelligence
 
