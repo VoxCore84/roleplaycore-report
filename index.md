@@ -16,14 +16,12 @@ Data Quality & Optimization Summary
 {: .highlight }
 > **TL;DR**
 >
-> | What | Result |
-> |------|--------|
-> | **Imported** | ~1M rows from LoreWalkerTDB |
-> | **Repaired** | 103K hotfix entries across 388 tables |
-> | **Removed** | 10.6M redundant rows (97.8% of hotfix DB) |
-> | **Fixed** | 78K NPC corrections (levels, factions, flags) |
-> | **Localized** | 1.6M item translations across 10 languages |
-> | **Startup** | 3m24s → **17s** (92% faster) |
+> - **~1M rows** imported from LoreWalkerTDB
+> - **103K hotfix entries** repaired across 388 tables
+> - **10.6M redundant rows** removed (97.8% of hotfix DB)
+> - **78K NPC corrections** — levels, factions, flags, pathing
+> - **1.6M item translations** across 10 languages
+> - **Server startup: 3m24s → 17s** (92% faster)
 >
 > All tooling is open and reproducible.
 
