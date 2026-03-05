@@ -1,7 +1,3 @@
----
-title: Performance & Build Diff
-nav_order: 6
----
 
 ## Part 7: MySQL & Server Performance
 
@@ -62,7 +58,8 @@ With 1.08M hotfix_data rows (966K unique push IDs), the server crashed on client
 
 Relevant to any TC server running large hotfix datasets. Without it, 1M+ hotfix_data rows crash the server.
 
-> **Post-audit update**: The redundancy audit ([Part 13](hotfix-audit)) reduced hotfix content tables from ~10.8M to ~244K rows and hotfix_data from 1.08M to ~835K entries. The chunked delivery system remains as a safety net, but the payload is now well within original limits.
+\!\!\! note
+    The redundancy audit ([Part 13](hotfix-audit.md)) reduced hotfix content tables from ~10.8M to ~244K rows and hotfix_data from 1.08M to ~835K entries. The chunked delivery system remains as a safety net, but the payload is now well within original limits.
 
 ### 7.5 Memory Leak Fixes
 

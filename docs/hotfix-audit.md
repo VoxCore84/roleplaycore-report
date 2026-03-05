@@ -1,16 +1,12 @@
----
-title: Hotfix Redundancy Audit
-nav_order: 9
----
 
 ## Part 13: Hotfix Redundancy Audit (Complete)
 
 ### 13.1 The Problem
 
-After the hotfix repair ([Part 2](data-import#part-2-hotfix-repair-system)), the hotfix database carried **~10.8M content rows** across 517 tables. The hotfix system sends only **corrections** to client data — rows that override the client's built-in DBC/DB2 files. But 97.8% of those rows were **identical** to what the client already had. This:
+After the hotfix repair ([Part 2](data-import.md#part-2-hotfix-repair-system)), the hotfix database carried **~10.8M content rows** across 517 tables. The hotfix system sends only **corrections** to client data — rows that override the client's built-in DBC/DB2 files. But 97.8% of those rows were **identical** to what the client already had. This:
 
 - Increased login time (every hotfix entry sent via SMSG_HOTFIX_CONNECT)
-- Required chunked packet delivery ([Part 7.4](performance#74-hotfix-pipeline-crash-fix-critical)) just to avoid crashing
+- Required chunked packet delivery ([Part 7.4](performance.md#74-hotfix-pipeline-crash-fix-critical)) just to avoid crashing
 - Wasted server memory caching duplicate data
 
 ### 13.2 Approach: 3-Round Audit
@@ -71,7 +67,8 @@ Found 767,672 additional redundant rows across 109 tables.
 | hotfix_data entries | 1,084,369 | 835,385 |
 | Hotfix DB on disk | 1,309 MB | 637 MB |
 
-> **Note on hotfix_data**: The content table cleanup (deleting redundant rows from tables like spell_name, spell_effect, etc.) was fully applied across all 3 rounds. The hotfix_data registry was partially cleaned (orphan removal in R2), reducing it from 1.08M to ~835K. The remaining hotfix_data entries include both references to the ~244K genuine content rows and stale entries referencing deleted rows — the server skips these harmlessly at load time.
+\!\!\! note
+    The content table cleanup (deleting redundant rows from tables like spell_name, spell_effect, etc.) was fully applied across all 3 rounds. The hotfix_data registry was partially cleaned (orphan removal in R2), reducing it from 1.08M to ~835K. The remaining hotfix_data entries include both references to the ~244K genuine content rows and stale entries referencing deleted rows — the server skips these harmlessly at load time.
 
 **Remaining ~244K content rows:**
 

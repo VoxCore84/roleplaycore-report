@@ -1,7 +1,3 @@
----
-title: NPC Audits & Corrections
-nav_order: 3
----
 
 ## Part 3: NPC Audits & Corrections
 

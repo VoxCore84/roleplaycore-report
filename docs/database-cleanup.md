@@ -1,7 +1,3 @@
----
-title: Database Cleanup
-nav_order: 5
----
 
 ## Part 6: Database Cleanup & Integrity
 
@@ -48,7 +44,8 @@ After the LW bulk import, the worldserver logged ~627K error lines. Systematical
 | Empty waypoint_paths | 47 |
 | Orphaned dependents from spawn deletion | 4,642 |
 
-> **Note on SmartAI validation**: Beyond the 2,808 rows in the table above, additional cleanup scripts (2026_02_25_30 through 2026_02_26_32) removed ~498K invalid SmartAI entries — scripts referencing creatures without SmartAI AIName, non-existent spells/waypoints/quests, deprecated event types, and broken link chains. This is why the final smart_scripts count (294,425) is much lower than the peak during import. The validation scripts mirror the server's own `SmartScriptMgr.cpp` checks, ensuring every remaining script is loadable without errors.
+\!\!\! note
+    Beyond the 2,808 rows in the table above, additional cleanup scripts (2026_02_25_30 through 2026_02_26_32) removed ~498K invalid SmartAI entries — scripts referencing creatures without SmartAI AIName, non-existent spells/waypoints/quests, deprecated event types, and broken link chains. This is why the final smart_scripts count (294,425) is much lower than the peak during import. The validation scripts mirror the server's own `SmartScriptMgr.cpp` checks, ensuring every remaining script is loadable without errors.
 
 ### 6.4 Other Cleanup
 

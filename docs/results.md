@@ -1,11 +1,7 @@
----
-title: Tooling & Results
-nav_order: 8
----
 
 ## Part 10: Custom Tooling Summary
 
-Over 50 Python scripts, MCP servers, audit tools, and SQL generators were built for this project. See **[Part 16](reference#part-16-complete-tooling--infrastructure-catalog)** for the complete catalog.
+Over 50 Python scripts, MCP servers, audit tools, and SQL generators were built for this project. See **[Part 16](reference.md#part-16-complete-tooling--infrastructure-catalog)** for the complete catalog.
 
 **Top 10 tools at a glance:**
 
@@ -35,7 +31,7 @@ Over 50 Python scripts, MCP servers, audit tools, and SQL generators were built 
 | creature | 662,536 | NPC spawn instances |
 | gameobject | 175,368 | World object spawn instances |
 | creature_loot_template | 2,904,341 | NPC loot tables (deduplicated, with PKs) |
-| smart_scripts | 294,425 | NPC AI behavior scripts (validated — see [Section 6.3](database-cleanup#63-post-import-cleanup-47478-rows)) |
+| smart_scripts | 294,425 | NPC AI behavior scripts (validated — see [Section 6.3](database-cleanup.md#63-post-import-cleanup-47478-rows)) |
 | npc_vendor | 165,802 | Vendor inventory entries |
 | waypoint_path_node | 160,784 | NPC patrol path nodes |
 | quest_template_addon | 47,164 | Quest chain/config data |
@@ -58,7 +54,8 @@ Over 50 Python scripts, MCP servers, audit tools, and SQL generators were built 
 | spell_effect | 176 | Spell effect overrides |
 | spell_name | 15 | Custom/override spell entries |
 
-> **Note**: Most hotfix tables (spell_name, spell_effect, creature_display_info, content_tuning, area_table, etc.) were nearly emptied by the redundancy audit — their data matched the client's DBC baseline and was unnecessary. The tables above show only genuine overrides and custom content. Pre-audit counts were 10-1,000x larger (see [Part 2.3](data-import#23-results-build-66220--march-3-2026)).
+\!\!\! note
+    Most hotfix tables (spell_name, spell_effect, creature_display_info, content_tuning, area_table, etc.) were nearly emptied by the redundancy audit — their data matched the client's DBC baseline and was unnecessary. The tables above show only genuine overrides and custom content. Pre-audit counts were 10-1,000x larger (see [Part 2.3](data-import.md#23-results-build-66220--march-3-2026)).
 
 **Locale tables:**
 

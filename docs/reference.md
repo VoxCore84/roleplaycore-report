@@ -1,7 +1,3 @@
----
-title: Timeline & Reference
-nav_order: 11
----
 
 ## Part 15: Timeline
 

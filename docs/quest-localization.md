@@ -1,7 +1,3 @@
----
-title: Quests & Localization
-nav_order: 4
----
 
 ## Part 4: Quest System Enrichment
 

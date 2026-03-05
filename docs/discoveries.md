@@ -1,7 +1,3 @@
----
-title: Discoveries & Lessons
-nav_order: 10
----
 
 ## Part 14: Discoveries & Lessons (Useful for the Community)
 
@@ -26,7 +22,7 @@ LW uses an older TC fork. At least 3 tables have fewer columns: `creature` (28 v
 LW stores `(0,0,0,0)` quaternion for gameobject rotations — mathematically invalid (identity is `(0,0,0,1)`). Don't overwrite valid rotations with LW data.
 
 ### 14.7 ByteBuffer Assert at Scale
-TC's ByteBuffer asserts at 100MB. With 1M+ hotfix_data rows, SMSG_HOTFIX_CONNECT exceeds this on connect. Any server with a large hotfix dataset needs chunked delivery — or better yet, run a redundancy audit to trim the payload ([Part 13](hotfix-audit)).
+TC's ByteBuffer asserts at 100MB. With 1M+ hotfix_data rows, SMSG_HOTFIX_CONNECT exceeds this on connect. Any server with a large hotfix dataset needs chunked delivery — or better yet, run a redundancy audit to trim the payload ([Part 13](hotfix-audit.md)).
 
 ### 14.8 Stacked Quest Board Trap
 LW import places old-framework quest boards (entries 206294/206116) at exact coordinates of modern boards. The old boards may be the ones actually serving quests (via `gameobject_queststarter`), while modern boards have zero associations. Deleting the "duplicate" breaks quest functionality. Always check quest associations first.

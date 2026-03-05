@@ -1,7 +1,3 @@
----
-title: Data Import & Hotfix Repair
-nav_order: 2
----
 
 ## Part 1: LoreWalkerTDB Integration
 
@@ -34,7 +30,7 @@ Two rounds of SmartAI extraction from LW's 897MB world dump:
 - **Round 2**: 166,443 rows — 165,360 creature behaviors, 169 gameobject scripts, 702 action lists, 212 scene triggers
 - **Skipped**: 525K quest boilerplate rows (all identical "cast spell 82238" phase-update scripts — not useful for RP)
 - **Attempted**: ~524,000 SmartAI INSERT operations across all import rounds (including Phase 4 in Section 1.3)
-- **Post-validation**: Cleanup scripts removed entries referencing non-existent spells, creatures without SmartAI AIName, deprecated event types, broken link chains, and invalid waypoints (see [Section 6.3](database-cleanup#63-post-import-cleanup-47478-rows))
+- **Post-validation**: Cleanup scripts removed entries referencing non-existent spells, creatures without SmartAI AIName, deprecated event types, broken link chains, and invalid waypoints (see [Section 6.3](database-cleanup.md#63-post-import-cleanup-47478-rows))
 - **Final result**: 294,425 validated scripts (up from ~268K baseline — a net gain of ~26K valid scripts, plus validation of the entire existing dataset)
 
 ### 1.3 World DB Bulk Import (March 3, 2026)
@@ -113,9 +109,9 @@ TrinityCore's hotfix database diverges from Blizzard's live data over time. Colu
 | Total SQL generated | ~71 MB across 5 batch files |
 | **Total hotfix_data rows (pre-trim)** | **1,084,369 across 204 tables** |
 
-> The 1,084,369 total included entries from the repair tool, LW imports, and prior TC data. The subsequent redundancy audit ([Part 13](hotfix-audit)) reduced hotfix content table rows to ~244K by deleting entries that matched the client's DBC baseline. The hotfix_data registry itself was reduced from 1,084,369 to 835,385 entries.
+> The 1,084,369 total included entries from the repair tool, LW imports, and prior TC data. The subsequent redundancy audit ([Part 13](hotfix-audit.md)) reduced hotfix content table rows to ~244K by deleting entries that matched the client's DBC baseline. The hotfix_data registry itself was reduced from 1,084,369 to 835,385 entries.
 
-**Key table populations after repair (pre-audit — see [Part 11](results#part-11-final-database-state) for current):**
+**Key table populations after repair (pre-audit — see [Part 11](results.md#part-11-final-database-state) for current):**
 
 | Table | Rows (pre-audit) |
 |-------|------|

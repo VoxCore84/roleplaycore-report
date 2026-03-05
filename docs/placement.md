@@ -1,7 +1,3 @@
----
-title: Placement Audits
-nav_order: 7
----
 
 ## Part 9: Placement Audits
 
