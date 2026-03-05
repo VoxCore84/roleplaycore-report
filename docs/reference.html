@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Timeline & Reference — VoxCore</title>
+<meta name="description" content="VoxCore Database Report — Data Quality & Optimization Summary">
+<style>:root {
+  --font-body: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: "SF Mono", SFMono-Regular, ui-monospace, Menlo, Consolas, monospace;
+  --bg: #fff; --bg-alt: #f5f5f7; --bg-card: #fff;
+  --text: #1d1d1f; --text-2: #6e6e73; --text-3: #86868b;
+  --accent: #0071e3; --accent-hover: #2997ff;
+  --border: #d2d2d7; --code-bg: #f5f5f7;
+  --nav-bg: rgba(255,255,255,0.72); --nav-border: rgba(0,0,0,0.08);
+  --card-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  --callout-bg: rgba(0,113,227,0.04);
+  --table-stripe: rgba(0,0,0,0.02);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #000; --bg-alt: #1d1d1f; --bg-card: #1d1d1f;
+    --text: #f5f5f7; --text-2: #a1a1a6; --text-3: #86868b;
+    --accent: #2997ff; --accent-hover: #2997ff;
+    --border: #424245; --code-bg: #1d1d1f;
+    --nav-bg: rgba(29,29,31,0.72); --nav-border: rgba(255,255,255,0.08);
+    --card-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    --callout-bg: rgba(41,151,255,0.06);
+    --table-stripe: rgba(255,255,255,0.02);
+  }
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-body); font-size: 17px; line-height: 1.7;
+  color: var(--text); background: var(--bg);
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+}
+h1, h2, h3, h4, h5, h6 { font-family: var(--font-display); color: var(--text); line-height: 1.15; }
+h1 { font-size: 48px; font-weight: 700; letter-spacing: -0.03em; }
+h2 { font-size: 32px; font-weight: 600; letter-spacing: -0.02em; margin: 72px 0 20px; }
+h3 { font-size: 24px; font-weight: 600; margin: 48px 0 14px; }
+h4 { font-size: 20px; font-weight: 600; margin: 32px 0 10px; }
+h5 { font-size: 17px; font-weight: 600; margin: 24px 0 8px; }
+article h2:first-child { margin-top: 0; }
+a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
+a:hover { color: var(--accent-hover); }
+p { margin: 0 0 20px; color: var(--text-2); }
+strong { color: var(--text); font-weight: 600; }
+em { font-style: italic; }
+code {
+  font-family: var(--font-mono); font-size: 0.875em;
+  background: var(--code-bg); padding: 2px 6px; border-radius: 4px;
+}
+hr { border: none; border-top: 1px solid var(--border); margin: 64px 0; }
+ul, ol { margin: 0 0 20px 24px; color: var(--text-2); }
+li { margin-bottom: 6px; line-height: 1.6; }
+li strong { color: var(--text); }
+blockquote {
+  border-left: 3px solid var(--accent); padding: 0 0 0 20px;
+  margin: 24px 0; color: var(--text-2); font-style: italic;
+}
+
+/* ── Nav ── */
+.site-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 48px;
+  background: var(--nav-bg); backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid var(--nav-border);
+}
+.nav-inner {
+  max-width: 980px; margin: 0 auto; padding: 0 24px;
+  height: 100%; display: flex; align-items: center; gap: 20px;
+}
+.nav-logo {
+  font-family: var(--font-display); font-weight: 600; font-size: 17px;
+  color: var(--text); text-decoration: none; flex-shrink: 0;
+  letter-spacing: -0.02em;
+}
+.nav-links {
+  display: flex; gap: 20px; overflow-x: auto; flex: 1;
+  -webkit-overflow-scrolling: touch; scrollbar-width: none;
+}
+.nav-links::-webkit-scrollbar { display: none; }
+.nav-links a {
+  font-size: 12px; font-weight: 500; color: var(--text-2);
+  text-decoration: none; white-space: nowrap; padding: 4px 0;
+  letter-spacing: 0.01em; transition: color 0.2s;
+}
+.nav-links a:hover, .nav-links a.active { color: var(--text); }
+.nav-links a.active { font-weight: 600; }
+.nav-end { flex-shrink: 0; display: flex; align-items: center; gap: 16px; }
+.nav-github { color: var(--text-3); transition: color 0.2s; display: flex; }
+.nav-github:hover { color: var(--text); }
+.nav-menu-btn {
+  display: none; background: none; border: none; cursor: pointer;
+  color: var(--text-2); padding: 4px;
+}
+.mobile-nav {
+  display: none; position: fixed; inset: 0; z-index: 99;
+  background: var(--nav-bg); backdrop-filter: saturate(180%) blur(40px);
+  -webkit-backdrop-filter: saturate(180%) blur(40px);
+  padding: 72px 32px 32px; flex-direction: column; gap: 4px;
+}
+.mobile-nav.open { display: flex; }
+.mobile-nav a {
+  font-size: 17px; font-weight: 400; color: var(--text-2);
+  padding: 12px 0; border-bottom: 1px solid var(--border);
+  text-decoration: none; transition: color 0.2s;
+}
+.mobile-nav a:hover { color: var(--text); }
+
+/* ── Hero ── */
+.hero { text-align: center; padding: 100px 24px 60px; max-width: 720px; margin: 0 auto; }
+.hero-label { font-size: 14px; font-weight: 500; color: var(--text-3); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px; }
+.hero h1 { font-size: clamp(48px, 8vw, 72px); margin-bottom: 12px; }
+.hero-sub { font-size: 21px; color: var(--text-2); margin-bottom: 8px; font-weight: 400; }
+.hero-meta { font-size: 14px; color: var(--text-3); font-weight: 500; }
+
+/* ── Stat ribbon ── */
+.stat-ribbon {
+  display: flex; justify-content: center; align-items: center; flex-wrap: wrap;
+  gap: 0; padding: 48px 24px; max-width: 980px; margin: 0 auto;
+}
+.stat-item { text-align: center; padding: 0 28px; }
+.stat-sep { width: 1px; height: 40px; background: var(--border); flex-shrink: 0; }
+.stat-num {
+  font-family: var(--font-display); font-size: 32px; font-weight: 700;
+  color: var(--text); letter-spacing: -0.02em; display: block;
+}
+.stat-label { font-size: 13px; color: var(--text-2); margin-top: 2px; display: block; }
+
+/* ── Banner ── */
+.banner {
+  background: var(--callout-bg); padding: 20px 32px;
+  max-width: 980px; margin: 0 auto 64px; border-radius: 12px;
+  display: flex; align-items: center; gap: 12px;
+  font-size: 15px; color: var(--text-2);
+}
+.banner svg { flex-shrink: 0; color: var(--accent); }
+.banner a { font-weight: 500; }
+
+/* ── Summary grid ── */
+.summary { max-width: 980px; margin: 0 auto; padding: 0 24px 80px; }
+.summary h2 { font-size: 32px; margin-bottom: 8px; }
+.summary > p { color: var(--text-2); margin-bottom: 40px; font-size: 17px; }
+.summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+.summary-col h3 {
+  font-size: 13px; font-weight: 600; color: var(--text-3);
+  letter-spacing: 0.06em; text-transform: uppercase; margin: 0 0 20px;
+}
+.summary-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 8px 0; border-bottom: 1px solid var(--border);
+}
+.summary-row:last-child { border-bottom: none; }
+.summary-row .label { font-size: 14px; color: var(--text-2); }
+.summary-row .value { font-size: 14px; font-weight: 600; color: var(--text); white-space: nowrap; margin-left: 16px; }
+
+/* ── Section cards ── */
+.cards-section { background: var(--bg-alt); padding: 80px 24px; }
+.cards-wrap { max-width: 1120px; margin: 0 auto; }
+.cards-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+}
+.card {
+  background: var(--bg-card); border-radius: 18px; padding: 32px;
+  text-decoration: none; color: var(--text); display: block;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card:hover { transform: translateY(-2px); box-shadow: var(--card-shadow); color: var(--text); }
+.card-icon { color: var(--text-3); margin-bottom: 16px; display: block; }
+.card:hover .card-icon { color: var(--accent); }
+.card h3 { font-size: 20px; font-weight: 600; margin: 0 0 8px; letter-spacing: -0.01em; }
+.card p { font-size: 15px; color: var(--text-2); margin: 0; line-height: 1.5; }
+.card:hover h3 { color: var(--accent); }
+
+/* ── Page layout (interior) ── */
+.page-header { max-width: 980px; margin: 0 auto; padding: 80px 24px 0; }
+.breadcrumb { font-size: 13px; color: var(--text-3); margin-bottom: 12px; }
+.breadcrumb a { color: var(--text-3); font-weight: 500; }
+.breadcrumb a:hover { color: var(--accent); }
+.page-header h1 { margin-bottom: 32px; }
+.page-layout {
+  display: grid; grid-template-columns: 200px 1fr; gap: 60px;
+  max-width: 980px; margin: 0 auto; padding: 0 24px 80px;
+  align-items: start;
+}
+.sidebar { position: sticky; top: 72px; max-height: calc(100vh - 96px); overflow-y: auto; padding: 8px 0; }
+.sidebar a {
+  display: block; font-size: 13px; color: var(--text-3); text-decoration: none;
+  padding: 5px 12px; border-left: 2px solid transparent; transition: all 0.2s;
+  line-height: 1.4;
+}
+.sidebar a:hover { color: var(--text-2); }
+.sidebar a.active { color: var(--accent); border-left-color: var(--accent); font-weight: 500; }
+.sidebar a.toc-h3 { padding-left: 24px; font-size: 12px; }
+.sidebar-toggle {
+  display: none; background: var(--bg-alt); border: 1px solid var(--border);
+  border-radius: 8px; padding: 10px 16px; width: 100%; text-align: left;
+  font-size: 14px; color: var(--text-2); cursor: pointer; margin-bottom: 24px;
+  font-family: var(--font-body);
+}
+article { min-width: 0; }
+
+/* ── Data tables ── */
+.data-table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 15px; }
+.data-table th {
+  text-align: left; font-weight: 600; font-size: 13px; color: var(--text-2);
+  padding: 10px 16px; border-bottom: 1px solid var(--border);
+  letter-spacing: 0.02em;
+}
+.data-table td { padding: 10px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top; }
+.data-table tr:nth-child(even) td { background: var(--table-stripe); }
+.data-table td strong { color: var(--text); }
+.data-table code { font-size: 0.8em; }
+
+/* ── Callout ── */
+.callout {
+  background: var(--callout-bg); border-left: 4px solid var(--accent);
+  border-radius: 12px; padding: 20px 24px; margin: 24px 0;
+  font-size: 15px; color: var(--text-2);
+}
+.callout strong { color: var(--text); }
+
+/* ── Details ── */
+details { margin: 24px 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+details summary {
+  cursor: pointer; padding: 16px 20px; font-weight: 600; color: var(--text);
+  list-style: none; display: flex; align-items: center; justify-content: space-between;
+  transition: background 0.2s;
+}
+details summary:hover { background: var(--bg-alt); }
+details summary::-webkit-details-marker { display: none; }
+details summary::after { content: "+"; font-weight: 400; color: var(--text-3); font-size: 20px; }
+details[open] summary::after { content: "\2212"; }
+details > div, details > p, details > table { padding: 0 20px 16px; }
+details .data-table { margin: 0 0 8px; }
+
+/* ── Prev/Next nav ── */
+.page-nav {
+  display: flex; justify-content: space-between; margin-top: 80px;
+  padding-top: 32px; border-top: 1px solid var(--border);
+}
+.page-nav a {
+  font-size: 15px; color: var(--text-2); text-decoration: none;
+  transition: color 0.2s; max-width: 45%;
+}
+.page-nav a:hover { color: var(--accent); }
+.page-nav .nav-label { font-size: 12px; color: var(--text-3); display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 500; }
+.page-nav .next { text-align: right; margin-left: auto; }
+
+/* ── Footer ── */
+.site-footer {
+  border-top: 1px solid var(--border); padding: 24px; margin-top: 0;
+  display: flex; justify-content: space-between; align-items: center;
+  max-width: 980px; margin: 0 auto; font-size: 13px; color: var(--text-3);
+}
+.site-footer a { color: var(--text-3); text-decoration: none; }
+.site-footer a:hover { color: var(--accent); }
+.footer-wrap { border-top: 1px solid var(--border); margin-top: 80px; }
+
+/* ── Animations ── */
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s cubic-bezier(0.25,0.46,0.45,0.94), transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94); }
+.reveal.visible { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .card { transition: none; }
+  .card:hover { transform: none; }
+}
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .page-layout { grid-template-columns: 1fr; gap: 0; }
+  .sidebar { display: none; }
+  .sidebar-toggle { display: block; }
+  .summary-grid { grid-template-columns: 1fr 1fr; }
+  .cards-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  h1 { font-size: 36px; }
+  h2 { font-size: 26px; margin-top: 48px; }
+  h3 { font-size: 20px; margin-top: 32px; }
+  .nav-links { display: none; }
+  .nav-menu-btn { display: block; }
+  .summary-grid { grid-template-columns: 1fr; gap: 32px; }
+  .cards-grid { grid-template-columns: 1fr; }
+  .stat-ribbon { flex-direction: column; gap: 20px; }
+  .stat-sep { width: 40px; height: 1px; }
+  .page-nav { flex-direction: column; gap: 16px; }
+  .page-nav .next { text-align: left; margin-left: 0; }
+  .hero { padding-top: 72px; }
+  .page-header { padding-top: 64px; }
+}
+</style>
+</head>
+<body>
+<nav class="site-nav" role="navigation" aria-label="Main">
+<div class="nav-inner">
+<a href="index.html" class="nav-logo">VoxCore</a>
+<div class="nav-links"><a href="data-import.html">Data Import</a><a href="npc-audits.html">NPC Audits</a><a href="quest-localization.html">Quests</a><a href="database-cleanup.html">Database Cleanup</a><a href="performance.html">Performance</a><a href="placement.html">Placement Audits</a><a href="results.html">Tooling</a><a href="hotfix-audit.html">Hotfix Redundancy Audit</a><a href="discoveries.html">Discoveries</a><a href="reference.html" class="active">Timeline</a></div>
+<div class="nav-end">
+<a href="https://github.com/VoxCore84/roleplaycore-report" class="nav-github" aria-label="GitHub"><svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg></a>
+<button class="nav-menu-btn" aria-label="Menu" aria-expanded="false">
+<svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+</button>
+</div>
+</div>
+</nav>
+<div class="mobile-nav" role="dialog" aria-label="Navigation"><a href="data-import.html">Data Import & Hotfix Repair</a><a href="npc-audits.html">NPC Audits & Corrections</a><a href="quest-localization.html">Quests & Localization</a><a href="database-cleanup.html">Database Cleanup & Integrity</a><a href="performance.html">Performance & Build Diff</a><a href="placement.html">Placement Audits</a><a href="results.html">Tooling & Results</a><a href="hotfix-audit.html">Hotfix Redundancy Audit</a><a href="discoveries.html">Discoveries & Lessons</a><a href="reference.html">Timeline & Reference</a></div>
+<main>
+<header class="page-header">
+<nav class="breadcrumb"><a href="index.html">VoxCore</a> &rsaquo; Timeline & Reference</nav>
+<h1>Timeline & Reference</h1>
+</header>
+<div class="page-layout">
+<button class="sidebar-toggle">On this page</button><nav class="sidebar" aria-label="Table of contents"><a href="#timeline" class="">Timeline</a><a href="#complete-tooling-infrastructure-catalog" class="">Complete Tooling & Infrastructure Catalog</a><a href="#appendix-a-data-sources" class="">Appendix A: Data Sources</a><a href="#appendix-b-reproducibility" class="">Appendix B: Reproducibility</a></nav>
+<article>
+<h2 id="timeline">Timeline</h2>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Date</th><th>Sessions</th><th>Key Milestones</th></tr></thead><tbody><tr><td><strong>Feb 26</strong></td><td>1</td><td>Companion AI fix, transmog wireDT fix, initial hotfix repair v1</td></tr><tr><td><strong>Feb 27</strong></td><td>2-7</td><td>5-DB audit (412K cleanup), LW import #1 (385K rows), NPC audit tool (27 checks), 3-batch NPC fixes (23,904 ops), placement audit tools</td></tr><tr><td><strong>Feb 28</strong></td><td>8-10</td><td>GO/quest audit tools + 2,279 DB fixes, TransmogBridge implementation, placement audits</td></tr><tr><td><strong>Mar 1</strong></td><td>11-12</td><td>Transmog confirmed working in-game, PR cleanup, cross-repo PR #760</td></tr><tr><td><strong>Mar 3</strong></td><td>13-30</td><td>Wowhead mega-audit (54,571 ops), Raidbots/Wago pipeline (locales + quests), LW import #2 (665K rows), post-import cleanup (47K rows), hotfix repair build 66220, MySQL tuning, build diff audit (5 builds), hotfix pipeline crash fix, transmog multi-bug fixes</td></tr><tr><td><strong>Mar 4</strong></td><td>31-38</td><td>Hotfix redundancy audit rounds 1-3 (10.8M → 244K content rows), WTL DBC pipeline, world DB cleanup (NPC/portal fixes, SmartAI orphans), transmog client wiki, auth key update</td></tr><tr><td><strong>Mar 5</strong></td><td>39+</td><td>Report update, transmog diagnostics, remaining QA</td></tr></tbody></table></div>
+<hr>
+<h2 id="complete-tooling-infrastructure-catalog">Complete Tooling & Infrastructure Catalog</h2>
+<details>
+<summary><strong>16.1 Python Data Pipeline Tools</strong> (14 tools)</summary>
+
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Tool</th><th>Location</th><th>Purpose</th></tr></thead><tbody></tbody></table></div>
+| <code>repair_hotfix_tables.py</code> | <code>C:/Users/atayl/source/wago/</code> | 5-batch hotfix DB repair against Wago DB2 baselines |
+| <code>repair_scene_scripts.py</code> | same | Scene script hex-encoded Lua repair |
+| <code>wago_db2_downloader.py</code> | same | Download 1,097 DB2 CSVs from Wago.tools |
+| <code>diff_builds.py</code> | same | Row-by-row CSV diffing with oscillation detection |
+| <code>cross_ref_mysql.py</code> | same | Cross-reference diff results with live MySQL |
+| <code>import_all.py</code> | same | 5-phase dependency-ordered LW import |
+| <code>validate_import.py</code> | same | 15-check post-import integrity validator |
+| <code>fix_column_mismatch.py</code> | same | Fix column count differences between TC forks |
+| <code>run_all_imports.py</code> | <code>raidbots/</code> | Master 8-step Raidbots/Wago orchestrator with --dry-run and --regenerate |
+| <code>db_snapshot.py</code> | <code>C:/Users/atayl/source/wago/</code> | MySQL backup/rollback (snapshot/check/list/rollback/prune) |
+| <code>import_item_names.py</code> | <code>raidbots/</code> | Raidbots → 10-locale item name import |
+| <code>quest_chain_gen.py</code> | <code>raidbots/</code> | Wago QuestLineXQuest → quest chain generation with DFS cycle detection |
+| <code>gen_quest_poi_sql.py</code> | <code>raidbots/</code> | Wago → quest POI import |
+| <code>quest_objectives_import.py</code> | <code>raidbots/</code> | Wago → quest objective import |
+| <code>extract_lw_world.py</code> | <code>C:/Users/atayl/source/wago/</code> | Parse 897MB LW dump into per-table SQL |
+| <code>validate_transmog.py</code> | same | Transmog data integrity check (155K appearances, 4.8K sets) |
+| <code>transmog_lookup.py</code> | same | Transmog DB2 cross-reference (IMAID → item name, display) |
+| <code>transmog_debug.py</code> | same | Transmog state debugger |
+
+</details>
+<details>
+<summary><strong>16.2 Hotfix Audit Tools</strong> (6 tools)</summary>
+
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Tool</th><th>Location</th><th>Purpose</th></tr></thead><tbody></tbody></table></div>
+| <code>hotfix_differ_r3.py</code> | <code>hotfix_audit/</code> (in repo) | Type-aware row differ — float32, int32 sign, logical PK |
+| <code>gen_practical_sql_r3.py</code> | same | Cleanup SQL generator — TRUNCATE + batched DELETEs |
+| <code>build_table_info_r3.py</code> | same | Column mapping builder — array index, coordinate, rename resolution |
+| <code>merge_results.py</code> | same | Result aggregator and report generator |
+| DBC2CSV | <code>C:\Tools\DBC2CSV\</code> | Converts WTL DB2 binaries to CSV |
+| wow.tools.local (WTL) | <code>C:\Tools\WoW.tools\</code> | Local CASC browser — extracts DB2 baselines from game files |
+
+</details>
+<details>
+<summary><strong>16.3 Audit Tools</strong> (6 tools)</summary>
+
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Tool</th><th>Checks</th><th>Scope</th></tr></thead><tbody></tbody></table></div>
+| <code>npc_audit.py</code> | 27 | 662K creatures vs Wago DB2 + Wowhead |
+| <code>go_audit.py</code> | 15 | 175K gameobjects vs Wago DB2 |
+| <code>quest_audit.py</code> | 15 | 47K quests vs Wago DB2 |
+| <code>creature_placement_audit.py</code> | 5 | Position comparison vs LW |
+| <code>go_placement_audit.py</code> | 6 | Position comparison vs LW |
+| <code>wowhead_scraper.py</code> | — | 216K NPC data scraper |
+
+</details>
+<details>
+<summary><strong>16.4 MCP Servers</strong> (3 servers)</summary>
+
+Model Context Protocol servers giving Claude Code direct access to project data:
+
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Server</th><th>Transport</th><th>Purpose</th></tr></thead><tbody></tbody></table></div>
+| <code>wago_db2_server.py</code> | FastMCP/stdio | DuckDB-powered queries against 1,097 DB2 CSV tables |
+| <code>code_intel_server.py</code> | FastMCP/stdio | Hybrid ctags+clangd C++ code intelligence (416K symbols) |
+| MySQL MCP | .claude.json | Direct MySQL queries against all 5 databases |
+
+</details>
+<details>
+<summary><strong>16.5 Claude Code Agents</strong> (5 agents)</summary>
+
+Specialized agents defined in <code>.claude/agents/</code>:
+
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Agent</th><th>Expertise</th></tr></thead><tbody><tr><td>Packet Analyst</td><td>Hex dumps, opcode analysis, UpdateField wire format</td></tr><tr><td>DB Specialist</td><td>MySQL queries, DB2 cross-referencing, hotfix data</td></tr><tr><td>C++ Systems</td><td>Server handlers, opcode registration, transmog pipeline</td></tr><tr><td>Lua/Addon Dev</td><td>TransmogBridge/TransmogSpy, WoW Lua API</td></tr><tr><td>Python Tooling</td><td>Scripts, MCP servers, packet log parsers</td></tr></tbody></table></div>
+
+</details>
+<details>
+<summary><strong>16.6 WoW Addons</strong> (3 addons)</summary>
+
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Addon</th><th>Purpose</th></tr></thead><tbody><tr><td>TransmogBridge</td><td>3-layer hybrid merge transmog data capture, sends to server via addon message (workaround for broken 12.x CMSG)</td></tr><tr><td>TransmogSpy</td><td>Diagnostic logger — all transmog API calls to SavedVariables</td></tr><tr><td>SpawnDespawnTool</td><td>Category-based batch spawn/despawn for GMs</td></tr></tbody></table></div>
+
+</details>
+<details>
+<summary><strong>16.7 Packet Analysis & Server Tools</strong> (4 tools)</summary>
+
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Tool</th><th>Purpose</th></tr></thead><tbody></tbody></table></div>
+| <code>opcode_analyzer.py</code> | TC opcode parser, cross-ref with WPP captures |
+| <code>start-worldserver.sh</code> | Session lifecycle with auto-archiving and WPP |
+| <code>wpp-add-build.sh</code> / <code>wpp-inspect.sh</code> | WowPacketParser utilities |
+| WowPacketParser (WPP) | <code>C:\Tools\WowPacketParser\</code> — retail packet parser |
+
+</details>
+<details>
+<summary><strong>16.8 SQL Fix Scripts</strong> (5 scripts)</summary>
+
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Script</th><th>Purpose</th></tr></thead><tbody></tbody></table></div>
+| <code>fix_quest_chains.sql</code> | Dangling ref cleanup + N-hop cycle fix with recursive CTE |
+| <code>fix_locale_and_orphans.sql</code> | Cross-DB cleanup: stale locales + orphaned objectives |
+| <code>fix_orphan_quest_refs.sql</code> | Orphaned quest reference remediation |
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Genre 5c-8a scripts</th><th>World DB cleanup: invalid maps/phases/models, SmartAI, loot</th></tr></thead><tbody><tr><td>Auth build consolidation</td><td>Idempotent SQL for multiple Midnight builds (65893-66220)</td></tr></tbody></table></div>
+
+</details>
+<details>
+<summary><strong>16.9 Infrastructure</strong> (4 components)</summary>
+
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Component</th><th>Details</th></tr></thead><tbody></tbody></table></div>
+| **Build** | VS2022 x64, Ninja, RelWithDebInfo, <code>-j20</code> |
+| **MySQL** | UniServerZ 9.5.0 — 16GB buffer pool, 8 instances, warm restarts, 256M tmp_table_size |
+| **Git** | Parallel worktrees; <code>db_snapshot.py</code> for DB rollback |
+| **Hardware** | Ryzen 9 9950X3D (12C/24T), 128GB DDR5-5600, RTX 5090, 2TB NVMe |
+
+</details>
+<details>
+<summary><strong>16.10 Data Sources & Pipelines</strong> (5 sources)</summary>
+
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Source</th><th>Pipeline</th><th>Output</th></tr></thead><tbody></tbody></table></div>
+| Wago.tools DB2 CSVs | <code>wago_db2_downloader.py</code> → DuckDB via MCP | DB2 data for repair/audit/diff |
+| wow.tools.local | WTL → DBC2CSV → CSV | Complete DBC baselines from client CASC |
+| Raidbots | <code>run_all_imports.py --regenerate</code> | Item names (171K x 7 locales), quest chains, POI |
+| LoreWalkerTDB | <code>import_all.py</code> + <code>validate_import.py</code> | World spawns, loot, SmartAI, hotfixes |
+| Wowhead | <code>wowhead_scraper.py</code> (216K NPCs) | NPC cross-reference data |
+
+</details>
+<details>
+<summary><strong>16.11 Workflow Patterns</strong> (5 patterns)</summary>
+
+- **Snapshot-gated phases**: <code>db_snapshot.py snapshot --tag <phase></code> before every DB mutation; rollback on failure
+- **Idempotent SQL**: INSERT IGNORE, ON DUPLICATE KEY UPDATE, DELETE-before-INSERT throughout
+- **Diagnostic build cycle**: Add logging → build → test → analyze logs → iterate
+- **Build diffing**: <code>diff_builds.py</code> separates real content changes from Wago export oscillation
+- **Parallel execution**: Separate git worktrees, subagent delegation, background builds
+
+---
+
+</details>
+<hr>
+<h2 id="appendix-a-data-sources">Appendix A: Data Sources</h2>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Source</th><th>Data Type</th><th>Volume</th></tr></thead><tbody><tr><td><strong>LoreWalkerTDB</strong></td><td>World DB, Hotfixes DB</td><td>1.2 GB SQL dumps</td></tr><tr><td><strong>Wago.tools DB2 CSVs</strong></td><td>1,097 client DB2 tables, 5 builds</td><td>~5.5K CSV files</td></tr><tr><td><strong>wow.tools.local</strong></td><td>DB2 baselines from client CASC (build 66220)</td><td>~1,097 DB2 tables</td></tr><tr><td><strong>Raidbots</strong></td><td>Item names (171K x 7 locales), talents</td><td>168 MB JSON</td></tr><tr><td><strong>Wowhead</strong></td><td>216K NPC tooltips, names, types, levels</td><td>218K JSON files</td></tr><tr><td><strong>TrinityCore upstream</strong></td><td>Periodic merge + SQL updates</td><td>Git merge</td></tr></tbody></table></div>
+<hr>
+<h2 id="appendix-b-reproducibility">Appendix B: Reproducibility</h2>
+<p>Every operation is fully reproducible:</p>
+<ol><li><strong>Hotfix repair</strong>: <code>python repair_hotfix_tables.py --batch {1..5}</code> — idempotent</li><li><strong>LW import</strong>: <code>python import_all.py</code> + <code>python validate_import.py</code> — 15 integrity checks</li><li><strong>Raidbots pipeline</strong>: <code>python run_all_imports.py --regenerate</code> — 8-step with --dry-run</li><li><strong>NPC audit</strong>: <code>python npc_audit.py all --report --json --sql-out</code> — 27 checks</li><li><strong>Build diff</strong>: <code>python diff_builds.py --base 66192 --target 66220</code></li><li><strong>Hotfix audit</strong>: <code>build_table_info_r3.py</code> → <code>hotfix_differ_r3.py</code> → <code>gen_practical_sql_r3.py</code> (see <code>hotfix_audit/README.md</code>)</li></ol>
+<p>All scripts version-controlled in private GitHub repositories.</p>
+<hr>
+<p><em>Updated March 5, 2026 | VoxCore — VoxCore84</em> <em>Tools: VoxCore84/wago-tooling, VoxCore84/tc-packet-tools, VoxCore84/code-intel, VoxCore84/trinitycore-claude-skills</em></p>
+<hr>
+<nav class="page-nav"><a href="discoveries.html" class="prev"><span class="nav-label">Previous</span>← Discoveries & Lessons</a><span></span></nav>
+</article>
+</div>
+</main>
+<div class="footer-wrap"><footer class="site-footer">
+<span>VoxCore &mdash; March 2026</span>
+<a href="https://github.com/VoxCore84/roleplaycore-report">GitHub</a>
+</footer></div>
+<script>(function(){
+  // Reduced motion check
+  var rm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Scroll reveal
+  if (!rm) {
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+  } else {
+    document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('visible'); });
+  }
+
+  // Count-up animation
+  document.querySelectorAll('[data-countup]').forEach(function(el) {
+    if (rm) return;
+    var o = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) { countUp(el, el.getAttribute('data-countup')); o.unobserve(el); }
+      });
+    }, { threshold: 0.5 });
+    o.observe(el);
+  });
+
+  function countUp(el, target) {
+    var m = target.match(/([~]?)([\d,.]+)(.*)/);
+    if (!m) { el.textContent = target; return; }
+    var pfx = m[1], num = parseFloat(m[2].replace(/,/g, '')), sfx = m[3];
+    var hasDot = m[2].indexOf('.') !== -1, start = performance.now();
+    function tick(now) {
+      var p = Math.min((now - start) / 1400, 1);
+      var e = 1 - Math.pow(1 - p, 3);
+      var c = num * e;
+      var d = hasDot ? c.toFixed(1) : (num >= 1000 ? Math.floor(c).toLocaleString() : Math.floor(c).toString());
+      el.textContent = pfx + d + sfx;
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  // Mobile nav
+  var btn = document.querySelector('.nav-menu-btn');
+  var mn = document.querySelector('.mobile-nav');
+  if (btn && mn) {
+    btn.addEventListener('click', function() {
+      mn.classList.toggle('open');
+      btn.setAttribute('aria-expanded', mn.classList.contains('open'));
+    });
+  }
+
+  // Sidebar TOC active tracking
+  var tocLinks = document.querySelectorAll('.sidebar a');
+  if (tocLinks.length > 0) {
+    var headings = [];
+    tocLinks.forEach(function(a) {
+      var id = a.getAttribute('href');
+      if (id && id.charAt(0) === '#') {
+        var el = document.getElementById(id.slice(1));
+        if (el) headings.push({ el: el, link: a });
+      }
+    });
+    var tocObs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) {
+          tocLinks.forEach(function(l) { l.classList.remove('active'); });
+          headings.forEach(function(h) {
+            if (h.el === e.target) h.link.classList.add('active');
+          });
+        }
+      });
+    }, { rootMargin: '-80px 0px -60% 0px' });
+    headings.forEach(function(h) { tocObs.observe(h.el); });
+  }
+
+  // Sidebar toggle (mobile/tablet)
+  var st = document.querySelector('.sidebar-toggle');
+  var sb = document.querySelector('.sidebar');
+  if (st && sb) {
+    st.addEventListener('click', function() {
+      sb.style.display = sb.style.display === 'block' ? 'none' : 'block';
+    });
+  }
+})();
+</script>
+</body>
+</html>

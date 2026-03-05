@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tooling & Results — VoxCore</title>
+<meta name="description" content="VoxCore Database Report — Data Quality & Optimization Summary">
+<style>:root {
+  --font-body: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: "SF Mono", SFMono-Regular, ui-monospace, Menlo, Consolas, monospace;
+  --bg: #fff; --bg-alt: #f5f5f7; --bg-card: #fff;
+  --text: #1d1d1f; --text-2: #6e6e73; --text-3: #86868b;
+  --accent: #0071e3; --accent-hover: #2997ff;
+  --border: #d2d2d7; --code-bg: #f5f5f7;
+  --nav-bg: rgba(255,255,255,0.72); --nav-border: rgba(0,0,0,0.08);
+  --card-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  --callout-bg: rgba(0,113,227,0.04);
+  --table-stripe: rgba(0,0,0,0.02);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #000; --bg-alt: #1d1d1f; --bg-card: #1d1d1f;
+    --text: #f5f5f7; --text-2: #a1a1a6; --text-3: #86868b;
+    --accent: #2997ff; --accent-hover: #2997ff;
+    --border: #424245; --code-bg: #1d1d1f;
+    --nav-bg: rgba(29,29,31,0.72); --nav-border: rgba(255,255,255,0.08);
+    --card-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    --callout-bg: rgba(41,151,255,0.06);
+    --table-stripe: rgba(255,255,255,0.02);
+  }
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-body); font-size: 17px; line-height: 1.7;
+  color: var(--text); background: var(--bg);
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+}
+h1, h2, h3, h4, h5, h6 { font-family: var(--font-display); color: var(--text); line-height: 1.15; }
+h1 { font-size: 48px; font-weight: 700; letter-spacing: -0.03em; }
+h2 { font-size: 32px; font-weight: 600; letter-spacing: -0.02em; margin: 72px 0 20px; }
+h3 { font-size: 24px; font-weight: 600; margin: 48px 0 14px; }
+h4 { font-size: 20px; font-weight: 600; margin: 32px 0 10px; }
+h5 { font-size: 17px; font-weight: 600; margin: 24px 0 8px; }
+article h2:first-child { margin-top: 0; }
+a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
+a:hover { color: var(--accent-hover); }
+p { margin: 0 0 20px; color: var(--text-2); }
+strong { color: var(--text); font-weight: 600; }
+em { font-style: italic; }
+code {
+  font-family: var(--font-mono); font-size: 0.875em;
+  background: var(--code-bg); padding: 2px 6px; border-radius: 4px;
+}
+hr { border: none; border-top: 1px solid var(--border); margin: 64px 0; }
+ul, ol { margin: 0 0 20px 24px; color: var(--text-2); }
+li { margin-bottom: 6px; line-height: 1.6; }
+li strong { color: var(--text); }
+blockquote {
+  border-left: 3px solid var(--accent); padding: 0 0 0 20px;
+  margin: 24px 0; color: var(--text-2); font-style: italic;
+}
+
+/* ── Nav ── */
+.site-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 48px;
+  background: var(--nav-bg); backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid var(--nav-border);
+}
+.nav-inner {
+  max-width: 980px; margin: 0 auto; padding: 0 24px;
+  height: 100%; display: flex; align-items: center; gap: 20px;
+}
+.nav-logo {
+  font-family: var(--font-display); font-weight: 600; font-size: 17px;
+  color: var(--text); text-decoration: none; flex-shrink: 0;
+  letter-spacing: -0.02em;
+}
+.nav-links {
+  display: flex; gap: 20px; overflow-x: auto; flex: 1;
+  -webkit-overflow-scrolling: touch; scrollbar-width: none;
+}
+.nav-links::-webkit-scrollbar { display: none; }
+.nav-links a {
+  font-size: 12px; font-weight: 500; color: var(--text-2);
+  text-decoration: none; white-space: nowrap; padding: 4px 0;
+  letter-spacing: 0.01em; transition: color 0.2s;
+}
+.nav-links a:hover, .nav-links a.active { color: var(--text); }
+.nav-links a.active { font-weight: 600; }
+.nav-end { flex-shrink: 0; display: flex; align-items: center; gap: 16px; }
+.nav-github { color: var(--text-3); transition: color 0.2s; display: flex; }
+.nav-github:hover { color: var(--text); }
+.nav-menu-btn {
+  display: none; background: none; border: none; cursor: pointer;
+  color: var(--text-2); padding: 4px;
+}
+.mobile-nav {
+  display: none; position: fixed; inset: 0; z-index: 99;
+  background: var(--nav-bg); backdrop-filter: saturate(180%) blur(40px);
+  -webkit-backdrop-filter: saturate(180%) blur(40px);
+  padding: 72px 32px 32px; flex-direction: column; gap: 4px;
+}
+.mobile-nav.open { display: flex; }
+.mobile-nav a {
+  font-size: 17px; font-weight: 400; color: var(--text-2);
+  padding: 12px 0; border-bottom: 1px solid var(--border);
+  text-decoration: none; transition: color 0.2s;
+}
+.mobile-nav a:hover { color: var(--text); }
+
+/* ── Hero ── */
+.hero { text-align: center; padding: 100px 24px 60px; max-width: 720px; margin: 0 auto; }
+.hero-label { font-size: 14px; font-weight: 500; color: var(--text-3); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px; }
+.hero h1 { font-size: clamp(48px, 8vw, 72px); margin-bottom: 12px; }
+.hero-sub { font-size: 21px; color: var(--text-2); margin-bottom: 8px; font-weight: 400; }
+.hero-meta { font-size: 14px; color: var(--text-3); font-weight: 500; }
+
+/* ── Stat ribbon ── */
+.stat-ribbon {
+  display: flex; justify-content: center; align-items: center; flex-wrap: wrap;
+  gap: 0; padding: 48px 24px; max-width: 980px; margin: 0 auto;
+}
+.stat-item { text-align: center; padding: 0 28px; }
+.stat-sep { width: 1px; height: 40px; background: var(--border); flex-shrink: 0; }
+.stat-num {
+  font-family: var(--font-display); font-size: 32px; font-weight: 700;
+  color: var(--text); letter-spacing: -0.02em; display: block;
+}
+.stat-label { font-size: 13px; color: var(--text-2); margin-top: 2px; display: block; }
+
+/* ── Banner ── */
+.banner {
+  background: var(--callout-bg); padding: 20px 32px;
+  max-width: 980px; margin: 0 auto 64px; border-radius: 12px;
+  display: flex; align-items: center; gap: 12px;
+  font-size: 15px; color: var(--text-2);
+}
+.banner svg { flex-shrink: 0; color: var(--accent); }
+.banner a { font-weight: 500; }
+
+/* ── Summary grid ── */
+.summary { max-width: 980px; margin: 0 auto; padding: 0 24px 80px; }
+.summary h2 { font-size: 32px; margin-bottom: 8px; }
+.summary > p { color: var(--text-2); margin-bottom: 40px; font-size: 17px; }
+.summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+.summary-col h3 {
+  font-size: 13px; font-weight: 600; color: var(--text-3);
+  letter-spacing: 0.06em; text-transform: uppercase; margin: 0 0 20px;
+}
+.summary-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 8px 0; border-bottom: 1px solid var(--border);
+}
+.summary-row:last-child { border-bottom: none; }
+.summary-row .label { font-size: 14px; color: var(--text-2); }
+.summary-row .value { font-size: 14px; font-weight: 600; color: var(--text); white-space: nowrap; margin-left: 16px; }
+
+/* ── Section cards ── */
+.cards-section { background: var(--bg-alt); padding: 80px 24px; }
+.cards-wrap { max-width: 1120px; margin: 0 auto; }
+.cards-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+}
+.card {
+  background: var(--bg-card); border-radius: 18px; padding: 32px;
+  text-decoration: none; color: var(--text); display: block;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card:hover { transform: translateY(-2px); box-shadow: var(--card-shadow); color: var(--text); }
+.card-icon { color: var(--text-3); margin-bottom: 16px; display: block; }
+.card:hover .card-icon { color: var(--accent); }
+.card h3 { font-size: 20px; font-weight: 600; margin: 0 0 8px; letter-spacing: -0.01em; }
+.card p { font-size: 15px; color: var(--text-2); margin: 0; line-height: 1.5; }
+.card:hover h3 { color: var(--accent); }
+
+/* ── Page layout (interior) ── */
+.page-header { max-width: 980px; margin: 0 auto; padding: 80px 24px 0; }
+.breadcrumb { font-size: 13px; color: var(--text-3); margin-bottom: 12px; }
+.breadcrumb a { color: var(--text-3); font-weight: 500; }
+.breadcrumb a:hover { color: var(--accent); }
+.page-header h1 { margin-bottom: 32px; }
+.page-layout {
+  display: grid; grid-template-columns: 200px 1fr; gap: 60px;
+  max-width: 980px; margin: 0 auto; padding: 0 24px 80px;
+  align-items: start;
+}
+.sidebar { position: sticky; top: 72px; max-height: calc(100vh - 96px); overflow-y: auto; padding: 8px 0; }
+.sidebar a {
+  display: block; font-size: 13px; color: var(--text-3); text-decoration: none;
+  padding: 5px 12px; border-left: 2px solid transparent; transition: all 0.2s;
+  line-height: 1.4;
+}
+.sidebar a:hover { color: var(--text-2); }
+.sidebar a.active { color: var(--accent); border-left-color: var(--accent); font-weight: 500; }
+.sidebar a.toc-h3 { padding-left: 24px; font-size: 12px; }
+.sidebar-toggle {
+  display: none; background: var(--bg-alt); border: 1px solid var(--border);
+  border-radius: 8px; padding: 10px 16px; width: 100%; text-align: left;
+  font-size: 14px; color: var(--text-2); cursor: pointer; margin-bottom: 24px;
+  font-family: var(--font-body);
+}
+article { min-width: 0; }
+
+/* ── Data tables ── */
+.data-table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 15px; }
+.data-table th {
+  text-align: left; font-weight: 600; font-size: 13px; color: var(--text-2);
+  padding: 10px 16px; border-bottom: 1px solid var(--border);
+  letter-spacing: 0.02em;
+}
+.data-table td { padding: 10px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top; }
+.data-table tr:nth-child(even) td { background: var(--table-stripe); }
+.data-table td strong { color: var(--text); }
+.data-table code { font-size: 0.8em; }
+
+/* ── Callout ── */
+.callout {
+  background: var(--callout-bg); border-left: 4px solid var(--accent);
+  border-radius: 12px; padding: 20px 24px; margin: 24px 0;
+  font-size: 15px; color: var(--text-2);
+}
+.callout strong { color: var(--text); }
+
+/* ── Details ── */
+details { margin: 24px 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+details summary {
+  cursor: pointer; padding: 16px 20px; font-weight: 600; color: var(--text);
+  list-style: none; display: flex; align-items: center; justify-content: space-between;
+  transition: background 0.2s;
+}
+details summary:hover { background: var(--bg-alt); }
+details summary::-webkit-details-marker { display: none; }
+details summary::after { content: "+"; font-weight: 400; color: var(--text-3); font-size: 20px; }
+details[open] summary::after { content: "\2212"; }
+details > div, details > p, details > table { padding: 0 20px 16px; }
+details .data-table { margin: 0 0 8px; }
+
+/* ── Prev/Next nav ── */
+.page-nav {
+  display: flex; justify-content: space-between; margin-top: 80px;
+  padding-top: 32px; border-top: 1px solid var(--border);
+}
+.page-nav a {
+  font-size: 15px; color: var(--text-2); text-decoration: none;
+  transition: color 0.2s; max-width: 45%;
+}
+.page-nav a:hover { color: var(--accent); }
+.page-nav .nav-label { font-size: 12px; color: var(--text-3); display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 500; }
+.page-nav .next { text-align: right; margin-left: auto; }
+
+/* ── Footer ── */
+.site-footer {
+  border-top: 1px solid var(--border); padding: 24px; margin-top: 0;
+  display: flex; justify-content: space-between; align-items: center;
+  max-width: 980px; margin: 0 auto; font-size: 13px; color: var(--text-3);
+}
+.site-footer a { color: var(--text-3); text-decoration: none; }
+.site-footer a:hover { color: var(--accent); }
+.footer-wrap { border-top: 1px solid var(--border); margin-top: 80px; }
+
+/* ── Animations ── */
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s cubic-bezier(0.25,0.46,0.45,0.94), transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94); }
+.reveal.visible { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .card { transition: none; }
+  .card:hover { transform: none; }
+}
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .page-layout { grid-template-columns: 1fr; gap: 0; }
+  .sidebar { display: none; }
+  .sidebar-toggle { display: block; }
+  .summary-grid { grid-template-columns: 1fr 1fr; }
+  .cards-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  h1 { font-size: 36px; }
+  h2 { font-size: 26px; margin-top: 48px; }
+  h3 { font-size: 20px; margin-top: 32px; }
+  .nav-links { display: none; }
+  .nav-menu-btn { display: block; }
+  .summary-grid { grid-template-columns: 1fr; gap: 32px; }
+  .cards-grid { grid-template-columns: 1fr; }
+  .stat-ribbon { flex-direction: column; gap: 20px; }
+  .stat-sep { width: 40px; height: 1px; }
+  .page-nav { flex-direction: column; gap: 16px; }
+  .page-nav .next { text-align: left; margin-left: 0; }
+  .hero { padding-top: 72px; }
+  .page-header { padding-top: 64px; }
+}
+</style>
+</head>
+<body>
+<nav class="site-nav" role="navigation" aria-label="Main">
+<div class="nav-inner">
+<a href="index.html" class="nav-logo">VoxCore</a>
+<div class="nav-links"><a href="data-import.html">Data Import</a><a href="npc-audits.html">NPC Audits</a><a href="quest-localization.html">Quests</a><a href="database-cleanup.html">Database Cleanup</a><a href="performance.html">Performance</a><a href="placement.html">Placement Audits</a><a href="results.html" class="active">Tooling</a><a href="hotfix-audit.html">Hotfix Redundancy Audit</a><a href="discoveries.html">Discoveries</a><a href="reference.html">Timeline</a></div>
+<div class="nav-end">
+<a href="https://github.com/VoxCore84/roleplaycore-report" class="nav-github" aria-label="GitHub"><svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg></a>
+<button class="nav-menu-btn" aria-label="Menu" aria-expanded="false">
+<svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+</button>
+</div>
+</div>
+</nav>
+<div class="mobile-nav" role="dialog" aria-label="Navigation"><a href="data-import.html">Data Import & Hotfix Repair</a><a href="npc-audits.html">NPC Audits & Corrections</a><a href="quest-localization.html">Quests & Localization</a><a href="database-cleanup.html">Database Cleanup & Integrity</a><a href="performance.html">Performance & Build Diff</a><a href="placement.html">Placement Audits</a><a href="results.html">Tooling & Results</a><a href="hotfix-audit.html">Hotfix Redundancy Audit</a><a href="discoveries.html">Discoveries & Lessons</a><a href="reference.html">Timeline & Reference</a></div>
+<main>
+<header class="page-header">
+<nav class="breadcrumb"><a href="index.html">VoxCore</a> &rsaquo; Tooling & Results</nav>
+<h1>Tooling & Results</h1>
+</header>
+<div class="page-layout">
+<button class="sidebar-toggle">On this page</button><nav class="sidebar" aria-label="Table of contents"><a href="#custom-tooling-summary" class="">Custom Tooling Summary</a><a href="#final-database-state" class="">Final Database State</a><a href="#111-table-counts-march-5-2026" class="toc-h3">11.1 Table Counts (March 5, 2026)</a><a href="#112-database-sizes" class="toc-h3">11.2 Database Sizes</a><a href="#what-it-all-means-for-players" class="">What It All Means for Players</a><a href="#before" class="toc-h3">Before</a><a href="#after" class="toc-h3">After</a><a href="#for-captaincore-lorewalkertdb" class="toc-h3">For CaptainCore / LoreWalkerTDB</a></nav>
+<article>
+<h2 id="custom-tooling-summary">Custom Tooling Summary</h2>
+<p>Over 50 Python scripts, MCP servers, audit tools, and SQL generators were built for this project. See <strong><a href="reference.html#part-16-complete-tooling--infrastructure-catalog">Part 16</a></strong> for the complete catalog.</p>
+<p><strong>Top 10 tools at a glance:</strong></p>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Tool</th><th>Purpose</th></tr></thead><tbody><tr><td><code>repair_hotfix_tables.py</code></td><td>5-batch hotfix DB repair against Wago DB2 baselines</td></tr><tr><td><code>hotfix_differ_r3.py</code></td><td>Type-aware redundancy audit (float32, int32 sign, logical PK)</td></tr><tr><td><code>npc_audit.py</code></td><td>27-check NPC validator against Wago DB2 + Wowhead</td></tr><tr><td><code>import_all.py</code></td><td>5-phase dependency-ordered LoreWalkerTDB import</td></tr><tr><td><code>run_all_imports.py</code></td><td>8-step Raidbots/Wago orchestrator with <code>--dry-run</code></td></tr><tr><td><code>wago_db2_server.py</code></td><td>MCP server: DuckDB queries across 1,097 DB2 CSVs</td></tr><tr><td><code>code_intel_server.py</code></td><td>MCP server: hybrid ctags + clangd C++ intelligence (416K symbols)</td></tr><tr><td><code>diff_builds.py</code></td><td>Row-by-row CSV differ with oscillation detection</td></tr><tr><td><code>wowhead_scraper.py</code></td><td>216K NPC data scraper for cross-reference audit</td></tr><tr><td><code>db_snapshot.py</code></td><td>MySQL backup/rollback with snapshot, check, prune, rollback</td></tr></tbody></table></div>
+<hr>
+<h2 id="final-database-state">Final Database State</h2>
+<h3 id="111-table-counts-march-5-2026">11.1 Table Counts (March 5, 2026)</h3>
+<p><strong>World database:</strong></p>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Table</th><th>Rows</th><th>Notes</th></tr></thead><tbody><tr><td>creature</td><td>662,536</td><td>NPC spawn instances</td></tr><tr><td>gameobject</td><td>175,368</td><td>World object spawn instances</td></tr><tr><td>creature_loot_template</td><td>2,904,341</td><td>NPC loot tables (deduplicated, with PKs)</td></tr><tr><td>smart_scripts</td><td>294,425</td><td>NPC AI behavior scripts (validated — see <a href="database-cleanup.html#63-post-import-cleanup-47478-rows">Section 6.3</a>)</td></tr><tr><td>npc_vendor</td><td>165,802</td><td>Vendor inventory entries</td></tr><tr><td>waypoint_path_node</td><td>160,784</td><td>NPC patrol path nodes</td></tr><tr><td>quest_template_addon</td><td>47,164</td><td>Quest chain/config data</td></tr><tr><td>quest_poi</td><td>134,856</td><td>Quest map markers</td></tr><tr><td>quest_poi_points</td><td>292,977</td><td>Quest map marker geometry</td></tr><tr><td>quest_objectives</td><td>60,199</td><td>Quest objective definitions</td></tr></tbody></table></div>
+<p><strong>Hotfixes database (post-audit):</strong></p>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Table</th><th>Rows</th><th>Notes</th></tr></thead><tbody><tr><td>hotfix_data</td><td>835,385</td><td>Client correction registry</td></tr><tr><td>broadcast_text</td><td>224,233</td><td>TC community + custom text entries</td></tr><tr><td>hotfix_blob</td><td>6,766</td><td>Binary hotfix data</td></tr><tr><td>phase</td><td>5,714</td><td>Phase definitions</td></tr><tr><td>chr_customization_choice</td><td>2,837</td><td>Custom character options</td></tr><tr><td>broadcast_text_duration</td><td>1,593</td><td>Text timing data</td></tr><tr><td>item_sparse</td><td>1,418</td><td>Custom/override item data</td></tr><tr><td>spell_item_enchantment</td><td>1,181</td><td>Enchant effect overrides</td></tr><tr><td>spell_effect</td><td>176</td><td>Spell effect overrides</td></tr><tr><td>spell_name</td><td>15</td><td>Custom/override spell entries</td></tr></tbody></table></div>
+<div class="callout"><strong>Note.</strong> Most hotfix tables (spell_name, spell_effect, creature_display_info, content_tuning, area_table, etc.) were nearly emptied by the redundancy audit — their data matched the client's DBC baseline and was unnecessary. The tables above show only genuine overrides and custom content. Pre-audit counts were 10-1,000x larger (see <a href="data-import.html#23-results-build-66220--march-3-2026">Part 2.3</a>).</div>
+<p><strong>Locale tables:</strong></p>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Table</th><th>Rows</th></tr></thead><tbody><tr><td>item_sparse_locale</td><td>1,020,264</td></tr><tr><td>item_search_name_locale</td><td>608,480</td></tr></tbody></table></div>
+<h3 id="112-database-sizes">11.2 Database Sizes</h3>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Database</th><th>Tables</th><th>Size</th></tr></thead><tbody><tr><td>world</td><td>259</td><td>1,267 MB</td></tr><tr><td>hotfixes</td><td>517</td><td>637 MB</td></tr><tr><td>characters</td><td>151</td><td>7.6 MB</td></tr><tr><td>auth</td><td>50</td><td>1.9 MB</td></tr><tr><td>roleplay</td><td>5</td><td>0.1 MB</td></tr></tbody></table></div>
+<hr>
+<h2 id="what-it-all-means-for-players">What It All Means for Players</h2>
+<h3 id="before">Before</h3>
+<ul><li>6,548 NPCs stuck at level 1 — endgame elites one-shottable by any player</li><li>Tens of thousands of NPCs standing motionless with no AI scripts</li><li>4,867+ duplicate NPCs stacked on top of each other</li><li>Quest chains broken — no breadcrumbs, no progression tracking</li><li>Quest objectives showing blank or missing, no map markers</li><li>Items showing English-only names for all non-English clients</li><li>Loot tables with 193K duplicate entries inflating drop chances (and no primary keys to prevent more)</li><li>1,142 vendors with VENDOR flag but zero items to sell</li><li>Vendors with 700-hour respawn timers, NPCs moving at 12-20x speed, an invisible creature (scale 0)</li><li>Server startup: 3 minutes 24 seconds</li><li>627,000+ error lines on every startup</li><li>Server crashing on client connect (oversized hotfix packet)</li></ul>
+<h3 id="after">After</h3>
+<ul><li>All NPCs at correct levels with proper ContentTuning scaling</li><li>294K validated SmartAI scripts — NPCs patrol, react, run events (26K net new scripts added, entire dataset validated)</li><li>Clean spawns — no duplicates, no stacked/invisible NPCs</li><li>21,758 quest chain links, 135K POI entries, 60K quest objectives</li><li>1.6M+ item locale entries across 10 languages</li><li>Correct drop rates with enforced primary keys on all loot tables</li><li>78,475 NPC corrections (levels, factions, flags, names, pathing)</li><li>Service NPCs actually function (vendors sell, trainers train, gossip menus work)</li><li>17-second server startup (92% reduction)</li><li>Hotfix content tables reduced from 10.8M rows to ~244K (97.8% reduction)</li><li>Clean server logs — real errors visible instead of buried in noise</li></ul>
+<h3 id="for-captaincore-lorewalkertdb">For CaptainCore / LoreWalkerTDB</h3>
+<p><strong>What LW data gave us:</strong></p>
+<ul><li>~1M net new rows of world data</li><li>~524K SmartAI scripts imported (294K survived validation — the rest had broken references)</li><li>~242K net loot table entries</li><li>Hotfix entries (spell enchantments, sound kits, display info, phases)</li><li>Quest starters/enders, conversation data, spawn pools, game events</li></ul>
+<p><strong>How we built on LW data:</strong></p>
+<ol><li><strong>Import pipeline</strong> — column mismatch handling (3 tables), dependency ordering (5 phases), 15-point validation</li><li><strong>Post-import cleanup</strong> — 47K orphans/duplicates cleaned, 627K error lines resolved, ~498K invalid SmartAI entries removed by validation</li><li><strong>Gap filling</strong> — 1.6M Raidbots item locales, 21K Wago quest chains, 135K quest POI, 216K Wowhead NPC cross-reference</li><li><strong>Hotfix repair + trim</strong> — 843K hotfix_data entries generated, content tables trimmed from ~10.8M to ~244K genuine rows</li><li><strong>78K NPC corrections</strong> — validated against Wago DB2 + Wowhead</li></ol>
+<p><strong>LW data quality findings (potential upstream fixes):</strong></p>
+<ul><li>Column count mismatches on <code>creature</code>/<code>gameobject</code>/<code>npc_vendor</code> vs current TC schema</li><li>Gameobject rotation quaternions stored as <code>(0,0,0,0)</code> instead of identity <code>(0,0,0,1)</code></li><li>Quest board entries (206294/206116) stacking on modern board coordinates</li><li>SmartAI scripts referencing non-existent spells (1,095), unsupported types (813), missing waypoints (803)</li><li>Duplicate spawns within 1 yard (37,870 pairs)</li></ul>
+<p><strong>Collaboration opportunities:</strong></p>
+<ul><li><code>fix_column_mismatch.py</code> and <code>validate_import.py</code> could help anyone consuming LW data</li><li>The hotfix repair system is build-agnostic — works for any TC hotfix database</li><li>The hotfix redundancy audit tools are in the VoxCore repo (<code>hotfix_audit/</code>)</li><li>If LW added composite PKs to loot tables, it would prevent the INSERT IGNORE duplication trap for all consumers</li></ul>
+<hr>
+<nav class="page-nav"><a href="placement.html" class="prev"><span class="nav-label">Previous</span>← Placement Audits</a><a href="hotfix-audit.html" class="next"><span class="nav-label">Next</span>Hotfix Redundancy Audit →</a></nav>
+</article>
+</div>
+</main>
+<div class="footer-wrap"><footer class="site-footer">
+<span>VoxCore &mdash; March 2026</span>
+<a href="https://github.com/VoxCore84/roleplaycore-report">GitHub</a>
+</footer></div>
+<script>(function(){
+  // Reduced motion check
+  var rm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Scroll reveal
+  if (!rm) {
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+  } else {
+    document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('visible'); });
+  }
+
+  // Count-up animation
+  document.querySelectorAll('[data-countup]').forEach(function(el) {
+    if (rm) return;
+    var o = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) { countUp(el, el.getAttribute('data-countup')); o.unobserve(el); }
+      });
+    }, { threshold: 0.5 });
+    o.observe(el);
+  });
+
+  function countUp(el, target) {
+    var m = target.match(/([~]?)([\d,.]+)(.*)/);
+    if (!m) { el.textContent = target; return; }
+    var pfx = m[1], num = parseFloat(m[2].replace(/,/g, '')), sfx = m[3];
+    var hasDot = m[2].indexOf('.') !== -1, start = performance.now();
+    function tick(now) {
+      var p = Math.min((now - start) / 1400, 1);
+      var e = 1 - Math.pow(1 - p, 3);
+      var c = num * e;
+      var d = hasDot ? c.toFixed(1) : (num >= 1000 ? Math.floor(c).toLocaleString() : Math.floor(c).toString());
+      el.textContent = pfx + d + sfx;
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  // Mobile nav
+  var btn = document.querySelector('.nav-menu-btn');
+  var mn = document.querySelector('.mobile-nav');
+  if (btn && mn) {
+    btn.addEventListener('click', function() {
+      mn.classList.toggle('open');
+      btn.setAttribute('aria-expanded', mn.classList.contains('open'));
+    });
+  }
+
+  // Sidebar TOC active tracking
+  var tocLinks = document.querySelectorAll('.sidebar a');
+  if (tocLinks.length > 0) {
+    var headings = [];
+    tocLinks.forEach(function(a) {
+      var id = a.getAttribute('href');
+      if (id && id.charAt(0) === '#') {
+        var el = document.getElementById(id.slice(1));
+        if (el) headings.push({ el: el, link: a });
+      }
+    });
+    var tocObs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) {
+          tocLinks.forEach(function(l) { l.classList.remove('active'); });
+          headings.forEach(function(h) {
+            if (h.el === e.target) h.link.classList.add('active');
+          });
+        }
+      });
+    }, { rootMargin: '-80px 0px -60% 0px' });
+    headings.forEach(function(h) { tocObs.observe(h.el); });
+  }
+
+  // Sidebar toggle (mobile/tablet)
+  var st = document.querySelector('.sidebar-toggle');
+  var sb = document.querySelector('.sidebar');
+  if (st && sb) {
+    st.addEventListener('click', function() {
+      sb.style.display = sb.style.display === 'block' ? 'none' : 'block';
+    });
+  }
+})();
+</script>
+</body>
+</html>

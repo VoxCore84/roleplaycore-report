@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Import & Hotfix Repair — VoxCore</title>
+<meta name="description" content="VoxCore Database Report — Data Quality & Optimization Summary">
+<style>:root {
+  --font-body: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: "SF Mono", SFMono-Regular, ui-monospace, Menlo, Consolas, monospace;
+  --bg: #fff; --bg-alt: #f5f5f7; --bg-card: #fff;
+  --text: #1d1d1f; --text-2: #6e6e73; --text-3: #86868b;
+  --accent: #0071e3; --accent-hover: #2997ff;
+  --border: #d2d2d7; --code-bg: #f5f5f7;
+  --nav-bg: rgba(255,255,255,0.72); --nav-border: rgba(0,0,0,0.08);
+  --card-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  --callout-bg: rgba(0,113,227,0.04);
+  --table-stripe: rgba(0,0,0,0.02);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #000; --bg-alt: #1d1d1f; --bg-card: #1d1d1f;
+    --text: #f5f5f7; --text-2: #a1a1a6; --text-3: #86868b;
+    --accent: #2997ff; --accent-hover: #2997ff;
+    --border: #424245; --code-bg: #1d1d1f;
+    --nav-bg: rgba(29,29,31,0.72); --nav-border: rgba(255,255,255,0.08);
+    --card-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    --callout-bg: rgba(41,151,255,0.06);
+    --table-stripe: rgba(255,255,255,0.02);
+  }
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-body); font-size: 17px; line-height: 1.7;
+  color: var(--text); background: var(--bg);
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+}
+h1, h2, h3, h4, h5, h6 { font-family: var(--font-display); color: var(--text); line-height: 1.15; }
+h1 { font-size: 48px; font-weight: 700; letter-spacing: -0.03em; }
+h2 { font-size: 32px; font-weight: 600; letter-spacing: -0.02em; margin: 72px 0 20px; }
+h3 { font-size: 24px; font-weight: 600; margin: 48px 0 14px; }
+h4 { font-size: 20px; font-weight: 600; margin: 32px 0 10px; }
+h5 { font-size: 17px; font-weight: 600; margin: 24px 0 8px; }
+article h2:first-child { margin-top: 0; }
+a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
+a:hover { color: var(--accent-hover); }
+p { margin: 0 0 20px; color: var(--text-2); }
+strong { color: var(--text); font-weight: 600; }
+em { font-style: italic; }
+code {
+  font-family: var(--font-mono); font-size: 0.875em;
+  background: var(--code-bg); padding: 2px 6px; border-radius: 4px;
+}
+hr { border: none; border-top: 1px solid var(--border); margin: 64px 0; }
+ul, ol { margin: 0 0 20px 24px; color: var(--text-2); }
+li { margin-bottom: 6px; line-height: 1.6; }
+li strong { color: var(--text); }
+blockquote {
+  border-left: 3px solid var(--accent); padding: 0 0 0 20px;
+  margin: 24px 0; color: var(--text-2); font-style: italic;
+}
+
+/* ── Nav ── */
+.site-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 48px;
+  background: var(--nav-bg); backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid var(--nav-border);
+}
+.nav-inner {
+  max-width: 980px; margin: 0 auto; padding: 0 24px;
+  height: 100%; display: flex; align-items: center; gap: 20px;
+}
+.nav-logo {
+  font-family: var(--font-display); font-weight: 600; font-size: 17px;
+  color: var(--text); text-decoration: none; flex-shrink: 0;
+  letter-spacing: -0.02em;
+}
+.nav-links {
+  display: flex; gap: 20px; overflow-x: auto; flex: 1;
+  -webkit-overflow-scrolling: touch; scrollbar-width: none;
+}
+.nav-links::-webkit-scrollbar { display: none; }
+.nav-links a {
+  font-size: 12px; font-weight: 500; color: var(--text-2);
+  text-decoration: none; white-space: nowrap; padding: 4px 0;
+  letter-spacing: 0.01em; transition: color 0.2s;
+}
+.nav-links a:hover, .nav-links a.active { color: var(--text); }
+.nav-links a.active { font-weight: 600; }
+.nav-end { flex-shrink: 0; display: flex; align-items: center; gap: 16px; }
+.nav-github { color: var(--text-3); transition: color 0.2s; display: flex; }
+.nav-github:hover { color: var(--text); }
+.nav-menu-btn {
+  display: none; background: none; border: none; cursor: pointer;
+  color: var(--text-2); padding: 4px;
+}
+.mobile-nav {
+  display: none; position: fixed; inset: 0; z-index: 99;
+  background: var(--nav-bg); backdrop-filter: saturate(180%) blur(40px);
+  -webkit-backdrop-filter: saturate(180%) blur(40px);
+  padding: 72px 32px 32px; flex-direction: column; gap: 4px;
+}
+.mobile-nav.open { display: flex; }
+.mobile-nav a {
+  font-size: 17px; font-weight: 400; color: var(--text-2);
+  padding: 12px 0; border-bottom: 1px solid var(--border);
+  text-decoration: none; transition: color 0.2s;
+}
+.mobile-nav a:hover { color: var(--text); }
+
+/* ── Hero ── */
+.hero { text-align: center; padding: 100px 24px 60px; max-width: 720px; margin: 0 auto; }
+.hero-label { font-size: 14px; font-weight: 500; color: var(--text-3); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px; }
+.hero h1 { font-size: clamp(48px, 8vw, 72px); margin-bottom: 12px; }
+.hero-sub { font-size: 21px; color: var(--text-2); margin-bottom: 8px; font-weight: 400; }
+.hero-meta { font-size: 14px; color: var(--text-3); font-weight: 500; }
+
+/* ── Stat ribbon ── */
+.stat-ribbon {
+  display: flex; justify-content: center; align-items: center; flex-wrap: wrap;
+  gap: 0; padding: 48px 24px; max-width: 980px; margin: 0 auto;
+}
+.stat-item { text-align: center; padding: 0 28px; }
+.stat-sep { width: 1px; height: 40px; background: var(--border); flex-shrink: 0; }
+.stat-num {
+  font-family: var(--font-display); font-size: 32px; font-weight: 700;
+  color: var(--text); letter-spacing: -0.02em; display: block;
+}
+.stat-label { font-size: 13px; color: var(--text-2); margin-top: 2px; display: block; }
+
+/* ── Banner ── */
+.banner {
+  background: var(--callout-bg); padding: 20px 32px;
+  max-width: 980px; margin: 0 auto 64px; border-radius: 12px;
+  display: flex; align-items: center; gap: 12px;
+  font-size: 15px; color: var(--text-2);
+}
+.banner svg { flex-shrink: 0; color: var(--accent); }
+.banner a { font-weight: 500; }
+
+/* ── Summary grid ── */
+.summary { max-width: 980px; margin: 0 auto; padding: 0 24px 80px; }
+.summary h2 { font-size: 32px; margin-bottom: 8px; }
+.summary > p { color: var(--text-2); margin-bottom: 40px; font-size: 17px; }
+.summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+.summary-col h3 {
+  font-size: 13px; font-weight: 600; color: var(--text-3);
+  letter-spacing: 0.06em; text-transform: uppercase; margin: 0 0 20px;
+}
+.summary-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 8px 0; border-bottom: 1px solid var(--border);
+}
+.summary-row:last-child { border-bottom: none; }
+.summary-row .label { font-size: 14px; color: var(--text-2); }
+.summary-row .value { font-size: 14px; font-weight: 600; color: var(--text); white-space: nowrap; margin-left: 16px; }
+
+/* ── Section cards ── */
+.cards-section { background: var(--bg-alt); padding: 80px 24px; }
+.cards-wrap { max-width: 1120px; margin: 0 auto; }
+.cards-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+}
+.card {
+  background: var(--bg-card); border-radius: 18px; padding: 32px;
+  text-decoration: none; color: var(--text); display: block;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card:hover { transform: translateY(-2px); box-shadow: var(--card-shadow); color: var(--text); }
+.card-icon { color: var(--text-3); margin-bottom: 16px; display: block; }
+.card:hover .card-icon { color: var(--accent); }
+.card h3 { font-size: 20px; font-weight: 600; margin: 0 0 8px; letter-spacing: -0.01em; }
+.card p { font-size: 15px; color: var(--text-2); margin: 0; line-height: 1.5; }
+.card:hover h3 { color: var(--accent); }
+
+/* ── Page layout (interior) ── */
+.page-header { max-width: 980px; margin: 0 auto; padding: 80px 24px 0; }
+.breadcrumb { font-size: 13px; color: var(--text-3); margin-bottom: 12px; }
+.breadcrumb a { color: var(--text-3); font-weight: 500; }
+.breadcrumb a:hover { color: var(--accent); }
+.page-header h1 { margin-bottom: 32px; }
+.page-layout {
+  display: grid; grid-template-columns: 200px 1fr; gap: 60px;
+  max-width: 980px; margin: 0 auto; padding: 0 24px 80px;
+  align-items: start;
+}
+.sidebar { position: sticky; top: 72px; max-height: calc(100vh - 96px); overflow-y: auto; padding: 8px 0; }
+.sidebar a {
+  display: block; font-size: 13px; color: var(--text-3); text-decoration: none;
+  padding: 5px 12px; border-left: 2px solid transparent; transition: all 0.2s;
+  line-height: 1.4;
+}
+.sidebar a:hover { color: var(--text-2); }
+.sidebar a.active { color: var(--accent); border-left-color: var(--accent); font-weight: 500; }
+.sidebar a.toc-h3 { padding-left: 24px; font-size: 12px; }
+.sidebar-toggle {
+  display: none; background: var(--bg-alt); border: 1px solid var(--border);
+  border-radius: 8px; padding: 10px 16px; width: 100%; text-align: left;
+  font-size: 14px; color: var(--text-2); cursor: pointer; margin-bottom: 24px;
+  font-family: var(--font-body);
+}
+article { min-width: 0; }
+
+/* ── Data tables ── */
+.data-table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 15px; }
+.data-table th {
+  text-align: left; font-weight: 600; font-size: 13px; color: var(--text-2);
+  padding: 10px 16px; border-bottom: 1px solid var(--border);
+  letter-spacing: 0.02em;
+}
+.data-table td { padding: 10px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top; }
+.data-table tr:nth-child(even) td { background: var(--table-stripe); }
+.data-table td strong { color: var(--text); }
+.data-table code { font-size: 0.8em; }
+
+/* ── Callout ── */
+.callout {
+  background: var(--callout-bg); border-left: 4px solid var(--accent);
+  border-radius: 12px; padding: 20px 24px; margin: 24px 0;
+  font-size: 15px; color: var(--text-2);
+}
+.callout strong { color: var(--text); }
+
+/* ── Details ── */
+details { margin: 24px 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+details summary {
+  cursor: pointer; padding: 16px 20px; font-weight: 600; color: var(--text);
+  list-style: none; display: flex; align-items: center; justify-content: space-between;
+  transition: background 0.2s;
+}
+details summary:hover { background: var(--bg-alt); }
+details summary::-webkit-details-marker { display: none; }
+details summary::after { content: "+"; font-weight: 400; color: var(--text-3); font-size: 20px; }
+details[open] summary::after { content: "\2212"; }
+details > div, details > p, details > table { padding: 0 20px 16px; }
+details .data-table { margin: 0 0 8px; }
+
+/* ── Prev/Next nav ── */
+.page-nav {
+  display: flex; justify-content: space-between; margin-top: 80px;
+  padding-top: 32px; border-top: 1px solid var(--border);
+}
+.page-nav a {
+  font-size: 15px; color: var(--text-2); text-decoration: none;
+  transition: color 0.2s; max-width: 45%;
+}
+.page-nav a:hover { color: var(--accent); }
+.page-nav .nav-label { font-size: 12px; color: var(--text-3); display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 500; }
+.page-nav .next { text-align: right; margin-left: auto; }
+
+/* ── Footer ── */
+.site-footer {
+  border-top: 1px solid var(--border); padding: 24px; margin-top: 0;
+  display: flex; justify-content: space-between; align-items: center;
+  max-width: 980px; margin: 0 auto; font-size: 13px; color: var(--text-3);
+}
+.site-footer a { color: var(--text-3); text-decoration: none; }
+.site-footer a:hover { color: var(--accent); }
+.footer-wrap { border-top: 1px solid var(--border); margin-top: 80px; }
+
+/* ── Animations ── */
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s cubic-bezier(0.25,0.46,0.45,0.94), transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94); }
+.reveal.visible { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .card { transition: none; }
+  .card:hover { transform: none; }
+}
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .page-layout { grid-template-columns: 1fr; gap: 0; }
+  .sidebar { display: none; }
+  .sidebar-toggle { display: block; }
+  .summary-grid { grid-template-columns: 1fr 1fr; }
+  .cards-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  h1 { font-size: 36px; }
+  h2 { font-size: 26px; margin-top: 48px; }
+  h3 { font-size: 20px; margin-top: 32px; }
+  .nav-links { display: none; }
+  .nav-menu-btn { display: block; }
+  .summary-grid { grid-template-columns: 1fr; gap: 32px; }
+  .cards-grid { grid-template-columns: 1fr; }
+  .stat-ribbon { flex-direction: column; gap: 20px; }
+  .stat-sep { width: 40px; height: 1px; }
+  .page-nav { flex-direction: column; gap: 16px; }
+  .page-nav .next { text-align: left; margin-left: 0; }
+  .hero { padding-top: 72px; }
+  .page-header { padding-top: 64px; }
+}
+</style>
+</head>
+<body>
+<nav class="site-nav" role="navigation" aria-label="Main">
+<div class="nav-inner">
+<a href="index.html" class="nav-logo">VoxCore</a>
+<div class="nav-links"><a href="data-import.html" class="active">Data Import</a><a href="npc-audits.html">NPC Audits</a><a href="quest-localization.html">Quests</a><a href="database-cleanup.html">Database Cleanup</a><a href="performance.html">Performance</a><a href="placement.html">Placement Audits</a><a href="results.html">Tooling</a><a href="hotfix-audit.html">Hotfix Redundancy Audit</a><a href="discoveries.html">Discoveries</a><a href="reference.html">Timeline</a></div>
+<div class="nav-end">
+<a href="https://github.com/VoxCore84/roleplaycore-report" class="nav-github" aria-label="GitHub"><svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg></a>
+<button class="nav-menu-btn" aria-label="Menu" aria-expanded="false">
+<svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+</button>
+</div>
+</div>
+</nav>
+<div class="mobile-nav" role="dialog" aria-label="Navigation"><a href="data-import.html">Data Import & Hotfix Repair</a><a href="npc-audits.html">NPC Audits & Corrections</a><a href="quest-localization.html">Quests & Localization</a><a href="database-cleanup.html">Database Cleanup & Integrity</a><a href="performance.html">Performance & Build Diff</a><a href="placement.html">Placement Audits</a><a href="results.html">Tooling & Results</a><a href="hotfix-audit.html">Hotfix Redundancy Audit</a><a href="discoveries.html">Discoveries & Lessons</a><a href="reference.html">Timeline & Reference</a></div>
+<main>
+<header class="page-header">
+<nav class="breadcrumb"><a href="index.html">VoxCore</a> &rsaquo; Data Import & Hotfix Repair</nav>
+<h1>Data Import & Hotfix Repair</h1>
+</header>
+<div class="page-layout">
+<button class="sidebar-toggle">On this page</button><nav class="sidebar" aria-label="Table of contents"><a href="#lorewalkertdb-integration" class="">LoreWalkerTDB Integration</a><a href="#11-hotfixes-import" class="toc-h3">1.1 Hotfixes Import</a><a href="#12-smartai-import-npc-behavior-scripts" class="toc-h3">1.2 SmartAI Import (NPC Behavior Scripts)</a><a href="#13-world-db-bulk-import-march-3-2026" class="toc-h3">1.3 World DB Bulk Import (March 3, 2026)</a><a href="#14-initial-lw-world-data-import-february-27-2026" class="toc-h3">1.4 Initial LW World Data Import (February 27, 2026)</a><a href="#hotfix-repair-system" class="">Hotfix Repair System</a><a href="#21-the-problem" class="toc-h3">2.1 The Problem</a><a href="#22-the-solution" class="toc-h3">2.2 The Solution</a><a href="#23-results-build-66220-march-3-2026" class="toc-h3">2.3 Results (Build 66220 — March 3, 2026)</a><a href="#24-scene-script-repair" class="toc-h3">2.4 Scene Script Repair</a><a href="#25-what-this-fixed-in-game" class="toc-h3">2.5 What This Fixed In-Game</a></nav>
+<article>
+<h2 id="lorewalkertdb-integration">LoreWalkerTDB Integration</h2>
+<h3 id="11-hotfixes-import">1.1 Hotfixes Import</h3>
+<p>LoreWalkerTDB's <code>hotfixes.sql</code> (322MB) was parsed and selectively imported. Blind import wasn't possible — VoxCore has custom entries (e.g., <code>broadcast_text</code> entries at 999999997+, custom <code>chr_customization_choice</code> data).</p>
+<p><strong>Key gains:</strong></p>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Table</th><th>Rows Added</th><th>What it fixed</th></tr></thead><tbody><tr><td>spell_item_enchantment</td><td>+1,193</td><td>Missing enchant effects</td></tr><tr><td>sound_kit</td><td>+3,611</td><td>Missing ambient/NPC/spell sounds</td></tr><tr><td>item + item_sparse</td><td>+2,799 / +2,810</td><td>Items that existed in client but had no server data</td></tr><tr><td>spell_effect</td><td>+1,335</td><td>Missing spell effects</td></tr><tr><td>spell_visual_kit</td><td>+610</td><td>Missing visual effects</td></tr><tr><td>creature_display_info</td><td>+123</td><td>Missing NPC models</td></tr><tr><td>phase</td><td>+595</td><td>Missing phase definitions</td></tr><tr><td>achievement</td><td>+849</td><td>Missing achievement data</td></tr><tr><td>lfg_dungeons</td><td>+213</td><td>Missing dungeon finder entries</td></tr><tr><td>trait_definition</td><td>+299</td><td>Missing talent/trait data</td></tr><tr><td>character_loadout</td><td>+157</td><td>Missing starting loadouts</td></tr><tr><td><strong>+ ~30K hotfix_data entries</strong></td><td></td><td>Registry entries so the client receives corrections</td></tr></tbody></table></div>
+<h3 id="12-smartai-import-npc-behavior-scripts">1.2 SmartAI Import (NPC Behavior Scripts)</h3>
+<p>Two rounds of SmartAI extraction from LW's 897MB world dump:</p>
+<ul><li><strong>Round 1</strong>: 22,370 rows — quest scripts (17,367), creature AI (4,965), scene triggers, timed events</li><li><strong>Round 2</strong>: 166,443 rows — 165,360 creature behaviors, 169 gameobject scripts, 702 action lists, 212 scene triggers</li><li><strong>Skipped</strong>: 525K quest boilerplate rows (all identical "cast spell 82238" phase-update scripts — not useful for RP)</li><li><strong>Attempted</strong>: ~524,000 SmartAI INSERT operations across all import rounds (including Phase 4 in Section 1.3)</li><li><strong>Post-validation</strong>: Cleanup scripts removed entries referencing non-existent spells, creatures without SmartAI AIName, deprecated event types, broken link chains, and invalid waypoints (see <a href="database-cleanup.html#63-post-import-cleanup-47478-rows">Section 6.3</a>)</li><li><strong>Final result</strong>: 294,425 validated scripts (up from ~268K baseline — a net gain of ~26K valid scripts, plus validation of the entire existing dataset)</li></ul>
+<h3 id="13-world-db-bulk-import-march-3-2026">1.3 World DB Bulk Import (March 3, 2026)</h3>
+<p>5-phase dependency-ordered import of 21 tables from LoreWalkerTDB (builds 65893/65727/65299/63906, all 12.0.x):</p>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Phase</th><th>Tables</th><th>Key Data</th></tr></thead><tbody><tr><td><strong>1. Spawns</strong></td><td>creature, gameobject</td><td>+29,196 creatures, +19,604 gameobjects</td></tr><tr><td><strong>2. Loot</strong></td><td>creature_loot, gameobject_loot</td><td>+184,084 creature loot, +58,066 GO loot</td></tr><tr><td><strong>3. Dependents</strong></td><td>waypoints, difficulty, addons, pools, spawn_groups, text, spells, models, formations</td><td>+30K waypoint nodes, +2K creature addons, +1.8K pool templates</td></tr><tr><td><strong>4. SmartAI</strong></td><td>smart_scripts</td><td>+336,186 NPC AI scripts (INSERT IGNORE — many later removed by validation)</td></tr><tr><td><strong>5. Gossip/Vendor</strong></td><td>gossip_menu, gossip_menu_option, npc_vendor, creature_template_addon</td><td>+58 gossip menus, +44 options, +4 vendors</td></tr><tr><td><strong>Total</strong></td><td><strong>21 tables</strong></td><td><strong>+665,658 net new rows</strong></td></tr></tbody></table></div>
+<p><strong>Column mismatch handling</strong>: LW uses an older TC fork, so 3 tables had different column counts. <code>fix_column_mismatch.py</code> parses SQL tuple boundaries and appends safe defaults:</p>
+<ul><li><code>creature</code>: 28 → 29 columns (appended <code>size=-1</code>)</li><li><code>gameobject</code>: 24 → 26 columns (appended <code>size=-1, visibility=256</code>)</li><li><code>npc_vendor</code>: 11 → 12 columns (appended <code>OverrideGoldCost=-1</code>)</li></ul>
+<p>All 15 post-import integrity checks passed with zero orphans.</p>
+<h3 id="14-initial-lw-world-data-import-february-27-2026">1.4 Initial LW World Data Import (February 27, 2026)</h3>
+<p>The first LW import (predating the bulk import above) added 385,823 rows across 17 tables. The SmartAI rows (167,685) are included in the Section 1.2 totals — same data, not additional:</p>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Table</th><th>Rows Added</th></tr></thead><tbody><tr><td>smart_scripts (2 passes)</td><td>167,685</td></tr><tr><td>creature_loot_template</td><td>151,509</td></tr><tr><td>gameobject_loot_template</td><td>59,893</td></tr><tr><td>pickpocketing_loot_template</td><td>1,389</td></tr><tr><td>reference_loot_template</td><td>662</td></tr><tr><td>skinning_loot_template</td><td>402</td></tr><tr><td>quest_offer_reward</td><td>541</td></tr><tr><td>quest_request_items</td><td>370</td></tr><tr><td>pool_template</td><td>1,176</td></tr><tr><td>pool_members</td><td>1,164</td></tr><tr><td>game_event_creature</td><td>260</td></tr><tr><td>game_event_gameobject</td><td>164</td></tr><tr><td>npc_vendor</td><td>248</td></tr><tr><td>conversation_actors</td><td>194</td></tr><tr><td>areatrigger_template</td><td>142</td></tr><tr><td>conversation_line_template</td><td>19</td></tr><tr><td>conversation_template</td><td>5</td></tr></tbody></table></div>
+<hr>
+<h2 id="hotfix-repair-system">Hotfix Repair System</h2>
+<h3 id="21-the-problem">2.1 The Problem</h3>
+<p>TrinityCore's hotfix database diverges from Blizzard's live data over time. Columns get zeroed out during schema migrations, new rows from client patches are missing, and the <code>hotfix_data</code> registry (which tells the client what corrections to apply) becomes incomplete.</p>
+<h3 id="22-the-solution">2.2 The Solution</h3>
+<p><code>repair_hotfix_tables.py</code> compares every hotfix DB table against authoritative Wago DB2 CSV exports and generates repair SQL:</p>
+<ol><li>Downloads 1,097 DB2 CSV tables from Wago.tools for the current build</li><li>Normalizes column names (28 global aliases + 23 table-specific aliases + 6 table name overrides)</li><li>Compares every row: identifies zeroed columns, missing rows, and custom diffs to preserve</li><li>Generates UPDATE statements for zeroed columns, INSERT statements for missing rows</li><li>Generates corresponding <code>hotfix_data</code> entries so the client receives the corrections</li><li>Runs in 5 batches (~80 tables each) to manage memory</li></ol>
+<h3 id="23-results-build-66220-march-3-2026">2.3 Results (Build 66220 — March 3, 2026)</h3>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Metric</th><th>Value</th></tr></thead><tbody><tr><td>Tables compared</td><td>388</td></tr><tr><td>Rows matching</td><td>9,790,318</td></tr><tr><td>Zeroed columns fixed</td><td>1,831 UPDATEs</td></tr><tr><td>Custom diffs preserved</td><td>468,972 rows (intentional overrides)</td></tr><tr><td>Missing rows inserted</td><td>103,153 INSERTs</td></tr><tr><td>hotfix_data entries generated</td><td>843,894</td></tr><tr><td>Total SQL generated</td><td>~71 MB across 5 batch files</td></tr><tr><td><strong>Total hotfix_data rows (pre-trim)</strong></td><td><strong>1,084,369 across 204 tables</strong></td></tr></tbody></table></div>
+<blockquote>The 1,084,369 total included entries from the repair tool, LW imports, and prior TC data. The subsequent redundancy audit (<a href="hotfix-audit.html">Part 13</a>) reduced hotfix content table rows to ~244K by deleting entries that matched the client's DBC baseline. The hotfix_data registry itself was reduced from 1,084,369 to 835,385 entries.</blockquote>
+<p><strong>Key table populations after repair (pre-audit — see <a href="results.html#part-11-final-database-state">Part 11</a> for current):</strong></p>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Table</th><th>Rows (pre-audit)</th></tr></thead><tbody><tr><td>spell_name</td><td>400,000</td></tr><tr><td>spell_effect</td><td>513,000</td></tr><tr><td>item_sparse</td><td>172,000</td></tr><tr><td>creature_display_info</td><td>118,000</td></tr><tr><td>content_tuning</td><td>9,800</td></tr><tr><td>area_table</td><td>9,800</td></tr></tbody></table></div>
+<h3 id="24-scene-script-repair">2.4 Scene Script Repair</h3>
+<p><code>repair_scene_scripts.py</code> handles <code>scene_script_text</code> — Lua scripts stored as hex-encoded blobs. Fixed 36 encoding errors and inserted 224 new scene scripts.</p>
+<h3 id="25-what-this-fixed-in-game">2.5 What This Fixed In-Game</h3>
+<ul><li>Items display correct names, stats, icons, and tooltips</li><li>Spells have correct effects, visuals, and descriptions</li><li>NPCs show proper display models</li><li>Achievements, currencies, and dungeon data are complete</li><li>All corrections delivered to the client via the hotfix system on login — no client modifications needed</li></ul>
+<hr>
+<nav class="page-nav"><span></span><a href="npc-audits.html" class="next"><span class="nav-label">Next</span>NPC Audits & Corrections →</a></nav>
+</article>
+</div>
+</main>
+<div class="footer-wrap"><footer class="site-footer">
+<span>VoxCore &mdash; March 2026</span>
+<a href="https://github.com/VoxCore84/roleplaycore-report">GitHub</a>
+</footer></div>
+<script>(function(){
+  // Reduced motion check
+  var rm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Scroll reveal
+  if (!rm) {
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+  } else {
+    document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('visible'); });
+  }
+
+  // Count-up animation
+  document.querySelectorAll('[data-countup]').forEach(function(el) {
+    if (rm) return;
+    var o = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) { countUp(el, el.getAttribute('data-countup')); o.unobserve(el); }
+      });
+    }, { threshold: 0.5 });
+    o.observe(el);
+  });
+
+  function countUp(el, target) {
+    var m = target.match(/([~]?)([\d,.]+)(.*)/);
+    if (!m) { el.textContent = target; return; }
+    var pfx = m[1], num = parseFloat(m[2].replace(/,/g, '')), sfx = m[3];
+    var hasDot = m[2].indexOf('.') !== -1, start = performance.now();
+    function tick(now) {
+      var p = Math.min((now - start) / 1400, 1);
+      var e = 1 - Math.pow(1 - p, 3);
+      var c = num * e;
+      var d = hasDot ? c.toFixed(1) : (num >= 1000 ? Math.floor(c).toLocaleString() : Math.floor(c).toString());
+      el.textContent = pfx + d + sfx;
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  // Mobile nav
+  var btn = document.querySelector('.nav-menu-btn');
+  var mn = document.querySelector('.mobile-nav');
+  if (btn && mn) {
+    btn.addEventListener('click', function() {
+      mn.classList.toggle('open');
+      btn.setAttribute('aria-expanded', mn.classList.contains('open'));
+    });
+  }
+
+  // Sidebar TOC active tracking
+  var tocLinks = document.querySelectorAll('.sidebar a');
+  if (tocLinks.length > 0) {
+    var headings = [];
+    tocLinks.forEach(function(a) {
+      var id = a.getAttribute('href');
+      if (id && id.charAt(0) === '#') {
+        var el = document.getElementById(id.slice(1));
+        if (el) headings.push({ el: el, link: a });
+      }
+    });
+    var tocObs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) {
+          tocLinks.forEach(function(l) { l.classList.remove('active'); });
+          headings.forEach(function(h) {
+            if (h.el === e.target) h.link.classList.add('active');
+          });
+        }
+      });
+    }, { rootMargin: '-80px 0px -60% 0px' });
+    headings.forEach(function(h) { tocObs.observe(h.el); });
+  }
+
+  // Sidebar toggle (mobile/tablet)
+  var st = document.querySelector('.sidebar-toggle');
+  var sb = document.querySelector('.sidebar');
+  if (st && sb) {
+    st.addEventListener('click', function() {
+      sb.style.display = sb.style.display === 'block' ? 'none' : 'block';
+    });
+  }
+})();
+</script>
+</body>
+</html>
