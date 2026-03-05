@@ -126,46 +126,6 @@
     filterTools();
   })();
 
-  // ── Achievement Toasts ──
-  (function initToasts() {
-    if (rm) return;
-    var toasts = [
-      { selector: '[data-countup="~1,004,000"]', text: '1M Rows Imported', icon: '\u2728' },
-      { selector: '[data-countup="97.8%"]', text: '97.8% Redundancy Eliminated', icon: '\u26A1' },
-      { selector: '[data-countup="~10.6M"]', text: '10.6M Dead Rows Purged', icon: '\uD83D\uDD25' },
-      { selector: '[data-countup="75+"]', text: '75+ Tools Built', icon: '\uD83D\uDEE0\uFE0F' }
-    ];
-    var shown = {};
-    toasts.forEach(function(t) {
-      var el = document.querySelector(t.selector);
-      if (!el) return;
-      var toastObs = new IntersectionObserver(function(entries) {
-        entries.forEach(function(e) {
-          if (e.isIntersecting && !shown[t.text]) {
-            shown[t.text] = true;
-            showToast(t.icon, t.text);
-            toastObs.unobserve(el);
-          }
-        });
-      }, { threshold: 0.8 });
-      toastObs.observe(el);
-    });
-
-    function showToast(icon, text) {
-      var toast = document.createElement('div');
-      toast.className = 'achievement-toast';
-      toast.innerHTML = '<span class="toast-icon">' + icon + '</span><div><div class="toast-text">' + text + '</div></div>';
-      document.body.appendChild(toast);
-      requestAnimationFrame(function() {
-        requestAnimationFrame(function() { toast.classList.add('show'); });
-      });
-      setTimeout(function() {
-        toast.classList.remove('show');
-        setTimeout(function() { toast.remove(); }, 500);
-      }, 3000);
-    }
-  })();
-
   // ── Mobile nav ──
   var menuBtn = document.querySelector('.nav-menu-btn');
   var mobileNav = document.querySelector('.mobile-nav');

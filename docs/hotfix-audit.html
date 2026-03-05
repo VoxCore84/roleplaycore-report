@@ -137,8 +137,25 @@ blockquote {
 .nav-links a.active::after { transform: scaleX(1); }
 
 .nav-end {
-  display: flex; align-items: center; gap: 16px;
+  display: flex; align-items: center; gap: 12px;
   justify-content: flex-end;
+}
+
+/* ── Nav Search Bar ── */
+.nav-search-btn {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--bg-alt); border: 1px solid var(--border);
+  border-radius: 8px; padding: 5px 12px;
+  font-family: var(--font-body); font-size: 13px; color: var(--text-3);
+  cursor: pointer; transition: border-color 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+.nav-search-btn:hover { border-color: var(--arcane); color: var(--text-2); }
+.nav-search-btn svg { flex-shrink: 0; }
+.nav-search-btn kbd {
+  font-family: var(--font-mono); font-size: 10px;
+  background: var(--bg-card); padding: 1px 4px; border-radius: 3px;
+  border: 1px solid var(--border); margin-left: 4px;
 }
 .nav-github { color: var(--text-3); transition: color 0.2s; display: flex; }
 .nav-github:hover { color: var(--text); }
@@ -383,7 +400,7 @@ blockquote {
   display: grid; grid-template-columns: 200px 1fr; gap: 60px;
   max-width: 980px; margin: 0 auto; padding: 0 24px 80px; align-items: start;
 }
-article { min-width: 0; }
+article { min-width: 0; padding-bottom: 40vh; }
 
 /* ── Sidebar (shared base) ── */
 .sidebar {
@@ -1106,6 +1123,8 @@ body.page-exit { animation: pageOut 0.18s ease-in forwards; }
   h3 { font-size: 20px; margin-top: 32px; }
   .nav-links { display: none; }
   .nav-menu-btn { display: block; }
+  .nav-search-btn span, .nav-search-btn kbd { display: none; }
+  .nav-search-btn { padding: 5px 8px; }
   .pillars-grid { grid-template-columns: 1fr; }
   .cards-grid { grid-template-columns: 1fr; }
   .stat-ribbon { flex-direction: column; gap: 20px; }
@@ -1132,6 +1151,7 @@ body.page-exit { animation: pageOut 0.18s ease-in forwards; }
 <a href="index.html" class="nav-logo">VoxCore</a>
 <div class="nav-links"><a href="framework.html">Framework</a><a href="pipeline.html">Pipeline</a><a href="data-import.html" class="active">Report</a><a href="tooling.html">Tooling</a><a href="ai-workflow.html">AI</a><a href="status.html">Status</a><a href="opensource.html">Open Source</a></div>
 <div class="nav-end">
+<button class="nav-search-btn" onclick="document.querySelector('.cmd-overlay').classList.add('open');document.querySelector('.cmd-input').focus();" aria-label="Search"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>Search<kbd>/</kbd></button>
 <a href="https://github.com/VoxCore84/RoleplayCore" class="nav-github" aria-label="GitHub" target="_blank" rel="noopener"><svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg></a>
 <button class="nav-menu-btn" aria-label="Menu" aria-expanded="false">
 <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
@@ -1353,46 +1373,6 @@ body.page-exit { animation: pageOut 0.18s ease-in forwards; }
     });
     if (search) search.addEventListener('input', filterTools);
     filterTools();
-  })();
-
-  // ── Achievement Toasts ──
-  (function initToasts() {
-    if (rm) return;
-    var toasts = [
-      { selector: '[data-countup="~1,004,000"]', text: '1M Rows Imported', icon: '\u2728' },
-      { selector: '[data-countup="97.8%"]', text: '97.8% Redundancy Eliminated', icon: '\u26A1' },
-      { selector: '[data-countup="~10.6M"]', text: '10.6M Dead Rows Purged', icon: '\uD83D\uDD25' },
-      { selector: '[data-countup="75+"]', text: '75+ Tools Built', icon: '\uD83D\uDEE0\uFE0F' }
-    ];
-    var shown = {};
-    toasts.forEach(function(t) {
-      var el = document.querySelector(t.selector);
-      if (!el) return;
-      var toastObs = new IntersectionObserver(function(entries) {
-        entries.forEach(function(e) {
-          if (e.isIntersecting && !shown[t.text]) {
-            shown[t.text] = true;
-            showToast(t.icon, t.text);
-            toastObs.unobserve(el);
-          }
-        });
-      }, { threshold: 0.8 });
-      toastObs.observe(el);
-    });
-
-    function showToast(icon, text) {
-      var toast = document.createElement('div');
-      toast.className = 'achievement-toast';
-      toast.innerHTML = '<span class="toast-icon">' + icon + '</span><div><div class="toast-text">' + text + '</div></div>';
-      document.body.appendChild(toast);
-      requestAnimationFrame(function() {
-        requestAnimationFrame(function() { toast.classList.add('show'); });
-      });
-      setTimeout(function() {
-        toast.classList.remove('show');
-        setTimeout(function() { toast.remove(); }, 500);
-      }, 3000);
-    }
   })();
 
   // ── Mobile nav ──

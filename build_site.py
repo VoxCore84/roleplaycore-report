@@ -722,6 +722,7 @@ def nav_html(current_slug=None):
 <a href="index.html" class="nav-logo">VoxCore</a>
 <div class="nav-links">{links}</div>
 <div class="nav-end">
+<button class="nav-search-btn" onclick="document.querySelector('.cmd-overlay').classList.add('open');document.querySelector('.cmd-input').focus();" aria-label="Search"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>Search<kbd>/</kbd></button>
 <a href="https://github.com/VoxCore84/RoleplayCore" class="nav-github" aria-label="GitHub" target="_blank" rel="noopener">{GITHUB_ICON}</a>
 <button class="nav-menu-btn" aria-label="Menu" aria-expanded="false">
 <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>

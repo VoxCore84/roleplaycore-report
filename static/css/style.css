@@ -130,8 +130,25 @@ blockquote {
 .nav-links a.active::after { transform: scaleX(1); }
 
 .nav-end {
-  display: flex; align-items: center; gap: 16px;
+  display: flex; align-items: center; gap: 12px;
   justify-content: flex-end;
+}
+
+/* ── Nav Search Bar ── */
+.nav-search-btn {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--bg-alt); border: 1px solid var(--border);
+  border-radius: 8px; padding: 5px 12px;
+  font-family: var(--font-body); font-size: 13px; color: var(--text-3);
+  cursor: pointer; transition: border-color 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+.nav-search-btn:hover { border-color: var(--arcane); color: var(--text-2); }
+.nav-search-btn svg { flex-shrink: 0; }
+.nav-search-btn kbd {
+  font-family: var(--font-mono); font-size: 10px;
+  background: var(--bg-card); padding: 1px 4px; border-radius: 3px;
+  border: 1px solid var(--border); margin-left: 4px;
 }
 .nav-github { color: var(--text-3); transition: color 0.2s; display: flex; }
 .nav-github:hover { color: var(--text); }
@@ -376,7 +393,7 @@ blockquote {
   display: grid; grid-template-columns: 200px 1fr; gap: 60px;
   max-width: 980px; margin: 0 auto; padding: 0 24px 80px; align-items: start;
 }
-article { min-width: 0; }
+article { min-width: 0; padding-bottom: 40vh; }
 
 /* ── Sidebar (shared base) ── */
 .sidebar {
@@ -1099,6 +1116,8 @@ body.page-exit { animation: pageOut 0.18s ease-in forwards; }
   h3 { font-size: 20px; margin-top: 32px; }
   .nav-links { display: none; }
   .nav-menu-btn { display: block; }
+  .nav-search-btn span, .nav-search-btn kbd { display: none; }
+  .nav-search-btn { padding: 5px 8px; }
   .pillars-grid { grid-template-columns: 1fr; }
   .cards-grid { grid-template-columns: 1fr; }
   .stat-ribbon { flex-direction: column; gap: 20px; }
