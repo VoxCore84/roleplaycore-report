@@ -22,6 +22,8 @@ def _read_json(path):
     with open(path, 'r', encoding='utf-8') as f:
         return json.load(f)
 
+_search_index = '[]'  # populated in main()
+
 CSS = _read(os.path.join(STATIC_DIR, "css", "style.css"))
 JS = _read(os.path.join(STATIC_DIR, "js", "main.js"))
 STATS = _read_json(os.path.join(DATA_DIR, "stats.json"))
@@ -384,6 +386,82 @@ def build_tool_explorer():
 
 TOOL_EXPLORER_HTML = build_tool_explorer()
 
+# ── Command Palette ──────────────────────────────────────────────────────────
+
+CMD_PALETTE_HTML = '''<div class="cmd-overlay">
+<div class="cmd-palette">
+<div class="cmd-input-wrap">
+<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+<input type="text" class="cmd-input" placeholder="Search pages and sections..." autocomplete="off">
+</div>
+<div class="cmd-results"></div>
+<div class="cmd-hint"><span><kbd>\u2191\u2193</kbd> navigate</span><span><kbd>\u21B5</kbd> open</span><span><kbd>esc</kbd> close</span></div>
+</div>
+</div>'''
+
+
+def build_search_index(report_data):
+    """Build a compact search index for the command palette."""
+    index = [{"t": "Home", "u": "index.html", "p": "", "s": "VoxCore main page"}]
+    for page in FEATURE_PAGES:
+        index.append({"t": page["title"], "u": f"{page['slug']}.html", "p": "", "s": page["desc"]})
+    for page in REPORT_PAGES:
+        index.append({"t": page["title"], "u": f"{page['slug']}.html", "p": "Report", "s": page["desc"]})
+        toc = report_data.get(page['slug'], {}).get('toc', [])
+        for level, anchor, title in toc:
+            if level == 2:
+                index.append({"t": title, "u": f"{page['slug']}.html#{anchor}", "p": page["title"], "s": ""})
+    return json.dumps(index, separators=(',', ':'))
+
+
+def reading_time(text):
+    words = len(text.split())
+    minutes = max(1, round(words / 250))
+    return minutes
+
+
+READING_TIME_ICON = '<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>'
+
+
+def categorize_entry(title):
+    t = title.lower()
+    if 'transmog' in t: return 'transmog'
+    if 'audit' in t or 'cleanup' in t or 'fix' in t: return 'audit'
+    if 'build' in t or 'spawn' in t or 'deploy' in t: return 'build'
+    if 'website' in t or 'codex' in t or 'visual' in t or 'arcane' in t: return 'website'
+    if 'tool' in t or 'pipeline' in t or 'parser' in t or 'scrape' in t or 'btw' in t: return 'tooling'
+    return 'data'
+
+
+PROGRESS_RINGS_HTML = '''<div class="progress-rings reveal">
+<div class="progress-ring-wrap">
+<svg class="progress-ring" viewBox="0 0 80 80"><circle class="progress-ring-bg" cx="40" cy="40" r="36"/><circle class="progress-ring-fill" cx="40" cy="40" r="36" data-pct="97.8"/></svg>
+<span class="progress-ring-value">97.8%</span>
+<span class="progress-ring-label">Hotfix redundancy removed</span>
+</div>
+<div class="progress-ring-wrap">
+<svg class="progress-ring" viewBox="0 0 80 80"><circle class="progress-ring-bg" cx="40" cy="40" r="36"/><circle class="progress-ring-fill" cx="40" cy="40" r="36" data-pct="98"/></svg>
+<span class="progress-ring-value">98%</span>
+<span class="progress-ring-label">CT=0 creatures enriched</span>
+</div>
+<div class="progress-ring-wrap">
+<svg class="progress-ring" viewBox="0 0 80 80"><circle class="progress-ring-bg" cx="40" cy="40" r="36"/><circle class="progress-ring-fill gold" cx="40" cy="40" r="36" data-pct="92"/></svg>
+<span class="progress-ring-value">92%</span>
+<span class="progress-ring-label">Startup time reduction</span>
+</div>
+<div class="progress-ring-wrap">
+<svg class="progress-ring" viewBox="0 0 80 80"><circle class="progress-ring-bg" cx="40" cy="40" r="36"/><circle class="progress-ring-fill" cx="40" cy="40" r="36" data-pct="100"/></svg>
+<span class="progress-ring-value">100%</span>
+<span class="progress-ring-label">SmartAI validated</span>
+</div>
+<div class="progress-ring-wrap">
+<svg class="progress-ring" viewBox="0 0 80 80"><circle class="progress-ring-bg" cx="40" cy="40" r="36"/><circle class="progress-ring-fill gold" cx="40" cy="40" r="36" data-pct="100"/></svg>
+<span class="progress-ring-value">100%</span>
+<span class="progress-ring-label">Loot table PKs enforced</span>
+</div>
+</div>'''
+
+
 # ── Markdown to HTML ──────────────────────────────────────────────────────────
 
 def inline_md(text):
@@ -737,7 +815,7 @@ BACK_TO_TOP = '''<button class="back-to-top" aria-label="Back to top">
 </button>'''
 
 
-def base_page(title, body, current_slug=None):
+def base_page(title, body, current_slug=None, search_index='[]'):
     desc = "VoxCore \u2014 An AI-assisted open source MMO framework built on TrinityCore for WoW 12.x Midnight"
     return f'''<!DOCTYPE html>
 <html lang="en">
@@ -751,9 +829,11 @@ def base_page(title, body, current_slug=None):
 <body>
 <div class="scroll-progress"></div>
 {nav_html(current_slug)}
+{CMD_PALETTE_HTML}
 {body}
 {BACK_TO_TOP}
 {footer_html()}
+<script id="search-index" type="application/json">{search_index}</script>
 <script>{JS}</script>
 </body>
 </html>'''
@@ -788,13 +868,26 @@ def build_index():
         icon = ICONS.get(p['slug'], '')
         report_cards += f'<a href="{p["slug"]}.html" class="card reveal"><span class="card-icon">{icon}</span><h3>{p["title"]}</h3><p>{p["desc"]}</p></a>\n'
 
-    # Timeline
+    # Timeline (interactive cards)
+    chevron_svg = '<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>'
     timeline_entries = ''
     for entry in CHANGELOG:
-        timeline_entries += f'<div class="timeline-entry reveal"><span class="timeline-date">{entry["date"]}</span><div><h3>{entry["title"]}</h3><p>{entry["summary"]}</p></div></div>\n'
+        cat = categorize_entry(entry["title"])
+        timeline_entries += (
+            f'<div class="timeline-card reveal">'
+            f'<div class="timeline-card-header">'
+            f'<span class="timeline-card-date">{entry["date"]}</span>'
+            f'<span class="timeline-card-title">{entry["title"]}</span>'
+            f'<span class="timeline-category {cat}">{cat}</span>'
+            f'<span class="timeline-card-chevron">{chevron_svg}</span>'
+            f'</div>'
+            f'<div class="timeline-card-body"><p>{entry["summary"]}</p></div>'
+            f'</div>\n'
+        )
 
     body = f'''<main>
 <div class="hero-wrap">
+<div class="hero-aurora" aria-hidden="true"></div>
 <div class="hero-particles" aria-hidden="true"></div>
 <section class="hero reveal">
 <p class="hero-label">WoW 12.x / Midnight</p>
@@ -855,7 +948,7 @@ def build_index():
 </div>
 </main>'''
 
-    return base_page("VoxCore", body)
+    return base_page("VoxCore", body, search_index=_search_index)
 
 
 def build_feature_page(page):
@@ -863,11 +956,12 @@ def build_feature_page(page):
     with open(md_path, 'r', encoding='utf-8') as f:
         md = f.read()
 
-    md = re.sub(r'^#\s+[^\n]+\n', '', md.strip(), count=1)
-    html = md_to_html(md)
+    md_stripped = re.sub(r'^#\s+[^\n]+\n', '', md.strip(), count=1)
+    html = md_to_html(md_stripped)
     toc = extract_toc(html)
+    rt = reading_time(md)
 
-    # Inject diagrams at top of specific pages
+    # Inject diagrams/widgets at top of specific pages
     extra_top = ''
     if page['slug'] == 'framework':
         extra_top = ARCH_SVG
@@ -877,11 +971,14 @@ def build_feature_page(page):
         extra_top = FUNNEL_VIZ
     elif page['slug'] == 'tooling':
         extra_top = TOOL_EXPLORER_HTML
+    elif page['slug'] == 'status':
+        extra_top = PROGRESS_RINGS_HTML
 
     body = f'''<main>
 <header class="page-header">
 <nav class="breadcrumb"><a href="index.html">VoxCore</a> &rsaquo; {page["title"]}</nav>
 <h1>{page["title"]}</h1>
+<div class="reading-time">{READING_TIME_ICON} ~{rt} min read</div>
 </header>
 <div class="page-layout">
 {feature_sidebar_html(toc)}
@@ -892,39 +989,55 @@ def build_feature_page(page):
 </div>
 </main>'''
 
-    return base_page(page['title'], body, current_slug=page['slug'])
+    return base_page(page['title'], body, current_slug=page['slug'], search_index=_search_index)
 
 
 def build_report_page(page, prev_p, next_p, report_data):
     cached = report_data.get(page['slug'], {})
     html = cached.get('html', '')
+    md_path = os.path.join(CONTENT_DIR, f"{page['slug']}.md")
+    with open(md_path, 'r', encoding='utf-8') as f:
+        md_text = f.read()
+    rt = reading_time(md_text)
+
+    # Inject funnel on hotfix-audit report page
+    extra_top = ''
+    if page['slug'] == 'hotfix-audit':
+        extra_top = FUNNEL_VIZ
 
     body = f'''<main>
 <header class="page-header">
 <nav class="breadcrumb"><a href="index.html">VoxCore</a> &rsaquo; <a href="index.html#report">Report</a> &rsaquo; {page["title"]}</nav>
 <h1>{page["title"]}</h1>
+<div class="reading-time">{READING_TIME_ICON} ~{rt} min read</div>
 </header>
 <div class="page-layout">
 {report_sidebar_html(page['slug'], report_data)}
 <article>
+{extra_top}
 {html}
 {prev_next_html(prev_p, next_p)}
 </article>
 </div>
 </main>'''
 
-    return base_page(page['title'], body, current_slug=page['slug'])
+    return base_page(page['title'], body, current_slug=page['slug'], search_index=_search_index)
 
 
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 def main():
+    global _search_index
+
     if os.path.exists(OUTPUT_DIR):
         shutil.rmtree(OUTPUT_DIR)
     os.makedirs(OUTPUT_DIR)
 
     # First pass: extract all report page data
     report_data = extract_all_report_data()
+
+    # Build search index for command palette
+    _search_index = build_search_index(report_data)
 
     total_size = 0
 

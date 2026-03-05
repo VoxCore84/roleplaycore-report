@@ -837,6 +837,233 @@ body { animation: pageIn 0.4s ease-out; }
 .card-icon { color: var(--arcane); }
 .banner { border: 1px solid var(--arcane-subtle); }
 
+/* ── Command Palette ── */
+.cmd-overlay {
+  position: fixed; inset: 0; z-index: 500;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+  display: none; align-items: flex-start; justify-content: center;
+  padding-top: 18vh;
+}
+.cmd-overlay.open { display: flex; }
+.cmd-palette {
+  width: 560px; max-width: 92vw;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.5), 0 0 40px rgba(123,104,238,0.1);
+  overflow: hidden;
+  animation: cmdIn 0.15s ease-out;
+}
+@keyframes cmdIn {
+  from { opacity: 0; transform: scale(0.96) translateY(-8px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.cmd-input-wrap {
+  display: flex; align-items: center; padding: 16px 20px;
+  border-bottom: 1px solid var(--border); gap: 12px;
+}
+.cmd-input-wrap svg { flex-shrink: 0; color: var(--text-3); }
+.cmd-input {
+  flex: 1; background: none; border: none;
+  font-family: var(--font-body); font-size: 16px;
+  color: var(--text); outline: none;
+}
+.cmd-input::placeholder { color: var(--text-3); }
+.cmd-results {
+  max-height: 400px; overflow-y: auto; padding: 8px;
+  scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.1) transparent;
+}
+.cmd-result {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 12px; border-radius: 8px;
+  cursor: pointer; transition: background 0.12s;
+  text-decoration: none; color: var(--text);
+}
+.cmd-result:hover, .cmd-result.active {
+  background: var(--arcane-subtle); color: var(--text);
+}
+.cmd-result-title { font-size: 14px; font-weight: 500; }
+.cmd-result-page { font-size: 12px; color: var(--text-3); margin-left: auto; white-space: nowrap; }
+.cmd-hint {
+  padding: 10px 20px; border-top: 1px solid var(--border);
+  font-size: 12px; color: var(--text-3); display: flex; gap: 16px;
+}
+.cmd-hint kbd {
+  background: var(--bg-alt); padding: 1px 6px; border-radius: 4px;
+  font-family: var(--font-mono); font-size: 11px; border: 1px solid var(--border);
+}
+
+/* ── 3D Card Tilt ── */
+.pillar-card, .card, .tool-card, .timeline-card { transform-style: preserve-3d; }
+
+/* ── Aurora Background ── */
+.hero-aurora {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 60%, rgba(123,104,238,0.12) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 40% at 75% 35%, rgba(91,79,207,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse 70% 50% at 50% 80%, rgba(201,168,76,0.05) 0%, transparent 50%);
+  animation: auroraShift 16s ease-in-out infinite alternate;
+}
+@keyframes auroraShift {
+  0% { opacity: 0.5; transform: scale(1) translateY(0); }
+  50% { opacity: 1; transform: scale(1.04) translateY(-8px); }
+  100% { opacity: 0.6; transform: scale(0.98) translateY(4px); }
+}
+
+/* ── Cursor Trail ── */
+.cursor-dot {
+  position: fixed; pointer-events: none; z-index: 9998;
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--arcane); opacity: 0;
+  mix-blend-mode: screen; will-change: transform;
+}
+
+/* ── Copy Button ── */
+.code-wrap { position: relative; }
+.code-copy {
+  position: absolute; top: 8px; right: 8px;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 6px; padding: 4px 10px;
+  font-size: 11px; color: var(--text-3);
+  cursor: pointer; opacity: 0; transition: opacity 0.2s, color 0.2s, border-color 0.2s;
+  font-family: var(--font-mono);
+}
+.code-wrap:hover .code-copy { opacity: 1; }
+.code-copy:hover { color: var(--accent); border-color: var(--accent); }
+.code-copy.copied { color: var(--gold); border-color: var(--gold); }
+
+/* ── Reading Time ── */
+.reading-time {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 13px; color: var(--text-3); margin-bottom: 24px;
+}
+
+/* ── Progress Rings ── */
+.progress-rings { display: flex; flex-wrap: wrap; gap: 32px; justify-content: center; margin: 40px 0; }
+.progress-ring-wrap {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  position: relative;
+}
+.progress-ring { width: 88px; height: 88px; transform: rotate(-90deg); }
+.progress-ring-bg { fill: none; stroke: var(--border); stroke-width: 5; }
+.progress-ring-fill {
+  fill: none; stroke: var(--arcane); stroke-width: 5;
+  stroke-linecap: round; stroke-dasharray: 226.2; stroke-dashoffset: 226.2;
+  transition: stroke-dashoffset 1.5s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.progress-ring-fill.gold { stroke: var(--gold); }
+.progress-ring-label { font-size: 12px; color: var(--text-2); text-align: center; max-width: 100px; }
+.progress-ring-value {
+  position: absolute; top: 30px; left: 50%; transform: translateX(-50%);
+  font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--text);
+}
+
+/* ── Pulse Status Dots ── */
+.pulse-dot {
+  display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+  margin-right: 6px; vertical-align: middle; position: relative;
+}
+.pulse-dot.green { background: #50C878; box-shadow: 0 0 6px rgba(80,200,120,0.4); }
+.pulse-dot.amber { background: #FFB347; box-shadow: 0 0 6px rgba(255,179,71,0.4); }
+.pulse-dot::after {
+  content: ''; position: absolute; inset: -3px; border-radius: 50%;
+  opacity: 0; animation: pulseRing 2s ease-out infinite;
+}
+.pulse-dot.green::after { border: 2px solid #50C878; }
+.pulse-dot.amber::after { border: 2px solid #FFB347; }
+@keyframes pulseRing {
+  0% { opacity: 0.5; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.8); }
+}
+
+/* ── Interactive Timeline ── */
+.timeline-card {
+  background: var(--bg-card); border: 1px solid var(--arcane-subtle);
+  border-radius: 14px; margin-bottom: 10px; overflow: hidden;
+  transition: border-color 0.3s, box-shadow 0.3s, transform 0.2s;
+}
+.timeline-card:hover {
+  border-color: rgba(123,104,238,0.25);
+  box-shadow: 0 4px 16px var(--arcane-glow);
+}
+.timeline-card-header {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 20px; cursor: pointer; user-select: none;
+}
+.timeline-card-date {
+  font-size: 12px; font-weight: 600; color: var(--gold);
+  flex-shrink: 0; min-width: 50px;
+}
+.timeline-card-title { font-size: 15px; font-weight: 600; color: var(--text); flex: 1; }
+.timeline-card-chevron {
+  color: var(--text-3); transition: transform 0.3s; flex-shrink: 0;
+}
+.timeline-card.expanded .timeline-card-chevron { transform: rotate(180deg); }
+.timeline-card-body {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.4s ease;
+  padding: 0 20px;
+}
+.timeline-card.expanded .timeline-card-body {
+  max-height: 200px; padding: 0 20px 16px;
+}
+.timeline-card-body p { font-size: 14px; color: var(--text-2); line-height: 1.5; margin: 0; }
+.timeline-category {
+  display: inline-block; font-size: 10px; font-weight: 600;
+  padding: 2px 8px; border-radius: 10px; margin-left: 8px;
+  letter-spacing: 0.03em; text-transform: uppercase; flex-shrink: 0;
+}
+.timeline-category.data { background: rgba(123,104,238,0.15); color: var(--accent); }
+.timeline-category.transmog { background: rgba(201,168,76,0.15); color: var(--gold); }
+.timeline-category.tooling { background: rgba(80,200,120,0.15); color: #5EC98A; }
+.timeline-category.audit { background: rgba(255,107,107,0.15); color: #FF6B6B; }
+.timeline-category.website { background: rgba(107,165,215,0.15); color: #6BA5D7; }
+.timeline-category.build { background: rgba(184,107,212,0.15); color: #B86BD4; }
+
+/* ── Expanding Tables ── */
+.table-expandable.collapsed tbody tr:nth-child(n+9) { display: none; }
+.table-expand-btn {
+  display: block; width: 100%; padding: 10px;
+  background: linear-gradient(180deg, transparent 0%, var(--bg) 50%);
+  border: none; cursor: pointer;
+  font-family: var(--font-body); font-size: 13px; color: var(--accent);
+  text-align: center; margin-top: -16px; position: relative;
+}
+.table-expand-btn:hover { color: var(--accent-hover); }
+
+/* ── Floating Runes ── */
+.rune {
+  position: fixed; pointer-events: none; z-index: -1;
+  opacity: 0.025; color: var(--arcane);
+  animation: runeFloat 20s ease-in-out infinite;
+  font-family: serif;
+}
+@keyframes runeFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.025; }
+  50% { transform: translateY(-25px) rotate(12deg); opacity: 0.05; }
+}
+
+/* ── Page Transition ── */
+body.page-exit { animation: pageOut 0.18s ease-in forwards; }
+@keyframes pageOut {
+  to { opacity: 0; transform: translateY(-6px); }
+}
+
+/* ── Glassmorphism enhancement ── */
+.card, .pillar-card {
+  background: rgba(26, 23, 38, 0.75);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+}
+
+/* ── Keyboard shortcut hint in nav ── */
+.nav-kbd-hint {
+  font-size: 11px; color: var(--text-3); opacity: 0.5;
+  font-family: var(--font-mono); padding: 1px 5px;
+  border: 1px solid var(--border); border-radius: 3px;
+  margin-left: 4px; vertical-align: middle;
+}
+
 /* ── Animations ── */
 .reveal {
   opacity: 0; transform: translateY(20px);
@@ -854,6 +1081,13 @@ body { animation: pageIn 0.4s ease-out; }
   .card:hover, .pillar-card:hover { transform: none; }
   .back-to-top { transition: none; }
   .konami-flash { animation: none; }
+  .hero-aurora { animation: none; }
+  .rune { animation: none; display: none; }
+  .cursor-dot { display: none; }
+  .section-divider { animation: none; }
+  .timeline-card-body { transition: none; }
+  .progress-ring-fill { transition: none; }
+  body.page-exit { animation: none; }
 }
 
 /* ── Responsive ── */
@@ -883,6 +1117,11 @@ body { animation: pageIn 0.4s ease-out; }
   .timeline-entry { flex-direction: column; gap: 4px; }
   .timeline-date { width: auto; }
   .back-to-top { bottom: 20px; right: 20px; width: 40px; height: 40px; }
+  .progress-rings { gap: 20px; }
+  .progress-ring-wrap { transform: scale(0.85); }
+  .cmd-palette { max-width: 95vw; }
+  .timeline-card-header { padding: 12px 16px; gap: 10px; }
+  .timeline-category { display: none; }
 }
 </style>
 </head>
@@ -901,8 +1140,19 @@ body { animation: pageIn 0.4s ease-out; }
 </div>
 </nav>
 <div class="mobile-nav" role="dialog" aria-label="Navigation"><a href="framework.html">The Framework</a><a href="pipeline.html">Data Pipeline</a><a href="tooling.html">Tooling</a><a href="ai-workflow.html">AI Workflow</a><a href="status.html">Project Status</a><a href="opensource.html">Open Source</a><div class="mobile-sep"></div><a href="data-import.html">Data Import & Hotfix Repair</a><a href="npc-audits.html">NPC Audits & Corrections</a><a href="quest-localization.html">Quests & Localization</a><a href="database-cleanup.html">Database Cleanup & Integrity</a><a href="performance.html">Performance & Build Diff</a><a href="placement.html">Placement Audits</a><a href="results.html">Tooling & Results</a><a href="hotfix-audit.html">Hotfix Redundancy Audit</a><a href="discoveries.html">Discoveries & Lessons</a><a href="reference.html">Timeline & Reference</a></div>
+<div class="cmd-overlay">
+<div class="cmd-palette">
+<div class="cmd-input-wrap">
+<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+<input type="text" class="cmd-input" placeholder="Search pages and sections..." autocomplete="off">
+</div>
+<div class="cmd-results"></div>
+<div class="cmd-hint"><span><kbd>↑↓</kbd> navigate</span><span><kbd>↵</kbd> open</span><span><kbd>esc</kbd> close</span></div>
+</div>
+</div>
 <main>
 <div class="hero-wrap">
+<div class="hero-aurora" aria-hidden="true"></div>
 <div class="hero-particles" aria-hidden="true"></div>
 <section class="hero reveal">
 <p class="hero-label">WoW 12.x / Midnight</p>
@@ -964,12 +1214,12 @@ body { animation: pageIn 0.4s ease-out; }
 
 <section class="timeline-section">
 <h2>Recent Activity</h2>
-<div class="timeline-entry reveal"><span class="timeline-date">Mar 5</span><div><h3>Arcane Codex Visual Overhaul</h3><p>Dark-only arcane theme, Tool Explorer (54 tools/9 chips), pipeline animation, reduction funnel, scroll progress, achievement toasts</p></div></div>
-<div class="timeline-entry reveal"><span class="timeline-date">Mar 5</span><div><h3>Transmog Audit Complete</h3><p>5-phase audit — 26/26 items across Bridge/Spy/Server/Player.cpp. All 5 bugs fixed, system ready for testing</p></div></div>
-<div class="timeline-entry reveal"><span class="timeline-date">Mar 5</span><div><h3>BtWQuests + Gap Scrape</h3><p>1,062 quest starters from BtWQuests addon, 8,799 vendor items + 592 quest starters from Wowhead gap scrape</p></div></div>
-<div class="timeline-entry reveal"><span class="timeline-date">Mar 5</span><div><h3>Quest Reward Text Import</h3><p>30-worker Tor scraper — 13,494 quest_offer_reward + 6,792 quest_request_items rows from Wowhead</p></div></div>
-<div class="timeline-entry reveal"><span class="timeline-date">Mar 5</span><div><h3>Midnight Expansion Data</h3><p>38 guide + 586 entity pages scraped — 58 starters, 60 enders, 819 loot entries, 526 boss abilities</p></div></div>
-<div class="timeline-entry reveal"><span class="timeline-date">Mar 5</span><div><h3>Build 66263 + High-Tier Spawns</h3><p>New client build, 1,094 DB2 tables extracted. 1,492 high-tier service NPC spawns deployed</p></div></div>
+<div class="timeline-card reveal"><div class="timeline-card-header"><span class="timeline-card-date">Mar 5</span><span class="timeline-card-title">Arcane Codex Visual Overhaul</span><span class="timeline-category website">website</span><span class="timeline-card-chevron"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span></div><div class="timeline-card-body"><p>Dark-only arcane theme, Tool Explorer (54 tools/9 chips), pipeline animation, reduction funnel, scroll progress, achievement toasts</p></div></div>
+<div class="timeline-card reveal"><div class="timeline-card-header"><span class="timeline-card-date">Mar 5</span><span class="timeline-card-title">Transmog Audit Complete</span><span class="timeline-category transmog">transmog</span><span class="timeline-card-chevron"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span></div><div class="timeline-card-body"><p>5-phase audit — 26/26 items across Bridge/Spy/Server/Player.cpp. All 5 bugs fixed, system ready for testing</p></div></div>
+<div class="timeline-card reveal"><div class="timeline-card-header"><span class="timeline-card-date">Mar 5</span><span class="timeline-card-title">BtWQuests + Gap Scrape</span><span class="timeline-category tooling">tooling</span><span class="timeline-card-chevron"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span></div><div class="timeline-card-body"><p>1,062 quest starters from BtWQuests addon, 8,799 vendor items + 592 quest starters from Wowhead gap scrape</p></div></div>
+<div class="timeline-card reveal"><div class="timeline-card-header"><span class="timeline-card-date">Mar 5</span><span class="timeline-card-title">Quest Reward Text Import</span><span class="timeline-category data">data</span><span class="timeline-card-chevron"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span></div><div class="timeline-card-body"><p>30-worker Tor scraper — 13,494 quest_offer_reward + 6,792 quest_request_items rows from Wowhead</p></div></div>
+<div class="timeline-card reveal"><div class="timeline-card-header"><span class="timeline-card-date">Mar 5</span><span class="timeline-card-title">Midnight Expansion Data</span><span class="timeline-category data">data</span><span class="timeline-card-chevron"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span></div><div class="timeline-card-body"><p>38 guide + 586 entity pages scraped — 58 starters, 60 enders, 819 loot entries, 526 boss abilities</p></div></div>
+<div class="timeline-card reveal"><div class="timeline-card-header"><span class="timeline-card-date">Mar 5</span><span class="timeline-card-title">Build 66263 + High-Tier Spawns</span><span class="timeline-category build">build</span><span class="timeline-card-chevron"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span></div><div class="timeline-card-body"><p>New client build, 1,094 DB2 tables extracted. 1,492 high-tier service NPC spawns deployed</p></div></div>
 
 </section>
 
@@ -991,6 +1241,7 @@ body { animation: pageIn 0.4s ease-out; }
 <span>VoxCore &mdash; March 2026</span>
 <a href="https://github.com/VoxCore84/RoleplayCore">GitHub</a>
 </footer></div>
+<script id="search-index" type="application/json">[{"t":"Home","u":"index.html","p":"","s":"VoxCore main page"},{"t":"The Framework","u":"framework.html","p":"","s":"11 custom C++ systems, persistent RP commands, transmog outfits, companion AI"},{"t":"Data Pipeline","u":"pipeline.html","p":"","s":"TACT extraction \u2192 CSV merge \u2192 hotfix repair \u2192 validation \u2014 1,094 tables, fully automated"},{"t":"Tooling","u":"tooling.html","p":"","s":"75+ tools \u2014 data pipelines, audit validators, packet analyzers, MCP servers"},{"t":"AI Workflow","u":"ai-workflow.html","p":"","s":"Claude Code integration \u2014 17 skills, 4 MCP servers, parallel agent architecture"},{"t":"Project Status","u":"status.html","p":"","s":"Database health, 64+ sessions logged, open issues, repository activity"},{"t":"Open Source","u":"opensource.html","p":"","s":"9 repositories, 6 public gists, community tools and reference data"},{"t":"Data Import & Hotfix Repair","u":"data-import.html","p":"Report","s":"~1M rows imported, 103K hotfix entries repaired"},{"t":"LoreWalkerTDB Integration","u":"data-import.html#lorewalkertdb-integration","p":"Data Import & Hotfix Repair","s":""},{"t":"Hotfix Repair System","u":"data-import.html#hotfix-repair-system","p":"Data Import & Hotfix Repair","s":""},{"t":"NPC Audits & Corrections","u":"npc-audits.html","p":"Report","s":"78,475 fixes across 27-check validator + Wowhead mega-audit"},{"t":"NPC Audits & Corrections","u":"npc-audits.html#npc-audits-corrections","p":"NPC Audits & Corrections","s":""},{"t":"Quests & Localization","u":"quest-localization.html","p":"Report","s":"24,868 chain links, 1.6M locale rows across 10 languages"},{"t":"Quest System Enrichment","u":"quest-localization.html#quest-system-enrichment","p":"Quests & Localization","s":""},{"t":"Localization","u":"quest-localization.html#localization","p":"Quests & Localization","s":""},{"t":"Database Cleanup & Integrity","u":"database-cleanup.html","p":"Report","s":"~412,000 dead rows removed, loot PK discovery, 47K post-import cleanup"},{"t":"Database Cleanup & Integrity","u":"database-cleanup.html#database-cleanup-integrity","p":"Database Cleanup & Integrity","s":""},{"t":"Performance & Build Diff","u":"performance.html","p":"Report","s":"3m24s to 17s startup, 5-build diff audit with zero breaking changes"},{"t":"MySQL & Server Performance","u":"performance.html#mysql-server-performance","p":"Performance & Build Diff","s":""},{"t":"Build Diff Audit (5 Builds)","u":"performance.html#build-diff-audit-5-builds","p":"Performance & Build Diff","s":""},{"t":"Placement Audits","u":"placement.html","p":"Report","s":"31K placement fixes generated from LoreWalkerTDB comparison"},{"t":"Placement Audits","u":"placement.html#placement-audits","p":"Placement Audits","s":""},{"t":"Tooling & Results","u":"results.html","p":"Report","s":"75+ tools built, final DB state, before/after player impact"},{"t":"Custom Tooling Summary","u":"results.html#custom-tooling-summary","p":"Tooling & Results","s":""},{"t":"Final Database State","u":"results.html#final-database-state","p":"Tooling & Results","s":""},{"t":"What It All Means for Players","u":"results.html#what-it-all-means-for-players","p":"Tooling & Results","s":""},{"t":"Hotfix Redundancy Audit","u":"hotfix-audit.html","p":"Report","s":"10.8M to ~244K rows \u2014 97.8% reduction in 3 rounds"},{"t":"Hotfix Redundancy Audit (Complete)","u":"hotfix-audit.html#hotfix-redundancy-audit-complete","p":"Hotfix Redundancy Audit","s":""},{"t":"Discoveries & Lessons","u":"discoveries.html","p":"Report","s":"9 community-relevant findings for any TrinityCore project"},{"t":"Discoveries & Lessons (Useful for the Community)","u":"discoveries.html#discoveries-lessons-useful-for-the-community","p":"Discoveries & Lessons","s":""},{"t":"Timeline & Reference","u":"reference.html","p":"Report","s":"Full timeline, 75+ tool catalog, data sources, reproducibility"},{"t":"Timeline","u":"reference.html#timeline","p":"Timeline & Reference","s":""},{"t":"Complete Tooling Catalog","u":"reference.html#complete-tooling-catalog","p":"Timeline & Reference","s":""},{"t":"Appendix A: Data Sources","u":"reference.html#appendix-a-data-sources","p":"Timeline & Reference","s":""},{"t":"Appendix B: Reproducibility","u":"reference.html#appendix-b-reproducibility","p":"Timeline & Reference","s":""}]</script>
 <script>(function(){
   var rm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -1011,7 +1262,6 @@ body { animation: pageIn 0.4s ease-out; }
     }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
     document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
 
-    // Apply stagger delays to grid children
     document.querySelectorAll('.pillars-grid, .cards-grid').forEach(function(grid) {
       var children = grid.children;
       for (var i = 0; i < children.length; i++) {
@@ -1056,12 +1306,10 @@ body { animation: pageIn 0.4s ease-out; }
     if (rm) return;
     var container = document.querySelector('.hero-particles');
     if (!container) return;
-    var count = 18;
-    for (var i = 0; i < count; i++) {
+    for (var i = 0; i < 18; i++) {
       var p = document.createElement('div');
       p.className = 'hero-particle' + (Math.random() > 0.7 ? ' gold' : '');
-      var size = 2 + Math.random() * 4;
-      p.style.setProperty('--size', size + 'px');
+      p.style.setProperty('--size', (2 + Math.random() * 4) + 'px');
       p.style.setProperty('--duration', (6 + Math.random() * 8) + 's');
       p.style.setProperty('--delay', (Math.random() * 6) + 's');
       p.style.setProperty('--drift-y', (-60 - Math.random() * 120) + 'px');
@@ -1078,10 +1326,7 @@ body { animation: pageIn 0.4s ease-out; }
     if (pipelineSvg) {
       var pipeObs = new IntersectionObserver(function(entries) {
         entries.forEach(function(e) {
-          if (e.isIntersecting) {
-            pipelineSvg.classList.add('active');
-            pipeObs.unobserve(pipelineSvg);
-          }
+          if (e.isIntersecting) { pipelineSvg.classList.add('active'); pipeObs.unobserve(pipelineSvg); }
         });
       }, { threshold: 0.3 });
       pipeObs.observe(pipelineSvg);
@@ -1092,7 +1337,6 @@ body { animation: pageIn 0.4s ease-out; }
   (function initToolExplorer() {
     var explorer = document.querySelector('.tool-explorer');
     if (!explorer) return;
-
     var search = explorer.querySelector('.tool-search');
     var chips = explorer.querySelectorAll('.tool-chip');
     var cards = explorer.querySelectorAll('.tool-card');
@@ -1108,12 +1352,8 @@ body { animation: pageIn 0.4s ease-out; }
         var desc = card.getAttribute('data-desc') || '';
         var matchCat = activeCategory === 'all' || cat === activeCategory;
         var matchSearch = !query || name.indexOf(query) !== -1 || desc.indexOf(query) !== -1;
-        if (matchCat && matchSearch) {
-          card.classList.remove('hidden');
-          visible++;
-        } else {
-          card.classList.add('hidden');
-        }
+        if (matchCat && matchSearch) { card.classList.remove('hidden'); visible++; }
+        else { card.classList.add('hidden'); }
       });
       if (countEl) countEl.textContent = visible + ' of ' + cards.length + ' tools';
     }
@@ -1126,7 +1366,6 @@ body { animation: pageIn 0.4s ease-out; }
         filterTools();
       });
     });
-
     if (search) search.addEventListener('input', filterTools);
     filterTools();
   })();
@@ -1138,7 +1377,7 @@ body { animation: pageIn 0.4s ease-out; }
       { selector: '[data-countup="~1,004,000"]', text: '1M Rows Imported', icon: '\u2728' },
       { selector: '[data-countup="97.8%"]', text: '97.8% Redundancy Eliminated', icon: '\u26A1' },
       { selector: '[data-countup="~10.6M"]', text: '10.6M Dead Rows Purged', icon: '\uD83D\uDD25' },
-      { selector: '[data-countup="65+"]', text: '65+ Tools Built', icon: '\uD83D\uDEE0\uFE0F' },
+      { selector: '[data-countup="75+"]', text: '75+ Tools Built', icon: '\uD83D\uDEE0\uFE0F' }
     ];
     var shown = {};
     toasts.forEach(function(t) {
@@ -1172,12 +1411,12 @@ body { animation: pageIn 0.4s ease-out; }
   })();
 
   // ── Mobile nav ──
-  var btn = document.querySelector('.nav-menu-btn');
-  var mn = document.querySelector('.mobile-nav');
-  if (btn && mn) {
-    btn.addEventListener('click', function() {
-      mn.classList.toggle('open');
-      btn.setAttribute('aria-expanded', mn.classList.contains('open'));
+  var menuBtn = document.querySelector('.nav-menu-btn');
+  var mobileNav = document.querySelector('.mobile-nav');
+  if (menuBtn && mobileNav) {
+    menuBtn.addEventListener('click', function() {
+      mobileNav.classList.toggle('open');
+      menuBtn.setAttribute('aria-expanded', mobileNav.classList.contains('open'));
     });
   }
 
@@ -1186,13 +1425,11 @@ body { animation: pageIn 0.4s ease-out; }
   if (sidebar) {
     var sections = sidebar.querySelectorAll('.toc-section');
     var isReportSidebar = sections.length > 0;
-
     sections.forEach(function(section) {
       var toggle = section.querySelector('.toc-toggle');
       if (toggle) {
         toggle.addEventListener('click', function(e) {
-          e.preventDefault();
-          e.stopPropagation();
+          e.preventDefault(); e.stopPropagation();
           section.classList.toggle('expanded');
         });
       }
@@ -1207,7 +1444,6 @@ body { animation: pageIn 0.4s ease-out; }
         if (el) headings.push({ el: el, link: a });
       }
     });
-
     if (headings.length > 0) {
       var tocObs = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
@@ -1217,8 +1453,8 @@ body { animation: pageIn 0.4s ease-out; }
               if (h.el === entry.target) {
                 h.link.classList.add('active');
                 if (isReportSidebar) {
-                  var parentSection = h.link.closest('.toc-section');
-                  if (parentSection) parentSection.classList.add('expanded');
+                  var ps = h.link.closest('.toc-section');
+                  if (ps) ps.classList.add('expanded');
                 }
               }
             });
@@ -1232,21 +1468,13 @@ body { animation: pageIn 0.4s ease-out; }
   // ── Sidebar toggle (tablet/mobile) ──
   var st = document.querySelector('.sidebar-toggle');
   var sb = document.querySelector('.sidebar');
-  if (st && sb) {
-    st.addEventListener('click', function() {
-      sb.classList.toggle('mobile-open');
-    });
-  }
+  if (st && sb) { st.addEventListener('click', function() { sb.classList.toggle('mobile-open'); }); }
 
   // ── Back to top button ──
   var btt = document.querySelector('.back-to-top');
   if (btt) {
     window.addEventListener('scroll', function() {
-      if (window.scrollY > 600) {
-        btt.classList.add('visible');
-      } else {
-        btt.classList.remove('visible');
-      }
+      btt.classList.toggle('visible', window.scrollY > 600);
     }, { passive: true });
     btt.addEventListener('click', function() {
       window.scrollTo({ top: 0, behavior: rm ? 'auto' : 'smooth' });
@@ -1254,8 +1482,7 @@ body { animation: pageIn 0.4s ease-out; }
   }
 
   // ── Konami Code Easter Egg ──
-  var konamiSeq = [38,38,40,40,37,39,37,39,66,65];
-  var konamiPos = 0;
+  var konamiSeq = [38,38,40,40,37,39,37,39,66,65], konamiPos = 0;
   document.addEventListener('keydown', function(e) {
     if (e.keyCode === konamiSeq[konamiPos]) {
       konamiPos++;
@@ -1266,10 +1493,246 @@ body { animation: pageIn 0.4s ease-out; }
         document.body.appendChild(flash);
         setTimeout(function() { flash.remove(); }, 1300);
       }
-    } else {
-      konamiPos = 0;
-    }
+    } else { konamiPos = 0; }
   });
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  //  NEW INTERACTIVE FEATURES
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  // ── 3D Card Tilt ──
+  if (!rm) {
+    document.querySelectorAll('.pillar-card, .card, .tool-card, .timeline-card').forEach(function(card) {
+      card.addEventListener('mousemove', function(e) {
+        var rect = card.getBoundingClientRect();
+        var x = (e.clientX - rect.left) / rect.width - 0.5;
+        var y = (e.clientY - rect.top) / rect.height - 0.5;
+        card.style.transform = 'perspective(800px) rotateY(' + (x * 5) + 'deg) rotateX(' + (-y * 5) + 'deg) translateY(-4px)';
+      });
+      card.addEventListener('mouseleave', function() {
+        card.style.transform = '';
+      });
+    });
+  }
+
+  // ── Command Palette (Ctrl+K or /) ──
+  (function initCommandPalette() {
+    var overlay = document.querySelector('.cmd-overlay');
+    if (!overlay) return;
+    var input = overlay.querySelector('.cmd-input');
+    var resultsEl = overlay.querySelector('.cmd-results');
+    var activeIdx = -1;
+    var searchIndex = [];
+    try {
+      var indexEl = document.getElementById('search-index');
+      if (indexEl) searchIndex = JSON.parse(indexEl.textContent);
+    } catch(e) {}
+
+    function openPalette() {
+      overlay.classList.add('open');
+      input.value = '';
+      input.focus();
+      renderResults('');
+      activeIdx = -1;
+    }
+    function closePalette() {
+      overlay.classList.remove('open');
+      activeIdx = -1;
+    }
+
+    function renderResults(query) {
+      query = query.toLowerCase().trim();
+      var matches = searchIndex;
+      if (query) {
+        matches = searchIndex.filter(function(item) {
+          return item.t.toLowerCase().indexOf(query) !== -1 ||
+                 (item.s && item.s.toLowerCase().indexOf(query) !== -1);
+        });
+      }
+      matches = matches.slice(0, 15);
+      resultsEl.innerHTML = matches.map(function(item, i) {
+        return '<a class="cmd-result' + (i === 0 ? ' active' : '') + '" href="' + item.u + '">' +
+          '<span class="cmd-result-title">' + item.t + '</span>' +
+          '<span class="cmd-result-page">' + (item.p || '') + '</span></a>';
+      }).join('');
+      activeIdx = matches.length > 0 ? 0 : -1;
+    }
+
+    function navigate(idx) {
+      var items = resultsEl.querySelectorAll('.cmd-result');
+      items.forEach(function(el) { el.classList.remove('active'); });
+      if (idx >= 0 && idx < items.length) {
+        items[idx].classList.add('active');
+        items[idx].scrollIntoView({ block: 'nearest' });
+      }
+      activeIdx = idx;
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        overlay.classList.contains('open') ? closePalette() : openPalette();
+      }
+      if (e.key === '/' && !overlay.classList.contains('open') &&
+          document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+        e.preventDefault(); openPalette();
+      }
+      if (e.key === 'Escape' && overlay.classList.contains('open')) { closePalette(); }
+    });
+
+    input.addEventListener('keydown', function(e) {
+      var items = resultsEl.querySelectorAll('.cmd-result');
+      if (e.key === 'ArrowDown') { e.preventDefault(); navigate(Math.min(activeIdx + 1, items.length - 1)); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); navigate(Math.max(activeIdx - 1, 0)); }
+      else if (e.key === 'Enter') {
+        e.preventDefault();
+        var active = resultsEl.querySelector('.cmd-result.active');
+        if (active) window.location.href = active.href;
+      }
+    });
+    input.addEventListener('input', function() { renderResults(input.value); });
+    overlay.addEventListener('click', function(e) { if (e.target === overlay) closePalette(); });
+  })();
+
+  // ── Copy Buttons on Code Blocks ──
+  document.querySelectorAll('pre').forEach(function(pre) {
+    var wrap = document.createElement('div');
+    wrap.className = 'code-wrap';
+    pre.parentNode.insertBefore(wrap, pre);
+    wrap.appendChild(pre);
+    var btn = document.createElement('button');
+    btn.className = 'code-copy';
+    btn.textContent = 'Copy';
+    btn.addEventListener('click', function() {
+      var code = pre.querySelector('code');
+      navigator.clipboard.writeText(code ? code.textContent : pre.textContent).then(function() {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(function() { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+      });
+    });
+    wrap.appendChild(btn);
+  });
+
+  // ── Cursor Trail ──
+  if (!rm && window.innerWidth > 768) {
+    var trail = [], trailCount = 5;
+    for (var ti = 0; ti < trailCount; ti++) {
+      var dot = document.createElement('div');
+      dot.className = 'cursor-dot';
+      document.body.appendChild(dot);
+      trail.push({ el: dot, x: 0, y: 0 });
+    }
+    var mouseX = 0, mouseY = 0;
+    document.addEventListener('mousemove', function(e) { mouseX = e.clientX; mouseY = e.clientY; });
+    function animateTrail() {
+      var px = mouseX, py = mouseY;
+      trail.forEach(function(d, i) {
+        d.x += (px - d.x) * (0.28 - i * 0.04);
+        d.y += (py - d.y) * (0.28 - i * 0.04);
+        d.el.style.left = d.x + 'px';
+        d.el.style.top = d.y + 'px';
+        d.el.style.opacity = (1 - i / trailCount) * 0.2;
+        d.el.style.width = d.el.style.height = (5 - i * 0.7) + 'px';
+        px = d.x; py = d.y;
+      });
+      requestAnimationFrame(animateTrail);
+    }
+    animateTrail();
+  }
+
+  // ── Interactive Timeline ──
+  document.querySelectorAll('.timeline-card-header').forEach(function(header) {
+    header.addEventListener('click', function() {
+      header.closest('.timeline-card').classList.toggle('expanded');
+    });
+  });
+
+  // ── Expanding Tables ──
+  document.querySelectorAll('.data-table').forEach(function(table) {
+    var rows = table.querySelectorAll('tbody tr');
+    if (rows.length <= 8) return;
+    var wrap = table.closest('.table-wrap');
+    if (!wrap) return;
+    wrap.classList.add('table-expandable', 'collapsed');
+    var btn = document.createElement('button');
+    btn.className = 'table-expand-btn';
+    btn.textContent = 'Show all ' + rows.length + ' rows';
+    btn.addEventListener('click', function() {
+      wrap.classList.toggle('collapsed');
+      btn.textContent = wrap.classList.contains('collapsed') ? 'Show all ' + rows.length + ' rows' : 'Show fewer';
+    });
+    wrap.appendChild(btn);
+  });
+
+  // ── Progress Ring Animation ──
+  if (!rm) {
+    document.querySelectorAll('.progress-ring-fill').forEach(function(ring) {
+      var pct = parseFloat(ring.getAttribute('data-pct') || 0);
+      var offset = 226.2 * (1 - pct / 100);
+      var ringObs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+          if (e.isIntersecting) { ring.style.strokeDashoffset = offset; ringObs.unobserve(ring); }
+        });
+      }, { threshold: 0.5 });
+      ringObs.observe(ring);
+    });
+  }
+
+  // ── Typewriter Effect on Page Titles ──
+  if (!rm) {
+    var pageH1 = document.querySelector('.page-header h1');
+    if (pageH1 && !pageH1.classList.contains('typed')) {
+      var fullText = pageH1.textContent;
+      pageH1.classList.add('typed');
+      pageH1.textContent = '';
+      pageH1.style.borderRight = '2px solid var(--arcane)';
+      var ci = 0;
+      function typeChar() {
+        if (ci < fullText.length) {
+          pageH1.textContent += fullText[ci];
+          ci++;
+          setTimeout(typeChar, 25 + Math.random() * 35);
+        } else {
+          setTimeout(function() {
+            pageH1.style.borderRight = '2px solid transparent';
+          }, 600);
+        }
+      }
+      setTimeout(typeChar, 300);
+    }
+  }
+
+  // ── Smooth Page Transitions ──
+  document.querySelectorAll('a[href$=".html"]').forEach(function(link) {
+    if (link.target === '_blank') return;
+    if (link.closest('.cmd-palette')) return;
+    try { if (link.hostname && link.hostname !== window.location.hostname) return; } catch(e) { return; }
+    link.addEventListener('click', function(e) {
+      if (e.ctrlKey || e.metaKey || e.shiftKey) return;
+      e.preventDefault();
+      var href = link.href;
+      document.body.classList.add('page-exit');
+      setTimeout(function() { window.location.href = href; }, 180);
+    });
+  });
+
+  // ── Floating Runes (subtle background) ──
+  if (!rm && window.innerWidth > 1024) {
+    var runes = ['\u16A0','\u16A2','\u16A6','\u16B1','\u16B7','\u16C1','\u16C7','\u16D2'];
+    for (var ri = 0; ri < 5; ri++) {
+      var rune = document.createElement('div');
+      rune.className = 'rune';
+      rune.textContent = runes[Math.floor(Math.random() * runes.length)];
+      rune.style.left = (8 + Math.random() * 84) + '%';
+      rune.style.top = (5 + Math.random() * 90) + '%';
+      rune.style.animationDelay = (Math.random() * 12) + 's';
+      rune.style.animationDuration = (18 + Math.random() * 14) + 's';
+      rune.style.fontSize = (22 + Math.random() * 14) + 'px';
+      document.body.appendChild(rune);
+    }
+  }
+
 })();
 </script>
 </body>
