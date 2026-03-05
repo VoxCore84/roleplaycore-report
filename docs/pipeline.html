@@ -640,49 +640,103 @@ details .data-table { margin: 0 0 8px; }
 <h1>Data Pipeline</h1>
 </header>
 <div class="page-layout">
-<button class="sidebar-toggle">On this page</button><nav class="sidebar" aria-label="Table of contents"><a href="#pipeline-overview">Pipeline Overview</a><a href="#stage-1-extract">Stage 1: Extract</a><a href="#tactsharp-casc-extraction" class="toc-h3">TACTSharp / CASC Extraction</a><a href="#wagotools-cdn-fallback-extras" class="toc-h3">Wago.tools CDN (Fallback + Extras)</a><a href="#stage-2-merge">Stage 2: Merge</a><a href="#best-of-both-dataset" class="toc-h3">Best-of-Both Dataset</a><a href="#stage-3-repair">Stage 3: Repair</a><a href="#hotfix-repair-system" class="toc-h3">Hotfix Repair System</a><a href="#redundancy-audit" class="toc-h3">Redundancy Audit</a><a href="#stage-4-validate">Stage 4: Validate</a><a href="#post-repair-verification" class="toc-h3">Post-Repair Verification</a><a href="#additional-data-sources">Additional Data Sources</a><a href="#allthethings-database" class="toc-h3">AllTheThings Database</a><a href="#lorewalkertdb" class="toc-h3">LoreWalkerTDB</a><a href="#coordinate-transformer" class="toc-h3">Coordinate Transformer</a><a href="#pipeline-automation">Pipeline Automation</a><a href="#one-command-rebuild" class="toc-h3">One-Command Rebuild</a><a href="#build-bump-procedure" class="toc-h3">Build Bump Procedure</a></nav>
+<button class="sidebar-toggle">On this page</button><nav class="sidebar" aria-label="Table of contents"><a href="#pipeline-overview">Pipeline Overview</a><a href="#stage-1-extract">Stage 1: Extract</a><a href="#tactsharp-casc-extraction" class="toc-h3">TACTSharp / CASC Extraction</a><a href="#wagotools-cdn-fallback-extras" class="toc-h3">Wago.tools CDN (Fallback + Extras)</a><a href="#stage-2-merge">Stage 2: Merge</a><a href="#best-of-both-dataset" class="toc-h3">Best-of-Both Dataset</a><a href="#stage-3-repair">Stage 3: Repair</a><a href="#hotfix-repair-system" class="toc-h3">Hotfix Repair System</a><a href="#redundancy-audit" class="toc-h3">Redundancy Audit</a><a href="#stage-4-validate">Stage 4: Validate</a><a href="#post-repair-verification" class="toc-h3">Post-Repair Verification</a><a href="#additional-data-sources">Additional Data Sources</a><a href="#allthethings-database" class="toc-h3">AllTheThings Database</a><a href="#lorewalkertdb" class="toc-h3">LoreWalkerTDB</a><a href="#coordinate-transformer" class="toc-h3">Coordinate Transformer</a><a href="#packet-capture-client-analysis">Packet Capture & Client Analysis</a><a href="#wowpacketparser-wpp" class="toc-h3">WowPacketParser (WPP)</a><a href="#ymir-retail-sniffer" class="toc-h3">Ymir (Retail Sniffer)</a><a href="#wowtoolslocal" class="toc-h3">wow.tools.local</a><a href="#client-dbcache" class="toc-h3">Client DBCache</a><a href="#pipeline-automation">Pipeline Automation</a><a href="#one-command-rebuild" class="toc-h3">One-Command Rebuild</a><a href="#build-bump-procedure" class="toc-h3">Build Bump Procedure</a></nav>
 <article>
-<div class="arch-wrap reveal"><svg viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg" class="arch-diagram" role="img" aria-label="Data pipeline flow diagram">
+<div class="arch-wrap reveal"><svg viewBox="0 0 860 340" xmlns="http://www.w3.org/2000/svg" class="arch-diagram" role="img" aria-label="Data pipeline flow diagram">
 <!-- Stage 1: Extract -->
-<rect x="20" y="30" width="160" height="70" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.6"/>
-<text x="100" y="56" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="14">1. Extract</text>
-<text x="100" y="76" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">TACTSharp &middot; 1,097 DB2s</text>
-<text x="100" y="90" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">~50 seconds</text>
+<rect x="20" y="20" width="180" height="80" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.6"/>
+<text x="110" y="46" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="15">1. Extract</text>
+<text x="110" y="66" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">TACTSharp / CASC</text>
+<text x="110" y="82" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">1,097 DB2 tables &middot; ~50s</text>
 
 <!-- Arrow 1 -->
-<line x1="180" y1="65" x2="215" y2="65" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.5"/>
-<polygon points="215,60 225,65 215,70" fill="var(--arcane)" fill-opacity="0.5"/>
+<line x1="200" y1="60" x2="230" y2="60" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.5"/>
+<polygon points="230,55 240,60 230,65" fill="var(--arcane)" fill-opacity="0.5"/>
 
 <!-- Stage 2: Merge -->
-<rect x="225" y="30" width="160" height="70" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.6"/>
-<text x="305" y="56" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="14">2. Merge</text>
-<text x="305" y="76" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">TACT + Wago CDN</text>
-<text x="305" y="90" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">+7,183 extra rows</text>
+<rect x="240" y="20" width="180" height="80" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.6"/>
+<text x="330" y="46" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="15">2. Merge</text>
+<text x="330" y="66" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">TACT base + Wago CDN</text>
+<text x="330" y="82" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">99 tables merged &middot; +7,183 rows</text>
 
 <!-- Arrow 2 -->
-<line x1="385" y1="65" x2="420" y2="65" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.5"/>
-<polygon points="420,60 430,65 420,70" fill="var(--arcane)" fill-opacity="0.5"/>
+<line x1="420" y1="60" x2="450" y2="60" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.5"/>
+<polygon points="450,55 460,60 450,65" fill="var(--arcane)" fill-opacity="0.5"/>
 
 <!-- Stage 3: Repair -->
-<rect x="430" y="30" width="160" height="70" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.6"/>
-<text x="510" y="56" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="14">3. Repair</text>
-<text x="510" y="76" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">103K inserts &middot; 5 batches</text>
-<text x="510" y="90" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">388 tables compared</text>
+<rect x="460" y="20" width="180" height="80" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.6"/>
+<text x="550" y="46" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="15">3. Repair</text>
+<text x="550" y="66" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">103K inserts &middot; 5 batches</text>
+<text x="550" y="82" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">388 tables compared</text>
 
 <!-- Arrow 3 -->
-<line x1="590" y1="65" x2="625" y2="65" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.5"/>
-<polygon points="625,60 635,65 625,70" fill="var(--arcane)" fill-opacity="0.5"/>
+<line x1="640" y1="60" x2="670" y2="60" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.5"/>
+<polygon points="670,55 680,60 670,65" fill="var(--arcane)" fill-opacity="0.5"/>
 
 <!-- Stage 4: Validate -->
-<rect x="635" y="30" width="145" height="70" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.6"/>
-<text x="707" y="56" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="14">4. Validate</text>
-<text x="707" y="76" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">~244K genuine rows</text>
-<text x="707" y="90" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">97.8% reduction</text>
+<rect x="680" y="20" width="160" height="80" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.6"/>
+<text x="760" y="46" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="15">4. Validate</text>
+<text x="760" y="66" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">~244K genuine rows</text>
+<text x="760" y="82" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">97.8% redundancy removed</text>
 
-<!-- Bottom: Additional Sources -->
-<rect x="20" y="130" width="760" height="50" rx="12" fill="var(--bg-alt)" stroke="var(--border)" stroke-width="1" stroke-opacity="0.3"/>
-<text x="400" y="155" text-anchor="middle" fill="var(--text-2)" font-family="var(--font-display)" font-weight="500" font-size="12">Additional Sources: LoreWalkerTDB (~1M rows) &middot; AllTheThings (+9,221 rows) &middot; Raidbots (1.6M locales) &middot; Wowhead (78K NPC fixes) &middot; TDB (+1,967 rewards)</text>
-<line x1="400" y1="100" x2="400" y2="130" stroke="var(--border)" stroke-width="1" stroke-dasharray="4 3" stroke-opacity="0.4"/>
+<!-- Dashed line down to sources -->
+<line x1="430" y1="100" x2="430" y2="130" stroke="var(--border)" stroke-width="1" stroke-dasharray="4 3" stroke-opacity="0.4"/>
+
+<!-- Additional Sources: Row of boxes -->
+<!-- LoreWalkerTDB -->
+<rect x="20" y="135" width="155" height="56" rx="10" fill="var(--bg-alt)" stroke="var(--border)" stroke-width="1"/>
+<text x="97" y="157" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="12">LoreWalkerTDB</text>
+<text x="97" y="175" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">~1M world rows</text>
+
+<!-- AllTheThings -->
+<rect x="190" y="135" width="155" height="56" rx="10" fill="var(--bg-alt)" stroke="var(--border)" stroke-width="1"/>
+<text x="267" y="157" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="12">AllTheThings</text>
+<text x="267" y="175" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">+9,221 quest/vendor rows</text>
+
+<!-- Raidbots -->
+<rect x="360" y="135" width="140" height="56" rx="10" fill="var(--bg-alt)" stroke="var(--border)" stroke-width="1"/>
+<text x="430" y="157" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="12">Raidbots</text>
+<text x="430" y="175" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">1.6M locale rows</text>
+
+<!-- Wowhead -->
+<rect x="515" y="135" width="140" height="56" rx="10" fill="var(--bg-alt)" stroke="var(--border)" stroke-width="1"/>
+<text x="585" y="157" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="12">Wowhead</text>
+<text x="585" y="175" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">78K NPC fixes</text>
+
+<!-- TDB -->
+<rect x="670" y="135" width="170" height="56" rx="10" fill="var(--bg-alt)" stroke="var(--border)" stroke-width="1"/>
+<text x="755" y="157" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="12">TrinityCore TDB</text>
+<text x="755" y="175" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">+1,967 quest rewards</text>
+
+<!-- Label -->
+<text x="20" y="215" fill="var(--text-3)" font-family="var(--font-body)" font-size="10" font-style="italic">Additional Data Sources</text>
+
+<!-- Dashed line down to sniffer row -->
+<line x1="430" y1="220" x2="430" y2="240" stroke="var(--border)" stroke-width="1" stroke-dasharray="4 3" stroke-opacity="0.4"/>
+
+<!-- Packet Sniffers row -->
+<!-- WPP -->
+<rect x="20" y="245" width="195" height="56" rx="10" fill="var(--bg-alt)" stroke="var(--gold)" stroke-width="1" stroke-opacity="0.4"/>
+<text x="117" y="267" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="12">WowPacketParser</text>
+<text x="117" y="285" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">Private server .pkt captures</text>
+
+<!-- Ymir -->
+<rect x="232" y="245" width="195" height="56" rx="10" fill="var(--bg-alt)" stroke="var(--gold)" stroke-width="1" stroke-opacity="0.4"/>
+<text x="329" y="267" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="12">Ymir (Retail Sniffer)</text>
+<text x="329" y="285" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">2.77M lines &middot; ground truth</text>
+
+<!-- wow.tools.local -->
+<rect x="444" y="245" width="195" height="56" rx="10" fill="var(--bg-alt)" stroke="var(--gold)" stroke-width="1" stroke-opacity="0.4"/>
+<text x="541" y="267" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="12">wow.tools.local</text>
+<text x="541" y="285" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">DB2 browser &middot; hotfix inspect</text>
+
+<!-- DBCache -->
+<rect x="656" y="245" width="184" height="56" rx="10" fill="var(--bg-alt)" stroke="var(--gold)" stroke-width="1" stroke-opacity="0.4"/>
+<text x="748" y="267" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="12">Client DBCache</text>
+<text x="748" y="285" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">Hotfix cross-reference</text>
+
+<!-- Label -->
+<text x="20" y="325" fill="var(--text-3)" font-family="var(--font-body)" font-size="10" font-style="italic">Packet Capture &amp; Client Analysis</text>
 </svg></div>
 <p>The complete data flow from raw game files to a validated, production-ready server database. Every stage is scripted and reproducible.</p>
 <h2 id="pipeline-overview">Pipeline Overview</h2>
@@ -725,6 +779,19 @@ details .data-table { margin: 0 0 8px; }
 <h3 id="coordinate-transformer">Coordinate Transformer</h3>
 <p><code>coord_transformer.py</code> converts Wowhead zone-percent coordinates to world XYZ positions using nearest-neighbor Z interpolation from 527K existing spawns.</p>
 <div class="table-wrap"><table class="data-table"><thead><tr><th>Tier</th><th>Spawns Added</th></tr></thead><tbody><tr><td>Critical (quest NPCs)</td><td>1,541 applied</td></tr><tr><td>Phase-duplicate resolved</td><td>214 analyzed, 207 re-inserted</td></tr><tr><td>High (service NPCs)</td><td>1,626 ready</td></tr></tbody></table></div>
+<hr>
+<h2 id="packet-capture-client-analysis">Packet Capture & Client Analysis</h2>
+<p>Packet sniffers provide ground truth for protocol behavior that no database can tell you — how the retail client actually sends and receives data.</p>
+<h3 id="wowpacketparser-wpp">WowPacketParser (WPP)</h3>
+<p>Decodes <code>.pkt</code> captures from private server sessions. Integrated into the server launch script — every session automatically produces parsed packet logs for analysis.</p>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Metric</th><th>Value</th></tr></thead><tbody><tr><td>Opcodes tracked</td><td>991 in the opcode dictionary</td></tr><tr><td>Auto-parse</td><td>Runs on server shutdown via <code>start-worldserver.sh</code></td></tr><tr><td>Transmog extraction</td><td><code>extract_transmog_packets.py</code> pulls outfit/slot data from parsed output</td></tr><tr><td>Grep tool</td><td><code>wpp-inspect.sh</code> — 6 search modes (visible, transmog, trace, summary, opcodes, search)</td></tr></tbody></table></div>
+<h3 id="ymir-retail-sniffer">Ymir (Retail Sniffer)</h3>
+<p>Captures packets from the live retail WoW client. Provides ground truth for protocol behavior that can't be observed on a private server.</p>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Metric</th><th>Value</th></tr></thead><tbody><tr><td>Build</td><td>66220</td></tr><tr><td>Capture size</td><td>2.77M parsed lines</td></tr><tr><td>Key finding</td><td>Transmog outfits are 30 entries (not 14), DT=3 means "hidden visual" not "remove"</td></tr><tr><td>Impact</td><td>Corrected transmog DT assignment and merge strategy (commit <code>fae00afb86</code>)</td></tr></tbody></table></div>
+<h3 id="wowtoolslocal">wow.tools.local</h3>
+<p>Self-hosted DB2/DBC browser for visual data inspection, build diffs, and hotfix comparison. Confirms whether hotfix values match retail DBC baselines.</p>
+<h3 id="client-dbcache">Client DBCache</h3>
+<p><code>decode_dbcache.py</code> and <code>xref_dbcache.py</code> decode the WoW client's local hotfix cache (<code>DBCache.bin</code>) and cross-reference it against server hotfix data — confirms the client received the expected corrections.</p>
 <hr>
 <h2 id="pipeline-automation">Pipeline Automation</h2>
 <h3 id="one-command-rebuild">One-Command Rebuild</h3>

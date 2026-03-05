@@ -147,47 +147,101 @@ ARCH_SVG = '''<div class="arch-wrap reveal"><svg viewBox="0 0 800 300" xmlns="ht
 <line x1="685" y1="192" x2="685" y2="250" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="4 3"/>
 </svg></div>'''
 
-PIPELINE_SVG = '''<div class="arch-wrap reveal"><svg viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg" class="arch-diagram" role="img" aria-label="Data pipeline flow diagram">
+PIPELINE_SVG = '''<div class="arch-wrap reveal"><svg viewBox="0 0 860 340" xmlns="http://www.w3.org/2000/svg" class="arch-diagram" role="img" aria-label="Data pipeline flow diagram">
 <!-- Stage 1: Extract -->
-<rect x="20" y="30" width="160" height="70" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.6"/>
-<text x="100" y="56" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="14">1. Extract</text>
-<text x="100" y="76" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">TACTSharp &middot; 1,097 DB2s</text>
-<text x="100" y="90" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">~50 seconds</text>
+<rect x="20" y="20" width="180" height="80" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.6"/>
+<text x="110" y="46" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="15">1. Extract</text>
+<text x="110" y="66" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">TACTSharp / CASC</text>
+<text x="110" y="82" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">1,097 DB2 tables &middot; ~50s</text>
 
 <!-- Arrow 1 -->
-<line x1="180" y1="65" x2="215" y2="65" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.5"/>
-<polygon points="215,60 225,65 215,70" fill="var(--arcane)" fill-opacity="0.5"/>
+<line x1="200" y1="60" x2="230" y2="60" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.5"/>
+<polygon points="230,55 240,60 230,65" fill="var(--arcane)" fill-opacity="0.5"/>
 
 <!-- Stage 2: Merge -->
-<rect x="225" y="30" width="160" height="70" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.6"/>
-<text x="305" y="56" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="14">2. Merge</text>
-<text x="305" y="76" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">TACT + Wago CDN</text>
-<text x="305" y="90" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">+7,183 extra rows</text>
+<rect x="240" y="20" width="180" height="80" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.6"/>
+<text x="330" y="46" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="15">2. Merge</text>
+<text x="330" y="66" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">TACT base + Wago CDN</text>
+<text x="330" y="82" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">99 tables merged &middot; +7,183 rows</text>
 
 <!-- Arrow 2 -->
-<line x1="385" y1="65" x2="420" y2="65" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.5"/>
-<polygon points="420,60 430,65 420,70" fill="var(--arcane)" fill-opacity="0.5"/>
+<line x1="420" y1="60" x2="450" y2="60" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.5"/>
+<polygon points="450,55 460,60 450,65" fill="var(--arcane)" fill-opacity="0.5"/>
 
 <!-- Stage 3: Repair -->
-<rect x="430" y="30" width="160" height="70" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.6"/>
-<text x="510" y="56" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="14">3. Repair</text>
-<text x="510" y="76" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">103K inserts &middot; 5 batches</text>
-<text x="510" y="90" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">388 tables compared</text>
+<rect x="460" y="20" width="180" height="80" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.6"/>
+<text x="550" y="46" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="15">3. Repair</text>
+<text x="550" y="66" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">103K inserts &middot; 5 batches</text>
+<text x="550" y="82" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">388 tables compared</text>
 
 <!-- Arrow 3 -->
-<line x1="590" y1="65" x2="625" y2="65" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.5"/>
-<polygon points="625,60 635,65 625,70" fill="var(--arcane)" fill-opacity="0.5"/>
+<line x1="640" y1="60" x2="670" y2="60" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.5"/>
+<polygon points="670,55 680,60 670,65" fill="var(--arcane)" fill-opacity="0.5"/>
 
 <!-- Stage 4: Validate -->
-<rect x="635" y="30" width="145" height="70" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.6"/>
-<text x="707" y="56" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="14">4. Validate</text>
-<text x="707" y="76" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">~244K genuine rows</text>
-<text x="707" y="90" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">97.8% reduction</text>
+<rect x="680" y="20" width="160" height="80" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.6"/>
+<text x="760" y="46" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="15">4. Validate</text>
+<text x="760" y="66" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">~244K genuine rows</text>
+<text x="760" y="82" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">97.8% redundancy removed</text>
 
-<!-- Bottom: Additional Sources -->
-<rect x="20" y="130" width="760" height="50" rx="12" fill="var(--bg-alt)" stroke="var(--border)" stroke-width="1" stroke-opacity="0.3"/>
-<text x="400" y="155" text-anchor="middle" fill="var(--text-2)" font-family="var(--font-display)" font-weight="500" font-size="12">Additional Sources: LoreWalkerTDB (~1M rows) &middot; AllTheThings (+9,221 rows) &middot; Raidbots (1.6M locales) &middot; Wowhead (78K NPC fixes) &middot; TDB (+1,967 rewards)</text>
-<line x1="400" y1="100" x2="400" y2="130" stroke="var(--border)" stroke-width="1" stroke-dasharray="4 3" stroke-opacity="0.4"/>
+<!-- Dashed line down to sources -->
+<line x1="430" y1="100" x2="430" y2="130" stroke="var(--border)" stroke-width="1" stroke-dasharray="4 3" stroke-opacity="0.4"/>
+
+<!-- Additional Sources: Row of boxes -->
+<!-- LoreWalkerTDB -->
+<rect x="20" y="135" width="155" height="56" rx="10" fill="var(--bg-alt)" stroke="var(--border)" stroke-width="1"/>
+<text x="97" y="157" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="12">LoreWalkerTDB</text>
+<text x="97" y="175" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">~1M world rows</text>
+
+<!-- AllTheThings -->
+<rect x="190" y="135" width="155" height="56" rx="10" fill="var(--bg-alt)" stroke="var(--border)" stroke-width="1"/>
+<text x="267" y="157" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="12">AllTheThings</text>
+<text x="267" y="175" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">+9,221 quest/vendor rows</text>
+
+<!-- Raidbots -->
+<rect x="360" y="135" width="140" height="56" rx="10" fill="var(--bg-alt)" stroke="var(--border)" stroke-width="1"/>
+<text x="430" y="157" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="12">Raidbots</text>
+<text x="430" y="175" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">1.6M locale rows</text>
+
+<!-- Wowhead -->
+<rect x="515" y="135" width="140" height="56" rx="10" fill="var(--bg-alt)" stroke="var(--border)" stroke-width="1"/>
+<text x="585" y="157" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="12">Wowhead</text>
+<text x="585" y="175" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">78K NPC fixes</text>
+
+<!-- TDB -->
+<rect x="670" y="135" width="170" height="56" rx="10" fill="var(--bg-alt)" stroke="var(--border)" stroke-width="1"/>
+<text x="755" y="157" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="12">TrinityCore TDB</text>
+<text x="755" y="175" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">+1,967 quest rewards</text>
+
+<!-- Label -->
+<text x="20" y="215" fill="var(--text-3)" font-family="var(--font-body)" font-size="10" font-style="italic">Additional Data Sources</text>
+
+<!-- Dashed line down to sniffer row -->
+<line x1="430" y1="220" x2="430" y2="240" stroke="var(--border)" stroke-width="1" stroke-dasharray="4 3" stroke-opacity="0.4"/>
+
+<!-- Packet Sniffers row -->
+<!-- WPP -->
+<rect x="20" y="245" width="195" height="56" rx="10" fill="var(--bg-alt)" stroke="var(--gold)" stroke-width="1" stroke-opacity="0.4"/>
+<text x="117" y="267" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="12">WowPacketParser</text>
+<text x="117" y="285" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">Private server .pkt captures</text>
+
+<!-- Ymir -->
+<rect x="232" y="245" width="195" height="56" rx="10" fill="var(--bg-alt)" stroke="var(--gold)" stroke-width="1" stroke-opacity="0.4"/>
+<text x="329" y="267" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="12">Ymir (Retail Sniffer)</text>
+<text x="329" y="285" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">2.77M lines &middot; ground truth</text>
+
+<!-- wow.tools.local -->
+<rect x="444" y="245" width="195" height="56" rx="10" fill="var(--bg-alt)" stroke="var(--gold)" stroke-width="1" stroke-opacity="0.4"/>
+<text x="541" y="267" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="12">wow.tools.local</text>
+<text x="541" y="285" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">DB2 browser &middot; hotfix inspect</text>
+
+<!-- DBCache -->
+<rect x="656" y="245" width="184" height="56" rx="10" fill="var(--bg-alt)" stroke="var(--gold)" stroke-width="1" stroke-opacity="0.4"/>
+<text x="748" y="267" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="12">Client DBCache</text>
+<text x="748" y="285" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">Hotfix cross-reference</text>
+
+<!-- Label -->
+<text x="20" y="325" fill="var(--text-3)" font-family="var(--font-body)" font-size="10" font-style="italic">Packet Capture &amp; Client Analysis</text>
 </svg></div>'''
 
 # ── Markdown to HTML ──────────────────────────────────────────────────────────

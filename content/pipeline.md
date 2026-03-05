@@ -137,6 +137,42 @@ Community TrinityCore database providing the bulk of world data:
 
 ---
 
+## Packet Capture & Client Analysis
+
+Packet sniffers provide ground truth for protocol behavior that no database can tell you — how the retail client actually sends and receives data.
+
+### WowPacketParser (WPP)
+
+Decodes `.pkt` captures from private server sessions. Integrated into the server launch script — every session automatically produces parsed packet logs for analysis.
+
+| Metric | Value |
+|--------|-------|
+| Opcodes tracked | 991 in the opcode dictionary |
+| Auto-parse | Runs on server shutdown via `start-worldserver.sh` |
+| Transmog extraction | `extract_transmog_packets.py` pulls outfit/slot data from parsed output |
+| Grep tool | `wpp-inspect.sh` — 6 search modes (visible, transmog, trace, summary, opcodes, search) |
+
+### Ymir (Retail Sniffer)
+
+Captures packets from the live retail WoW client. Provides ground truth for protocol behavior that can't be observed on a private server.
+
+| Metric | Value |
+|--------|-------|
+| Build | 66220 |
+| Capture size | 2.77M parsed lines |
+| Key finding | Transmog outfits are 30 entries (not 14), DT=3 means "hidden visual" not "remove" |
+| Impact | Corrected transmog DT assignment and merge strategy (commit `fae00afb86`) |
+
+### wow.tools.local
+
+Self-hosted DB2/DBC browser for visual data inspection, build diffs, and hotfix comparison. Confirms whether hotfix values match retail DBC baselines.
+
+### Client DBCache
+
+`decode_dbcache.py` and `xref_dbcache.py` decode the WoW client's local hotfix cache (`DBCache.bin`) and cross-reference it against server hotfix data — confirms the client received the expected corrections.
+
+---
+
 ## Pipeline Automation
 
 ### One-Command Rebuild
