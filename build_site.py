@@ -145,15 +145,21 @@ blockquote {
   letter-spacing: -0.02em;
 }
 .nav-links {
-  display: flex; gap: 20px; overflow-x: auto; flex: 1;
+  display: flex; gap: 6px; overflow-x: auto; flex: 1;
   -webkit-overflow-scrolling: touch; scrollbar-width: none;
+  mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
+}
+.nav-links.no-fade {
+  mask-image: none; -webkit-mask-image: none;
 }
 .nav-links::-webkit-scrollbar { display: none; }
 .nav-links a {
   font-size: 12px; font-weight: 500; color: var(--text-2);
-  text-decoration: none; white-space: nowrap; padding: 4px 0;
-  letter-spacing: 0.01em; transition: color 0.2s;
+  text-decoration: none; white-space: nowrap; padding: 4px 6px;
+  letter-spacing: 0.01em; transition: color 0.2s; border-radius: 4px;
 }
+.nav-links a:hover { background: var(--bg-alt); }
 .nav-links a:hover, .nav-links a.active { color: var(--text); }
 .nav-links a.active { font-weight: 600; }
 .nav-end { flex-shrink: 0; display: flex; align-items: center; gap: 16px; }
@@ -413,6 +419,21 @@ JS = """\
       mn.classList.toggle('open');
       btn.setAttribute('aria-expanded', mn.classList.contains('open'));
     });
+  }
+
+  // Nav scroll fade — remove mask when scrolled to end
+  var nl = document.querySelector('.nav-links');
+  if (nl) {
+    function checkFade() {
+      if (nl.scrollWidth <= nl.clientWidth || nl.scrollLeft + nl.clientWidth >= nl.scrollWidth - 4) {
+        nl.classList.add('no-fade');
+      } else {
+        nl.classList.remove('no-fade');
+      }
+    }
+    nl.addEventListener('scroll', checkFade);
+    checkFade();
+    window.addEventListener('resize', checkFade);
   }
 
   // Sidebar TOC active tracking
@@ -680,11 +701,29 @@ GITHUB_ICON = '<svg width="18" height="18" fill="currentColor" viewBox="0 0 24 2
 CHECK_ICON = '<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>'
 
 
+NAV_LABELS = {
+    "Data Import & Hotfix Repair": "Import",
+    "NPC Audits & Corrections": "NPCs",
+    "Quests & Localization": "Quests",
+    "Database Cleanup & Integrity": "Cleanup",
+    "Performance & Build Diff": "Performance",
+    "Placement Audits": "Placement",
+    "Tooling & Results": "Tooling",
+    "Hotfix Redundancy Audit": "Hotfix Audit",
+    "Discoveries & Lessons": "Discoveries",
+    "Timeline & Reference": "Timeline",
+}
+
+
+def nav_label(title):
+    return NAV_LABELS.get(title, title)
+
+
 def nav_html(current_slug=None):
     links = ''.join(
         '<a href="{s}.html"{c}>{t}</a>'.format(
             s=p['slug'],
-            t=p['title'].replace(' & Hotfix Repair', '').replace(' & Corrections', '').replace(' & Localization', '').replace(' & Integrity', '').replace(' & Build Diff', '').replace(' & Results', '').replace(' & Lessons', '').replace(' & Reference', ''),
+            t=nav_label(p['title']),
             c=' class="active"' if p['slug'] == current_slug else '')
         for p in PAGES)
 

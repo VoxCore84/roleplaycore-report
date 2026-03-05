@@ -78,15 +78,21 @@ blockquote {
   letter-spacing: -0.02em;
 }
 .nav-links {
-  display: flex; gap: 20px; overflow-x: auto; flex: 1;
+  display: flex; gap: 6px; overflow-x: auto; flex: 1;
   -webkit-overflow-scrolling: touch; scrollbar-width: none;
+  mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
+}
+.nav-links.no-fade {
+  mask-image: none; -webkit-mask-image: none;
 }
 .nav-links::-webkit-scrollbar { display: none; }
 .nav-links a {
   font-size: 12px; font-weight: 500; color: var(--text-2);
-  text-decoration: none; white-space: nowrap; padding: 4px 0;
-  letter-spacing: 0.01em; transition: color 0.2s;
+  text-decoration: none; white-space: nowrap; padding: 4px 6px;
+  letter-spacing: 0.01em; transition: color 0.2s; border-radius: 4px;
 }
+.nav-links a:hover { background: var(--bg-alt); }
 .nav-links a:hover, .nav-links a.active { color: var(--text); }
 .nav-links a.active { font-weight: 600; }
 .nav-end { flex-shrink: 0; display: flex; align-items: center; gap: 16px; }
@@ -298,7 +304,7 @@ details .data-table { margin: 0 0 8px; }
 <nav class="site-nav" role="navigation" aria-label="Main">
 <div class="nav-inner">
 <a href="index.html" class="nav-logo">VoxCore</a>
-<div class="nav-links"><a href="data-import.html">Data Import</a><a href="npc-audits.html">NPC Audits</a><a href="quest-localization.html" class="active">Quests</a><a href="database-cleanup.html">Database Cleanup</a><a href="performance.html">Performance</a><a href="placement.html">Placement Audits</a><a href="results.html">Tooling</a><a href="hotfix-audit.html">Hotfix Redundancy Audit</a><a href="discoveries.html">Discoveries</a><a href="reference.html">Timeline</a></div>
+<div class="nav-links"><a href="data-import.html">Import</a><a href="npc-audits.html">NPCs</a><a href="quest-localization.html" class="active">Quests</a><a href="database-cleanup.html">Cleanup</a><a href="performance.html">Performance</a><a href="placement.html">Placement</a><a href="results.html">Tooling</a><a href="hotfix-audit.html">Hotfix Audit</a><a href="discoveries.html">Discoveries</a><a href="reference.html">Timeline</a></div>
 <div class="nav-end">
 <a href="https://github.com/VoxCore84/roleplaycore-report" class="nav-github" aria-label="GitHub"><svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg></a>
 <button class="nav-menu-btn" aria-label="Menu" aria-expanded="false">
@@ -397,6 +403,21 @@ details .data-table { margin: 0 0 8px; }
       mn.classList.toggle('open');
       btn.setAttribute('aria-expanded', mn.classList.contains('open'));
     });
+  }
+
+  // Nav scroll fade — remove mask when scrolled to end
+  var nl = document.querySelector('.nav-links');
+  if (nl) {
+    function checkFade() {
+      if (nl.scrollWidth <= nl.clientWidth || nl.scrollLeft + nl.clientWidth >= nl.scrollWidth - 4) {
+        nl.classList.add('no-fade');
+      } else {
+        nl.classList.remove('no-fade');
+      }
+    }
+    nl.addEventListener('scroll', checkFade);
+    checkFade();
+    window.addEventListener('resize', checkFade);
   }
 
   // Sidebar TOC active tracking
