@@ -17,7 +17,7 @@ hide:
 # VoxCore Database Report
 
 <p class="hero-sub">Data Quality & Optimization Summary</p>
-<p class="hero-meta">Prepared for CaptainCore (LoreWalkerTDB) · March 2026 · WoW 12.x Midnight · Build 66220</p>
+<p class="hero-meta">Prepared for CaptainCore (LoreWalkerTDB) · March 2026 · WoW 12.x Midnight · Build 66263</p>
 
 <div class="stat-grid">
 <div class="stat-card"><span class="num">~1M</span><span class="label">rows imported from LoreWalkerTDB</span></div>
@@ -46,7 +46,7 @@ hide:
 | 7 | [MySQL & Server Performance](performance.md) | 3m24s → 17s startup |
 | 8 | [Build Diff Audit](performance.md#part-8-build-diff-audit-5-builds) | Zero breaking changes |
 | 9 | [Placement Audits](placement.md) | 31K fixes generated |
-| 10 | [Custom Tooling Summary](results.md) | 65+ tools built |
+| 10 | [Custom Tooling Summary](results.md) | 75+ tools built |
 | 11 | [Final Database State](results.md#part-11-final-database-state) | Current row counts |
 | 12 | [What It All Means for Players](results.md#part-12-what-it-all-means-for-players) | Before / After |
 | 13 | [Hotfix Redundancy Audit](hotfix-audit.md) | 10.8M → 244K (97.8%) |

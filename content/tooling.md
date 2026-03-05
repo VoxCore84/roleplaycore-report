@@ -1,15 +1,15 @@
 # Tooling
 
-Over 60 custom tools built across Python, C++, Lua, SQL, Shell, and C#. Every data pipeline, audit, and repair operation is scripted and reproducible.
+Over 75 custom tools built across Python, C++, Lua, SQL, Shell, and C#. Every data pipeline, audit, and repair operation is scripted and reproducible.
 
 ## Data Pipelines
 
 | Tool | Language | What it does |
 |---|---|---|
-| `tact_extract.py` | Python | Primary DB2 source — bulk-extracts 1,097 tables from local CASC via TACTSharp in ~50s |
+| `tact_extract.py` | Python | Primary DB2 source — bulk-extracts 1,094 tables from local CASC via TACTSharp in ~50s |
 | `merge_csv_sources.py` | Python | Merges TACT base CSVs with Wago CDN extras into a single best-of-both dataset |
 | `repair_hotfix_tables.py` | Python | Compares all 388 hotfix tables against merged DB2 CSVs, generates repair SQL in 5 batches |
-| `wago_db2_downloader.py` | Python | Threaded CSV downloader for 1,097 DB2 tables from Wago.tools (fallback source) |
+| `wago_db2_downloader.py` | Python | Threaded CSV downloader for 1,094 DB2 tables from Wago.tools (fallback source) |
 | `extract_lw_world.py` | Python | Parses LoreWalkerTDB's 941 MB world dump, extracts tables with dependency ordering |
 | `fix_column_mismatch.py` | Python | Handles column count differences between TC forks (appends safe defaults) |
 | `run_all_imports.py` | Python | Orchestrator for the full Raidbots/Wago import pipeline |
@@ -104,7 +104,7 @@ Over 60 custom tools built across Python, C++, Lua, SQL, Shell, and C#. Every da
 | `parse_dberrors.py` | Python | Categorizes DB error log entries by type with counts |
 | `db_snapshot.py` | Python | Database snapshot and comparison tool |
 | `content_tuning_enrich.py` | Python | Zone-based content tuning enrichment for spawned creatures |
-| `wago_db2_server.py` | Python | MCP server — gives Claude direct access to 1,097 DB2 tables |
+| `wago_db2_server.py` | Python | MCP server — gives Claude direct access to 1,094 DB2 tables |
 | SOAP interface | HTTP | Remote GM commands without in-game login |
 
 ---
@@ -113,10 +113,10 @@ Over 60 custom tools built across Python, C++, Lua, SQL, Shell, and C#. Every da
 
 | Metric | Value |
 |---|---|
-| Total tools | 65+ |
+| Total tools | 75+ |
 | Primary language | Python |
 | Languages used | Python, C++, Lua, SQL, Shell, C# |
-| DB2 tables indexed | 1,097 |
+| DB2 tables indexed | 1,094 |
 | Audit checks | 27 (NPC validator) |
 | Hotfix tables repaired | 388 |
 | Lines of tooling code | 15,000+ |

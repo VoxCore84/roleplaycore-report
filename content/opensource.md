@@ -38,7 +38,7 @@ Data enrichment pipeline for importing and validating game data from Raidbots, W
 
 ### VoxCore84/roleplaycore-report
 
-This website. A static site generator with Apple HIG aesthetic, built from Markdown sources by a Python script. Outputs to GitHub Pages.
+This website. A static site generator with dark arcane theme, built from Markdown sources by a Python script. Outputs to GitHub Pages.
 
 - **Language:** Python
 - **Status:** Active
@@ -52,7 +52,7 @@ Five repositories contain specialized development tools.
 
 | Repository | What it does | Language |
 |---|---|---|
-| Wago Tooling | 65+ scripts — TACT extractor, CSV merger, hotfix repair, ATT mega-parser, MCP server, build differ, redundancy audit | Python |
+| Wago Tooling | 75+ scripts — TACT extractor, CSV merger, hotfix repair, ATT mega-parser, MCP server, build differ, redundancy audit | Python |
 | Code Intelligence | Hybrid ctags + clangd MCP server — 416K symbols, 8 query tools | Python |
 | Claude Skills | 17 custom slash commands — build automation, lookups, packet analysis, SmartAI validation | Markdown |
 | Packet Tools | Server launcher wrapper, WPP auto-parse, packet grep, build updater | Shell |
@@ -65,7 +65,7 @@ Five repositories contain specialized development tools.
 | Gist | What it contains |
 |---|---|
 | [Operations Runbook](https://gist.github.com/VoxCore84/84656ef0960c699927e3a555e8248f7b) | Complete reference for every tool, pipeline, and command — 22 sections |
-| [Session Changelog](https://gist.github.com/VoxCore84/4c63baf8154753d2a89475d9a4f5b2cc) | Chronological log of all 55+ development sessions with commit hashes |
+| [Session Changelog](https://gist.github.com/VoxCore84/4c63baf8154753d2a89475d9a4f5b2cc) | Chronological log of all 64+ development sessions with commit hashes |
 | [Database Report](https://gist.github.com/VoxCore84/528e801b53f6c62ce2e5c2ffe7e63e29) | Full 16-part data quality and optimization report |
 | [Open Issues](https://gist.github.com/VoxCore84/2b69757faa2a53172c7acb5bfa3ad3c4) | Prioritized issue tracker — HIGH / MEDIUM / LOW / DEFERRED |
 | [Packet Tools](https://gist.github.com/VoxCore84/a86d3dc8c88839c5f8aafef5908a9d5f) | Opcode analyzer (991 lines) + transmog packet extractor (342 lines) |
@@ -79,7 +79,7 @@ Local development tools used in the project:
 
 | Tool | What it does |
 |---|---|
-| WowPacketParser | Packet capture decoder, locally patched for build 66220 |
+| WowPacketParser | Packet capture decoder, locally patched for build 66263 |
 | wow.tools.local | Self-hosted DB2/DBC browser for visual data inspection |
 | LoreWalkerTDB | Community TrinityCore database — world data import source |
 | DBC2CSV | DB2-to-CSV converter with 1,315 table definition files |
@@ -87,7 +87,7 @@ Local development tools used in the project:
 | DB2Query | Interactive DB2 query CLI |
 | AllTheThings Database | Community item, quest, and NPC collection data (1,576 Lua files, 174K items, 47K quests) |
 | Lua Language Server | LSP for Eluna script and addon development |
-| Ymir | Retail packet sniffer for build 66220 |
+| Ymir | Retail packet sniffer for build 66263 |
 
 ---
 

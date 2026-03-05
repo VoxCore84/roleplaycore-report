@@ -89,7 +89,7 @@ TrinityCore's hotfix database diverges from Blizzard's live data over time. Colu
 
 `repair_hotfix_tables.py` compares every hotfix DB table against authoritative DB2 CSV exports and generates repair SQL:
 
-1. Extracts 1,097 DB2 CSV tables from local CASC via TACTSharp (`tact_extract.py`), merged with Wago CDN extras (`merge_csv_sources.py`) for best-of-both coverage
+1. Extracts 1,094 DB2 CSV tables from local CASC via TACTSharp (`tact_extract.py`), merged with Wago CDN extras (`merge_csv_sources.py`) for best-of-both coverage
 2. Normalizes column names (28 global aliases + 23 table-specific aliases + 6 table name overrides)
 3. Compares every row: identifies zeroed columns, missing rows, and custom diffs to preserve
 4. Generates UPDATE statements for zeroed columns, INSERT statements for missing rows

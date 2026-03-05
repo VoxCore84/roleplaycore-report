@@ -1,8 +1,8 @@
 [
-  {"date": "Mar 5", "title": "VoxCore Website QA", "summary": "Cross-page sidebar, external CSS/JS, accuracy audit \u2014 30/30 stats verified against live database"},
-  {"date": "Mar 5", "title": "ATT Mega-Parser", "summary": "Built SQLite extractor for AllTheThings \u2014 60 tables from 30 data sources, 52.6 MB, 174K items"},
-  {"date": "Mar 5", "title": "TACT CSV Merge Pipeline", "summary": "TACT base + Wago CDN extras \u2014 best-of-both dataset across 1,097 tables with 7,183 extra rows"},
-  {"date": "Mar 5", "title": "Missing NPC Spawns", "summary": "1,748 quest NPC spawns deployed via coordinate transformer \u2014 214 phase-duplicate entries resolved"},
-  {"date": "Mar 5", "title": "ATT Data Applied", "summary": "4,630 quest starters, 3,081 chain links, 1,510 vendor items from AllTheThings database"},
-  {"date": "Mar 5", "title": "Retail Sniffer Decode", "summary": "Decoded 2.77M-line Ymir packet capture \u2014 corrected transmog DT assignment and merge strategy"}
+  {"date": "Mar 5", "title": "Arcane Codex Visual Overhaul", "summary": "Dark-only arcane theme, Tool Explorer (54 tools/9 chips), pipeline animation, reduction funnel, scroll progress, achievement toasts"},
+  {"date": "Mar 5", "title": "Transmog Audit Complete", "summary": "5-phase audit \u2014 26/26 items across Bridge/Spy/Server/Player.cpp. All 5 bugs fixed, system ready for testing"},
+  {"date": "Mar 5", "title": "BtWQuests + Gap Scrape", "summary": "1,062 quest starters from BtWQuests addon, 8,799 vendor items + 592 quest starters from Wowhead gap scrape"},
+  {"date": "Mar 5", "title": "Quest Reward Text Import", "summary": "30-worker Tor scraper \u2014 13,494 quest_offer_reward + 6,792 quest_request_items rows from Wowhead"},
+  {"date": "Mar 5", "title": "Midnight Expansion Data", "summary": "38 guide + 586 entity pages scraped \u2014 58 starters, 60 enders, 819 loot entries, 526 boss abilities"},
+  {"date": "Mar 5", "title": "Build 66263 + High-Tier Spawns", "summary": "New client build, 1,094 DB2 tables extracted. 1,492 high-tier service NPC spawns deployed"}
 ]

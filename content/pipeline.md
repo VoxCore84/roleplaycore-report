@@ -12,23 +12,23 @@ The pipeline processes data through four stages: **Extract** raw DB2 tables from
 
 ### TACTSharp / CASC Extraction
 
-`tact_extract.py` extracts all 1,097 DB2 tables directly from the local WoW client installation via TACTSharp. This is the **ground truth** source — no API rate limits, no oscillation artifacts, no missing data.
+`tact_extract.py` extracts all 1,094 DB2 tables directly from the local WoW client installation via TACTSharp. This is the **ground truth** source — no API rate limits, no oscillation artifacts, no missing data.
 
 | Metric | Value |
 |--------|-------|
-| Tables extracted | 1,097 |
+| Tables extracted | 1,094 |
 | Extraction time | ~50 seconds |
-| Source | Local CASC (build 66220) |
+| Source | Local CASC (build 66263) |
 | Converter | DBC2CSV (1,315 table definitions) |
 | Retry handling | Automatic (DBC2CSV drops ~0.5% non-deterministically) |
 
 ### Wago.tools CDN (Fallback + Extras)
 
-`wago_db2_downloader.py` downloads the same 1,097 tables from Wago's HTTP API. Used as a fallback and as a source of CDN-only hotfix content that doesn't exist in the local client.
+`wago_db2_downloader.py` downloads the same 1,094 tables from Wago's HTTP API. Used as a fallback and as a source of CDN-only hotfix content that doesn't exist in the local client.
 
 | Metric | Value |
 |--------|-------|
-| Tables available | 1,097 |
+| Tables available | 1,094 |
 | Known issue | SpellEffect oscillates between 269K and 608K rows across exports |
 | CDN extras | Hotfix content not yet in local build |
 
@@ -95,7 +95,7 @@ Three rounds of cleanup removed data that matched the client's DBC baseline:
 | Check | Result |
 |-------|--------|
 | Hotfix content rows | ~244K genuine (8,396 override + 231,199 new) |
-| hotfix_data registry | 226,984 entries |
+| hotfix_data registry | 227,377 entries |
 | Server startup | 17s (was 3m24s before optimization) |
 | Client hotfix delivery | All corrections delivered on login |
 | Zero-error boot | Clean server logs after repair |
@@ -133,7 +133,7 @@ Community TrinityCore database providing the bulk of world data:
 |------|-------------|
 | Critical (quest NPCs) | 1,541 applied |
 | Phase-duplicate resolved | 214 analyzed, 207 re-inserted |
-| High (service NPCs) | 1,626 ready |
+| High (service NPCs) | 1,492 applied |
 
 ---
 
@@ -179,7 +179,7 @@ Self-hosted DB2/DBC browser for visual data inspection, build diffs, and hotfix 
 
 ```
 # Full pipeline from scratch
-python tact_extract.py           # Extract 1,097 DB2 tables (~50s)
+python tact_extract.py           # Extract 1,094 DB2 tables (~50s)
 python merge_csv_sources.py      # Merge TACT + Wago CDN extras
 python repair_hotfix_tables.py --batch 1  # Repair in 5 batches
 python repair_hotfix_tables.py --batch 2

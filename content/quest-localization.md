@@ -7,7 +7,7 @@ Using Wago's `QuestLineXQuest` DB2 CSV data, generated `PrevQuestID` and `NextQu
 
 | Metric | Value |
 |--------|-------|
-| Total quest_template_addon rows | 49,736 |
+| Total quest_template_addon rows | 47,164 |
 | Quests with PrevQuestID | 24,868 (50.0%) |
 | Quests with NextQuestID | 17,636 (35.5%) |
 | Chain starters identified | 1,862 |

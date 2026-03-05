@@ -912,7 +912,7 @@ body { animation: pageIn 0.4s ease-out; }
 <h2 id="quest-system-enrichment">Quest System Enrichment</h2>
 <h3 id="41-quest-chains">4.1 Quest Chains</h3>
 <p>Using Wago's <code>QuestLineXQuest</code> DB2 CSV data, generated <code>PrevQuestID</code> and <code>NextQuestID</code> links:</p>
-<div class="table-wrap"><table class="data-table"><thead><tr><th>Metric</th><th>Value</th></tr></thead><tbody><tr><td>Total quest_template_addon rows</td><td>49,736</td></tr><tr><td>Quests with PrevQuestID</td><td>24,868 (50.0%)</td></tr><tr><td>Quests with NextQuestID</td><td>17,636 (35.5%)</td></tr><tr><td>Chain starters identified</td><td>1,862</td></tr><tr><td>Quest lines processed</td><td>1,605</td></tr><tr><td>ATT chain links added</td><td>+3,081 (from AllTheThings database cross-reference)</td></tr></tbody></table></div>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Metric</th><th>Value</th></tr></thead><tbody><tr><td>Total quest_template_addon rows</td><td>47,164</td></tr><tr><td>Quests with PrevQuestID</td><td>24,868 (50.0%)</td></tr><tr><td>Quests with NextQuestID</td><td>17,636 (35.5%)</td></tr><tr><td>Chain starters identified</td><td>1,862</td></tr><tr><td>Quest lines processed</td><td>1,605</td></tr><tr><td>ATT chain links added</td><td>+3,081 (from AllTheThings database cross-reference)</td></tr></tbody></table></div>
 <p>Zero self-references, zero circular chains, zero dangling references. Cycle detection (DFS-based) and dangling reference cleanup built into the pipeline.</p>
 <h3 id="42-quest-points-of-interest-poi">4.2 Quest Points of Interest (POI)</h3>
 <p>From Wago <code>QuestPOIBlob</code> and <code>QuestPOIPoint</code> CSVs:</p>

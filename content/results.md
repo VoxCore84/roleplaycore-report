@@ -1,7 +1,7 @@
 
 ## Part 10: Custom Tooling Summary
 
-Over 65 Python scripts, MCP servers, audit tools, and SQL generators were built for this project. See **[Part 16](reference.md#part-16-complete-tooling--infrastructure-catalog)** for the complete catalog.
+Over 75 Python scripts, MCP servers, audit tools, and SQL generators were built for this project. See **[Part 16](reference.md#part-16-complete-tooling--infrastructure-catalog)** for the complete catalog.
 
 **Top 10 tools at a glance:**
 
@@ -12,7 +12,7 @@ Over 65 Python scripts, MCP servers, audit tools, and SQL generators were built 
 | `npc_audit.py` | 27-check NPC validator against Wago DB2 + Wowhead |
 | `import_all.py` | 5-phase dependency-ordered LoreWalkerTDB import |
 | `run_all_imports.py` | 8-step Raidbots/Wago orchestrator with `--dry-run` |
-| `wago_db2_server.py` | MCP server: DuckDB queries across 1,097 DB2 CSVs |
+| `wago_db2_server.py` | MCP server: DuckDB queries across 1,094 DB2 CSVs |
 | `code_intel_server.py` | MCP server: hybrid ctags + clangd C++ intelligence (416K symbols) |
 | `diff_builds.py` | Row-by-row CSV differ with oscillation detection |
 | `wowhead_scraper.py` | 216K NPC data scraper for cross-reference audit |
@@ -28,13 +28,13 @@ Over 65 Python scripts, MCP servers, audit tools, and SQL generators were built 
 
 | Table | Rows | Notes |
 |-------|------|-------|
-| creature | 662,536 | NPC spawn instances |
+| creature | 665,776 | NPC spawn instances |
 | gameobject | 175,368 | World object spawn instances |
 | creature_loot_template | 2,904,341 | NPC loot tables (deduplicated, with PKs) |
-| smart_scripts | 294,425 | NPC AI behavior scripts (validated — see [Section 6.3](database-cleanup.md#63-post-import-cleanup-47478-rows)) |
-| npc_vendor | 167,312 | Vendor inventory entries |
+| smart_scripts | 294,416 | NPC AI behavior scripts (validated — see [Section 6.3](database-cleanup.md#63-post-import-cleanup-47478-rows)) |
+| npc_vendor | 173,855 | Vendor inventory entries |
 | waypoint_path_node | 130,654 | NPC patrol path nodes (30K orphans removed) |
-| quest_template_addon | 49,736 | Quest chain/config data (+3,081 ATT chain links) |
+| quest_template_addon | 47,164 | Quest chain/config data (+3,081 ATT chain links) |
 | quest_poi | 134,856 | Quest map markers |
 | quest_poi_points | 292,977 | Quest map marker geometry |
 | quest_objectives | 60,199 | Quest objective definitions |
@@ -43,7 +43,7 @@ Over 65 Python scripts, MCP servers, audit tools, and SQL generators were built 
 
 | Table | Rows | Notes |
 |-------|------|-------|
-| hotfix_data | 226,984 | Client correction registry |
+| hotfix_data | 227,377 | Client correction registry |
 | broadcast_text | 224,233 | TC community + custom text entries |
 | hotfix_blob | 6,766 | Binary hotfix data |
 | phase | 5,714 | Phase definitions |
@@ -94,8 +94,8 @@ Over 65 Python scripts, MCP servers, audit tools, and SQL generators were built 
 
 ### After
 - All NPCs at correct levels with proper ContentTuning scaling (4,820 CT=0 creatures enriched)
-- 294K validated SmartAI scripts — NPCs patrol, react, run events (26K net new scripts added, entire dataset validated)
-- Clean spawns — no duplicates, no stacked/invisible NPCs. 1,748 missing quest NPCs added via coordinate transformer
+- 294K+ validated SmartAI scripts — NPCs patrol, react, run events (26K net new scripts added, entire dataset validated)
+- Clean spawns — no duplicates, no stacked/invisible NPCs. 3,240 missing NPCs added via coordinate transformer (quest + service tiers)
 - 24,868 quest chain links (+3,081 from AllTheThings), 135K POI entries, 60K quest objectives
 - 4,630 quest starters and 1,510 vendor items added from AllTheThings database
 - 1.6M+ item locale entries across 10 languages

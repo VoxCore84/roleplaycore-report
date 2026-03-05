@@ -1026,11 +1026,11 @@ body { animation: pageIn 0.4s ease-out; }
 <hr>
 <h2 id="stage-1-extract">Stage 1: Extract</h2>
 <h3 id="tactsharp-casc-extraction">TACTSharp / CASC Extraction</h3>
-<p><code>tact_extract.py</code> extracts all 1,097 DB2 tables directly from the local WoW client installation via TACTSharp. This is the <strong>ground truth</strong> source — no API rate limits, no oscillation artifacts, no missing data.</p>
-<div class="table-wrap"><table class="data-table"><thead><tr><th>Metric</th><th>Value</th></tr></thead><tbody><tr><td>Tables extracted</td><td>1,097</td></tr><tr><td>Extraction time</td><td>~50 seconds</td></tr><tr><td>Source</td><td>Local CASC (build 66220)</td></tr><tr><td>Converter</td><td>DBC2CSV (1,315 table definitions)</td></tr><tr><td>Retry handling</td><td>Automatic (DBC2CSV drops ~0.5% non-deterministically)</td></tr></tbody></table></div>
+<p><code>tact_extract.py</code> extracts all 1,094 DB2 tables directly from the local WoW client installation via TACTSharp. This is the <strong>ground truth</strong> source — no API rate limits, no oscillation artifacts, no missing data.</p>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Metric</th><th>Value</th></tr></thead><tbody><tr><td>Tables extracted</td><td>1,094</td></tr><tr><td>Extraction time</td><td>~50 seconds</td></tr><tr><td>Source</td><td>Local CASC (build 66263)</td></tr><tr><td>Converter</td><td>DBC2CSV (1,315 table definitions)</td></tr><tr><td>Retry handling</td><td>Automatic (DBC2CSV drops ~0.5% non-deterministically)</td></tr></tbody></table></div>
 <h3 id="wagotools-cdn-fallback-extras">Wago.tools CDN (Fallback + Extras)</h3>
-<p><code>wago_db2_downloader.py</code> downloads the same 1,097 tables from Wago's HTTP API. Used as a fallback and as a source of CDN-only hotfix content that doesn't exist in the local client.</p>
-<div class="table-wrap"><table class="data-table"><thead><tr><th>Metric</th><th>Value</th></tr></thead><tbody><tr><td>Tables available</td><td>1,097</td></tr><tr><td>Known issue</td><td>SpellEffect oscillates between 269K and 608K rows across exports</td></tr><tr><td>CDN extras</td><td>Hotfix content not yet in local build</td></tr></tbody></table></div>
+<p><code>wago_db2_downloader.py</code> downloads the same 1,094 tables from Wago's HTTP API. Used as a fallback and as a source of CDN-only hotfix content that doesn't exist in the local client.</p>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Metric</th><th>Value</th></tr></thead><tbody><tr><td>Tables available</td><td>1,094</td></tr><tr><td>Known issue</td><td>SpellEffect oscillates between 269K and 608K rows across exports</td></tr><tr><td>CDN extras</td><td>Hotfix content not yet in local build</td></tr></tbody></table></div>
 <hr>
 <h2 id="stage-2-merge">Stage 2: Merge</h2>
 <h3 id="best-of-both-dataset">Best-of-Both Dataset</h3>
@@ -1049,7 +1049,7 @@ body { animation: pageIn 0.4s ease-out; }
 <hr>
 <h2 id="stage-4-validate">Stage 4: Validate</h2>
 <h3 id="post-repair-verification">Post-Repair Verification</h3>
-<div class="table-wrap"><table class="data-table"><thead><tr><th>Check</th><th>Result</th></tr></thead><tbody><tr><td>Hotfix content rows</td><td>~244K genuine (8,396 override + 231,199 new)</td></tr><tr><td>hotfix_data registry</td><td>226,984 entries</td></tr><tr><td>Server startup</td><td>17s (was 3m24s before optimization)</td></tr><tr><td>Client hotfix delivery</td><td>All corrections delivered on login</td></tr><tr><td>Zero-error boot</td><td>Clean server logs after repair</td></tr></tbody></table></div>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Check</th><th>Result</th></tr></thead><tbody><tr><td>Hotfix content rows</td><td>~244K genuine (8,396 override + 231,199 new)</td></tr><tr><td>hotfix_data registry</td><td>227,377 entries</td></tr><tr><td>Server startup</td><td>17s (was 3m24s before optimization)</td></tr><tr><td>Client hotfix delivery</td><td>All corrections delivered on login</td></tr><tr><td>Zero-error boot</td><td>Clean server logs after repair</td></tr></tbody></table></div>
 <hr>
 <h2 id="additional-data-sources">Additional Data Sources</h2>
 <h3 id="allthethings-database">AllTheThings Database</h3>
@@ -1060,7 +1060,7 @@ body { animation: pageIn 0.4s ease-out; }
 <div class="table-wrap"><table class="data-table"><thead><tr><th>Category</th><th>Volume</th></tr></thead><tbody><tr><td>World DB rows</td><td>~1,004,000 net</td></tr><tr><td>SmartAI scripts</td><td>294,425 validated (from ~524K attempted)</td></tr><tr><td>Loot table entries</td><td>~242K net</td></tr></tbody></table></div>
 <h3 id="coordinate-transformer">Coordinate Transformer</h3>
 <p><code>coord_transformer.py</code> converts Wowhead zone-percent coordinates to world XYZ positions using nearest-neighbor Z interpolation from 527K existing spawns.</p>
-<div class="table-wrap"><table class="data-table"><thead><tr><th>Tier</th><th>Spawns Added</th></tr></thead><tbody><tr><td>Critical (quest NPCs)</td><td>1,541 applied</td></tr><tr><td>Phase-duplicate resolved</td><td>214 analyzed, 207 re-inserted</td></tr><tr><td>High (service NPCs)</td><td>1,626 ready</td></tr></tbody></table></div>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Tier</th><th>Spawns Added</th></tr></thead><tbody><tr><td>Critical (quest NPCs)</td><td>1,541 applied</td></tr><tr><td>Phase-duplicate resolved</td><td>214 analyzed, 207 re-inserted</td></tr><tr><td>High (service NPCs)</td><td>1,492 applied</td></tr></tbody></table></div>
 <hr>
 <h2 id="packet-capture-client-analysis">Packet Capture & Client Analysis</h2>
 <p>Packet sniffers provide ground truth for protocol behavior that no database can tell you — how the retail client actually sends and receives data.</p>
@@ -1078,7 +1078,7 @@ body { animation: pageIn 0.4s ease-out; }
 <h2 id="pipeline-automation">Pipeline Automation</h2>
 <h3 id="one-command-rebuild">One-Command Rebuild</h3>
 <pre><code># Full pipeline from scratch
-python tact_extract.py           # Extract 1,097 DB2 tables (~50s)
+python tact_extract.py           # Extract 1,094 DB2 tables (~50s)
 python merge_csv_sources.py      # Merge TACT + Wago CDN extras
 python repair_hotfix_tables.py --batch 1  # Repair in 5 batches
 python repair_hotfix_tables.py --batch 2
