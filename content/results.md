@@ -1,7 +1,7 @@
 
 ## Part 10: Custom Tooling Summary
 
-Over 50 Python scripts, MCP servers, audit tools, and SQL generators were built for this project. See **[Part 16](reference.md#part-16-complete-tooling--infrastructure-catalog)** for the complete catalog.
+Over 65 Python scripts, MCP servers, audit tools, and SQL generators were built for this project. See **[Part 16](reference.md#part-16-complete-tooling--infrastructure-catalog)** for the complete catalog.
 
 **Top 10 tools at a glance:**
 
@@ -32,9 +32,9 @@ Over 50 Python scripts, MCP servers, audit tools, and SQL generators were built 
 | gameobject | 175,368 | World object spawn instances |
 | creature_loot_template | 2,904,341 | NPC loot tables (deduplicated, with PKs) |
 | smart_scripts | 294,425 | NPC AI behavior scripts (validated — see [Section 6.3](database-cleanup.md#63-post-import-cleanup-47478-rows)) |
-| npc_vendor | 165,802 | Vendor inventory entries |
-| waypoint_path_node | 160,784 | NPC patrol path nodes |
-| quest_template_addon | 47,164 | Quest chain/config data |
+| npc_vendor | 167,312 | Vendor inventory entries |
+| waypoint_path_node | 130,654 | NPC patrol path nodes (30K orphans removed) |
+| quest_template_addon | 49,736 | Quest chain/config data (+3,081 ATT chain links) |
 | quest_poi | 134,856 | Quest map markers |
 | quest_poi_points | 292,977 | Quest map marker geometry |
 | quest_objectives | 60,199 | Quest objective definitions |
@@ -93,10 +93,11 @@ Over 50 Python scripts, MCP servers, audit tools, and SQL generators were built 
 - Server crashing on client connect (oversized hotfix packet)
 
 ### After
-- All NPCs at correct levels with proper ContentTuning scaling
+- All NPCs at correct levels with proper ContentTuning scaling (4,820 CT=0 creatures enriched)
 - 294K validated SmartAI scripts — NPCs patrol, react, run events (26K net new scripts added, entire dataset validated)
-- Clean spawns — no duplicates, no stacked/invisible NPCs
-- 21,758 quest chain links, 135K POI entries, 60K quest objectives
+- Clean spawns — no duplicates, no stacked/invisible NPCs. 1,748 missing quest NPCs added via coordinate transformer
+- 24,868 quest chain links (+3,081 from AllTheThings), 135K POI entries, 60K quest objectives
+- 4,630 quest starters and 1,510 vendor items added from AllTheThings database
 - 1.6M+ item locale entries across 10 languages
 - Correct drop rates with enforced primary keys on all loot tables
 - 78,475 NPC corrections (levels, factions, flags, names, pathing)
