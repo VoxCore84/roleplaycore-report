@@ -130,7 +130,7 @@ blockquote {
 }
 
 .nav-links {
-  display: flex; justify-content: center; gap: 32px;
+  display: flex; justify-content: center; gap: 22px;
 }
 .nav-links a {
   font-size: 13px; font-weight: 500; color: var(--text-2);
@@ -624,7 +624,7 @@ details .data-table { margin: 0 0 8px; }
 <nav class="site-nav" role="navigation" aria-label="Main">
 <div class="nav-inner">
 <a href="index.html" class="nav-logo">VoxCore</a>
-<div class="nav-links"><a href="framework.html">Framework</a><a href="data-import.html" class="active">Report</a><a href="tooling.html">Tooling</a><a href="ai-workflow.html">AI Workflow</a><a href="opensource.html">Open Source</a></div>
+<div class="nav-links"><a href="framework.html">Framework</a><a href="pipeline.html">Pipeline</a><a href="data-import.html" class="active">Report</a><a href="tooling.html">Tooling</a><a href="ai-workflow.html">AI</a><a href="status.html">Status</a><a href="opensource.html">Open Source</a></div>
 <div class="nav-end">
 <a href="https://github.com/VoxCore84/RoleplayCore" class="nav-github" aria-label="GitHub" target="_blank" rel="noopener"><svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg></a>
 <button class="nav-menu-btn" aria-label="Menu" aria-expanded="false">
@@ -633,7 +633,7 @@ details .data-table { margin: 0 0 8px; }
 </div>
 </div>
 </nav>
-<div class="mobile-nav" role="dialog" aria-label="Navigation"><a href="framework.html">The Framework</a><a href="tooling.html">Tooling</a><a href="ai-workflow.html">AI Workflow</a><a href="opensource.html">Open Source</a><div class="mobile-sep"></div><a href="data-import.html">Data Import & Hotfix Repair</a><a href="npc-audits.html">NPC Audits & Corrections</a><a href="quest-localization.html">Quests & Localization</a><a href="database-cleanup.html">Database Cleanup & Integrity</a><a href="performance.html">Performance & Build Diff</a><a href="placement.html">Placement Audits</a><a href="results.html">Tooling & Results</a><a href="hotfix-audit.html">Hotfix Redundancy Audit</a><a href="discoveries.html">Discoveries & Lessons</a><a href="reference.html">Timeline & Reference</a></div>
+<div class="mobile-nav" role="dialog" aria-label="Navigation"><a href="framework.html">The Framework</a><a href="pipeline.html">Data Pipeline</a><a href="tooling.html">Tooling</a><a href="ai-workflow.html">AI Workflow</a><a href="status.html">Project Status</a><a href="opensource.html">Open Source</a><div class="mobile-sep"></div><a href="data-import.html">Data Import & Hotfix Repair</a><a href="npc-audits.html">NPC Audits & Corrections</a><a href="quest-localization.html">Quests & Localization</a><a href="database-cleanup.html">Database Cleanup & Integrity</a><a href="performance.html">Performance & Build Diff</a><a href="placement.html">Placement Audits</a><a href="results.html">Tooling & Results</a><a href="hotfix-audit.html">Hotfix Redundancy Audit</a><a href="discoveries.html">Discoveries & Lessons</a><a href="reference.html">Timeline & Reference</a></div>
 <main>
 <header class="page-header">
 <nav class="breadcrumb"><a href="index.html">VoxCore</a> &rsaquo; <a href="index.html#report">Report</a> &rsaquo; Tooling & Results</nav>
@@ -663,7 +663,7 @@ details .data-table { margin: 0 0 8px; }
 <h3 id="before">Before</h3>
 <ul><li>6,548 NPCs stuck at level 1 — endgame elites one-shottable by any player</li><li>Tens of thousands of NPCs standing motionless with no AI scripts</li><li>4,867+ duplicate NPCs stacked on top of each other</li><li>Quest chains broken — no breadcrumbs, no progression tracking</li><li>Quest objectives showing blank or missing, no map markers</li><li>Items showing English-only names for all non-English clients</li><li>Loot tables with 193K duplicate entries inflating drop chances (and no primary keys to prevent more)</li><li>1,142 vendors with VENDOR flag but zero items to sell</li><li>Vendors with 700-hour respawn timers, NPCs moving at 12-20x speed, an invisible creature (scale 0)</li><li>Server startup: 3 minutes 24 seconds</li><li>627,000+ error lines on every startup</li><li>Server crashing on client connect (oversized hotfix packet)</li></ul>
 <h3 id="after">After</h3>
-<ul><li>All NPCs at correct levels with proper ContentTuning scaling</li><li>294K validated SmartAI scripts — NPCs patrol, react, run events (26K net new scripts added, entire dataset validated)</li><li>Clean spawns — no duplicates, no stacked/invisible NPCs</li><li>21,758 quest chain links, 135K POI entries, 60K quest objectives</li><li>1.6M+ item locale entries across 10 languages</li><li>Correct drop rates with enforced primary keys on all loot tables</li><li>78,475 NPC corrections (levels, factions, flags, names, pathing)</li><li>Service NPCs actually function (vendors sell, trainers train, gossip menus work)</li><li>17-second server startup (92% reduction)</li><li>Hotfix content tables reduced from 10.8M rows to ~244K (97.8% reduction)</li><li>Clean server logs — real errors visible instead of buried in noise</li></ul>
+<ul><li>All NPCs at correct levels with proper ContentTuning scaling (4,820 CT=0 creatures enriched)</li><li>294K validated SmartAI scripts — NPCs patrol, react, run events (26K net new scripts added, entire dataset validated)</li><li>Clean spawns — no duplicates, no stacked/invisible NPCs. 1,748 missing quest NPCs added via coordinate transformer</li><li>24,868 quest chain links (+3,081 from AllTheThings), 135K POI entries, 60K quest objectives</li><li>4,630 quest starters and 1,510 vendor items added from AllTheThings database</li><li>1.6M+ item locale entries across 10 languages</li><li>Correct drop rates with enforced primary keys on all loot tables</li><li>78,475 NPC corrections (levels, factions, flags, names, pathing)</li><li>Service NPCs actually function (vendors sell, trainers train, gossip menus work)</li><li>17-second server startup (92% reduction)</li><li>Hotfix content tables reduced from 10.8M rows to ~244K (97.8% reduction)</li><li>Clean server logs — real errors visible instead of buried in noise</li></ul>
 <h3 id="for-captaincore-lorewalkertdb">For CaptainCore / LoreWalkerTDB</h3>
 <p><strong>What LW data gave us:</strong></p>
 <ul><li>~1M net new rows of world data</li><li>~524K SmartAI scripts imported (294K survived validation — the rest had broken references)</li><li>~242K net loot table entries</li><li>Hotfix entries (spell enchantments, sound kits, display info, phases)</li><li>Quest starters/enders, conversation data, spawn pools, game events</li></ul>

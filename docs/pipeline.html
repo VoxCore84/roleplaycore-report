@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Open Source — VoxCore</title>
+<title>Data Pipeline — VoxCore</title>
 <meta name="description" content="VoxCore — An AI-assisted open source MMO framework built on TrinityCore for WoW 12.x Midnight">
 <style>/* ══════════════════════════════════════════════════════════════════════════
    VoxCore Design System — Apple HIG x Warcraft Atmosphere
@@ -624,7 +624,7 @@ details .data-table { margin: 0 0 8px; }
 <nav class="site-nav" role="navigation" aria-label="Main">
 <div class="nav-inner">
 <a href="index.html" class="nav-logo">VoxCore</a>
-<div class="nav-links"><a href="framework.html">Framework</a><a href="pipeline.html">Pipeline</a><a href="data-import.html">Report</a><a href="tooling.html">Tooling</a><a href="ai-workflow.html">AI</a><a href="status.html">Status</a><a href="opensource.html" class="active">Open Source</a></div>
+<div class="nav-links"><a href="framework.html">Framework</a><a href="pipeline.html" class="active">Pipeline</a><a href="data-import.html">Report</a><a href="tooling.html">Tooling</a><a href="ai-workflow.html">AI</a><a href="status.html">Status</a><a href="opensource.html">Open Source</a></div>
 <div class="nav-end">
 <a href="https://github.com/VoxCore84/RoleplayCore" class="nav-github" aria-label="GitHub" target="_blank" rel="noopener"><svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg></a>
 <button class="nav-menu-btn" aria-label="Menu" aria-expanded="false">
@@ -636,53 +636,109 @@ details .data-table { margin: 0 0 8px; }
 <div class="mobile-nav" role="dialog" aria-label="Navigation"><a href="framework.html">The Framework</a><a href="pipeline.html">Data Pipeline</a><a href="tooling.html">Tooling</a><a href="ai-workflow.html">AI Workflow</a><a href="status.html">Project Status</a><a href="opensource.html">Open Source</a><div class="mobile-sep"></div><a href="data-import.html">Data Import & Hotfix Repair</a><a href="npc-audits.html">NPC Audits & Corrections</a><a href="quest-localization.html">Quests & Localization</a><a href="database-cleanup.html">Database Cleanup & Integrity</a><a href="performance.html">Performance & Build Diff</a><a href="placement.html">Placement Audits</a><a href="results.html">Tooling & Results</a><a href="hotfix-audit.html">Hotfix Redundancy Audit</a><a href="discoveries.html">Discoveries & Lessons</a><a href="reference.html">Timeline & Reference</a></div>
 <main>
 <header class="page-header">
-<nav class="breadcrumb"><a href="index.html">VoxCore</a> &rsaquo; Open Source</nav>
-<h1>Open Source</h1>
+<nav class="breadcrumb"><a href="index.html">VoxCore</a> &rsaquo; Data Pipeline</nav>
+<h1>Data Pipeline</h1>
 </header>
 <div class="page-layout">
-<button class="sidebar-toggle">On this page</button><nav class="sidebar" aria-label="Table of contents"><a href="#public-repositories">Public Repositories</a><a href="#voxcore84roleplaycore" class="toc-h3">VoxCore84/RoleplayCore</a><a href="#voxcore84transmogbridge" class="toc-h3">VoxCore84/TransmogBridge</a><a href="#voxcore84tc-npc-audit" class="toc-h3">VoxCore84/tc-npc-audit</a><a href="#voxcore84wago-pipeline" class="toc-h3">VoxCore84/wago-pipeline</a><a href="#voxcore84roleplaycore-report" class="toc-h3">VoxCore84/roleplaycore-report</a><a href="#additional-tooling">Additional Tooling</a><a href="#public-gists">Public Gists</a><a href="#reference-tools">Reference Tools</a><a href="#quick-start">Quick Start</a></nav>
+<button class="sidebar-toggle">On this page</button><nav class="sidebar" aria-label="Table of contents"><a href="#pipeline-overview">Pipeline Overview</a><a href="#stage-1-extract">Stage 1: Extract</a><a href="#tactsharp-casc-extraction" class="toc-h3">TACTSharp / CASC Extraction</a><a href="#wagotools-cdn-fallback-extras" class="toc-h3">Wago.tools CDN (Fallback + Extras)</a><a href="#stage-2-merge">Stage 2: Merge</a><a href="#best-of-both-dataset" class="toc-h3">Best-of-Both Dataset</a><a href="#stage-3-repair">Stage 3: Repair</a><a href="#hotfix-repair-system" class="toc-h3">Hotfix Repair System</a><a href="#redundancy-audit" class="toc-h3">Redundancy Audit</a><a href="#stage-4-validate">Stage 4: Validate</a><a href="#post-repair-verification" class="toc-h3">Post-Repair Verification</a><a href="#additional-data-sources">Additional Data Sources</a><a href="#allthethings-database" class="toc-h3">AllTheThings Database</a><a href="#lorewalkertdb" class="toc-h3">LoreWalkerTDB</a><a href="#coordinate-transformer" class="toc-h3">Coordinate Transformer</a><a href="#pipeline-automation">Pipeline Automation</a><a href="#one-command-rebuild" class="toc-h3">One-Command Rebuild</a><a href="#build-bump-procedure" class="toc-h3">Build Bump Procedure</a></nav>
 <article>
+<div class="arch-wrap reveal"><svg viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg" class="arch-diagram" role="img" aria-label="Data pipeline flow diagram">
+<!-- Stage 1: Extract -->
+<rect x="20" y="30" width="160" height="70" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.6"/>
+<text x="100" y="56" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="14">1. Extract</text>
+<text x="100" y="76" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">TACTSharp &middot; 1,097 DB2s</text>
+<text x="100" y="90" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">~50 seconds</text>
 
-<p>VoxCore's tooling is distributed across nine GitHub repositories and six public gists. Four repositories and all gists are public. The remaining five contain specialized tooling available on request.</p>
-<h2 id="public-repositories">Public Repositories</h2>
-<h3 id="voxcore84roleplaycore">VoxCore84/RoleplayCore</h3>
-<p>The core server. TrinityCore fork targeting WoW 12.x / Midnight with eleven custom roleplay systems, five databases, and a fully integrated AI development workflow.</p>
-<ul><li><strong>Language:</strong> C++</li><li><strong>Status:</strong> Active</li><li><a href="https://github.com/VoxCore84/RoleplayCore">View on GitHub</a></li></ul>
-<h3 id="voxcore84transmogbridge">VoxCore84/TransmogBridge</h3>
-<p>Client addon that patches a serializer bug in the 12.x transmog outfit system. The WoW client omits four or more equipment slots from outfit update packets. TransmogBridge intercepts, merges with a pre-snapshot, and delivers the complete payload.</p>
-<ul><li><strong>Language:</strong> Lua</li><li><strong>Status:</strong> Active</li><li><a href="https://github.com/VoxCore84/TransmogBridge">View on GitHub</a></li></ul>
-<h3 id="voxcore84tc-npc-audit">VoxCore84/tc-npc-audit</h3>
-<p>NPC audit and validation toolkit. Twenty scripts cross-reference the TrinityCore world database against Wowhead and LoreWalkerTDB. Validates factions, display models, level ranges, equipment, zones, and flags. Produced 78,475 corrections.</p>
-<ul><li><strong>Language:</strong> Python</li><li><strong>Status:</strong> Archived (complete)</li><li><a href="https://github.com/VoxCore84/tc-npc-audit">View on GitHub</a></li></ul>
-<h3 id="voxcore84wago-pipeline">VoxCore84/wago-pipeline</h3>
-<p>Data enrichment pipeline for importing and validating game data from Raidbots, Wago, and LoreWalkerTDB. Six scripts with an orchestrator handle item names, quest chains, quest POI, objectives, and Wowhead scraping.</p>
-<ul><li><strong>Language:</strong> Python</li><li><strong>Status:</strong> Archived (complete)</li><li><a href="https://github.com/VoxCore84/wago-pipeline">View on GitHub</a></li></ul>
-<h3 id="voxcore84roleplaycore-report">VoxCore84/roleplaycore-report</h3>
-<p>This website. A static site generator with Apple HIG aesthetic, built from Markdown sources by a Python script. Outputs to GitHub Pages.</p>
-<ul><li><strong>Language:</strong> Python</li><li><strong>Status:</strong> Active</li><li><a href="https://github.com/VoxCore84/roleplaycore-report">View on GitHub</a></li></ul>
-<hr>
-<h2 id="additional-tooling">Additional Tooling</h2>
-<p>Five repositories contain specialized development tools.</p>
-<div class="table-wrap"><table class="data-table"><thead><tr><th>Repository</th><th>What it does</th><th>Language</th></tr></thead><tbody><tr><td>Wago Tooling</td><td>65+ scripts — TACT extractor, CSV merger, hotfix repair, ATT mega-parser, MCP server, build differ, redundancy audit</td><td>Python</td></tr><tr><td>Code Intelligence</td><td>Hybrid ctags + clangd MCP server — 416K symbols, 8 query tools</td><td>Python</td></tr><tr><td>Claude Skills</td><td>17 custom slash commands — build automation, lookups, packet analysis, SmartAI validation</td><td>Markdown</td></tr><tr><td>Packet Tools</td><td>Server launcher wrapper, WPP auto-parse, packet grep, build updater</td><td>Shell</td></tr><tr><td>TC NPC Audit</td><td>20 NPC validation scripts — model, faction, level, zone, flag cross-references</td><td>Python</td></tr></tbody></table></div>
-<hr>
-<h2 id="public-gists">Public Gists</h2>
-<div class="table-wrap"><table class="data-table"><thead><tr><th>Gist</th><th>What it contains</th></tr></thead><tbody><tr><td><a href="https://gist.github.com/VoxCore84/84656ef0960c699927e3a555e8248f7b">Operations Runbook</a></td><td>Complete reference for every tool, pipeline, and command — 22 sections</td></tr><tr><td><a href="https://gist.github.com/VoxCore84/4c63baf8154753d2a89475d9a4f5b2cc">Session Changelog</a></td><td>Chronological log of all 55+ development sessions with commit hashes</td></tr><tr><td><a href="https://gist.github.com/VoxCore84/528e801b53f6c62ce2e5c2ffe7e63e29">Database Report</a></td><td>Full 16-part data quality and optimization report</td></tr><tr><td><a href="https://gist.github.com/VoxCore84/2b69757faa2a53172c7acb5bfa3ad3c4">Open Issues</a></td><td>Prioritized issue tracker — HIGH / MEDIUM / LOW / DEFERRED</td></tr><tr><td><a href="https://gist.github.com/VoxCore84/a86d3dc8c88839c5f8aafef5908a9d5f">Packet Tools</a></td><td>Opcode analyzer (991 lines) + transmog packet extractor (342 lines)</td></tr><tr><td><a href="https://gist.github.com/VoxCore84/88ba6320d249b5758753ecb954b0ded2">Transmog Wiki</a></td><td>189 functions, 23 events, 24 structures across 4 client API namespaces</td></tr></tbody></table></div>
-<hr>
-<h2 id="reference-tools">Reference Tools</h2>
-<p>Local development tools used in the project:</p>
-<div class="table-wrap"><table class="data-table"><thead><tr><th>Tool</th><th>What it does</th></tr></thead><tbody><tr><td>WowPacketParser</td><td>Packet capture decoder, locally patched for build 66220</td></tr><tr><td>wow.tools.local</td><td>Self-hosted DB2/DBC browser for visual data inspection</td></tr><tr><td>LoreWalkerTDB</td><td>Community TrinityCore database — world data import source</td></tr><tr><td>DBC2CSV</td><td>DB2-to-CSV converter with 1,315 table definition files</td></tr><tr><td>TACTSharp</td><td>Blizzard CASC storage extraction library</td></tr><tr><td>DB2Query</td><td>Interactive DB2 query CLI</td></tr><tr><td>AllTheThings Database</td><td>Community item, quest, and NPC collection data (1,576 Lua files, 174K items, 47K quests)</td></tr><tr><td>Lua Language Server</td><td>LSP for Eluna script and addon development</td></tr><tr><td>Ymir</td><td>Retail packet sniffer for build 66220</td></tr></tbody></table></div>
-<hr>
-<h2 id="quick-start">Quick Start</h2>
-<pre><code># Clone the core server
-git clone https://github.com/VoxCore84/RoleplayCore.git
+<!-- Arrow 1 -->
+<line x1="180" y1="65" x2="215" y2="65" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.5"/>
+<polygon points="215,60 225,65 215,70" fill="var(--arcane)" fill-opacity="0.5"/>
 
-# Install the transmog addon
-git clone https://github.com/VoxCore84/TransmogBridge.git
-# Copy to Interface/AddOns/TransmogBridge/
+<!-- Stage 2: Merge -->
+<rect x="225" y="30" width="160" height="70" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.6"/>
+<text x="305" y="56" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="14">2. Merge</text>
+<text x="305" y="76" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">TACT + Wago CDN</text>
+<text x="305" y="90" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">+7,183 extra rows</text>
 
-# Run NPC audits
-git clone https://github.com/VoxCore84/tc-npc-audit.git
-python npc_audit.py --all</code></pre>
+<!-- Arrow 2 -->
+<line x1="385" y1="65" x2="420" y2="65" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.5"/>
+<polygon points="420,60 430,65 420,70" fill="var(--arcane)" fill-opacity="0.5"/>
+
+<!-- Stage 3: Repair -->
+<rect x="430" y="30" width="160" height="70" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.6"/>
+<text x="510" y="56" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="14">3. Repair</text>
+<text x="510" y="76" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">103K inserts &middot; 5 batches</text>
+<text x="510" y="90" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">388 tables compared</text>
+
+<!-- Arrow 3 -->
+<line x1="590" y1="65" x2="625" y2="65" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.5"/>
+<polygon points="625,60 635,65 625,70" fill="var(--arcane)" fill-opacity="0.5"/>
+
+<!-- Stage 4: Validate -->
+<rect x="635" y="30" width="145" height="70" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.6"/>
+<text x="707" y="56" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="14">4. Validate</text>
+<text x="707" y="76" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">~244K genuine rows</text>
+<text x="707" y="90" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">97.8% reduction</text>
+
+<!-- Bottom: Additional Sources -->
+<rect x="20" y="130" width="760" height="50" rx="12" fill="var(--bg-alt)" stroke="var(--border)" stroke-width="1" stroke-opacity="0.3"/>
+<text x="400" y="155" text-anchor="middle" fill="var(--text-2)" font-family="var(--font-display)" font-weight="500" font-size="12">Additional Sources: LoreWalkerTDB (~1M rows) &middot; AllTheThings (+9,221 rows) &middot; Raidbots (1.6M locales) &middot; Wowhead (78K NPC fixes) &middot; TDB (+1,967 rewards)</text>
+<line x1="400" y1="100" x2="400" y2="130" stroke="var(--border)" stroke-width="1" stroke-dasharray="4 3" stroke-opacity="0.4"/>
+</svg></div>
+<p>The complete data flow from raw game files to a validated, production-ready server database. Every stage is scripted and reproducible.</p>
+<h2 id="pipeline-overview">Pipeline Overview</h2>
+<p>The pipeline processes data through four stages: <strong>Extract</strong> raw DB2 tables from the game client, <strong>Merge</strong> with CDN hotfix extras, <strong>Repair</strong> against the server database, and <strong>Validate</strong> the final result.</p>
+<hr>
+<h2 id="stage-1-extract">Stage 1: Extract</h2>
+<h3 id="tactsharp-casc-extraction">TACTSharp / CASC Extraction</h3>
+<p><code>tact_extract.py</code> extracts all 1,097 DB2 tables directly from the local WoW client installation via TACTSharp. This is the <strong>ground truth</strong> source — no API rate limits, no oscillation artifacts, no missing data.</p>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Metric</th><th>Value</th></tr></thead><tbody><tr><td>Tables extracted</td><td>1,097</td></tr><tr><td>Extraction time</td><td>~50 seconds</td></tr><tr><td>Source</td><td>Local CASC (build 66220)</td></tr><tr><td>Converter</td><td>DBC2CSV (1,315 table definitions)</td></tr><tr><td>Retry handling</td><td>Automatic (DBC2CSV drops ~0.5% non-deterministically)</td></tr></tbody></table></div>
+<h3 id="wagotools-cdn-fallback-extras">Wago.tools CDN (Fallback + Extras)</h3>
+<p><code>wago_db2_downloader.py</code> downloads the same 1,097 tables from Wago's HTTP API. Used as a fallback and as a source of CDN-only hotfix content that doesn't exist in the local client.</p>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Metric</th><th>Value</th></tr></thead><tbody><tr><td>Tables available</td><td>1,097</td></tr><tr><td>Known issue</td><td>SpellEffect oscillates between 269K and 608K rows across exports</td></tr><tr><td>CDN extras</td><td>Hotfix content not yet in local build</td></tr></tbody></table></div>
+<hr>
+<h2 id="stage-2-merge">Stage 2: Merge</h2>
+<h3 id="best-of-both-dataset">Best-of-Both Dataset</h3>
+<p><code>merge_csv_sources.py</code> combines the two sources: TACT as the base (client ground truth) with Wago-only rows appended (CDN hotfix content the client hasn't received yet).</p>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Metric</th><th>Value</th></tr></thead><tbody><tr><td>TACT-only tables</td><td>998 (Wago had same or fewer rows)</td></tr><tr><td>Merged tables</td><td>99 (Wago had additional CDN-only rows)</td></tr><tr><td>Extra rows from Wago</td><td>7,183 across 99 tables</td></tr><tr><td>Header normalization</td><td>DBC2CSV <code>[N]</code> converted to Wago <code>_N</code> notation</td></tr><tr><td>Output</td><td><code>merged_csv/</code> directory — single source of truth</td></tr></tbody></table></div>
+<p>All 14+ downstream consumer scripts read from <code>merged_csv/</code> automatically via <code>wago_common.py</code>.</p>
+<hr>
+<h2 id="stage-3-repair">Stage 3: Repair</h2>
+<h3 id="hotfix-repair-system">Hotfix Repair System</h3>
+<p><code>repair_hotfix_tables.py</code> compares every server hotfix table against the merged CSVs and generates repair SQL:</p>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Step</th><th>What happens</th></tr></thead><tbody><tr><td>Column normalization</td><td>28 global aliases + 23 table-specific + 6 table name overrides</td></tr><tr><td>Row comparison</td><td>Identifies zeroed columns, missing rows, custom diffs to preserve</td></tr><tr><td>SQL generation</td><td>UPDATE for zeroed columns, INSERT for missing rows</td></tr><tr><td>Registry sync</td><td>Generates hotfix_data entries so the client receives corrections</td></tr><tr><td>Batch processing</td><td>5 batches of ~80 tables each</td></tr></tbody></table></div>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Metric</th><th>Value</th></tr></thead><tbody><tr><td>Tables compared</td><td>388</td></tr><tr><td>Missing rows inserted</td><td>103,153</td></tr><tr><td>Zeroed columns fixed</td><td>1,831</td></tr><tr><td>Custom diffs preserved</td><td>468,972</td></tr><tr><td>hotfix_data generated</td><td>843,894 entries</td></tr></tbody></table></div>
+<h3 id="redundancy-audit">Redundancy Audit</h3>
+<p>Three rounds of cleanup removed data that matched the client's DBC baseline:</p>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Round</th><th>Method</th><th>Rows Removed</th></tr></thead><tbody><tr><td>R1</td><td>String comparison</td><td>9.6M</td></tr><tr><td>R2</td><td>WTL DBC2CSV cross-ref</td><td>204K</td></tr><tr><td>R3</td><td>Type-aware (float32, int32, logical PK)</td><td>768K</td></tr><tr><td>Orphan sweep</td><td>hotfix_data registry cleanup</td><td>175K entries</td></tr><tr><td><strong>Total</strong></td><td></td><td><strong>~10.6M rows removed (97.8%)</strong></td></tr></tbody></table></div>
+<hr>
+<h2 id="stage-4-validate">Stage 4: Validate</h2>
+<h3 id="post-repair-verification">Post-Repair Verification</h3>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Check</th><th>Result</th></tr></thead><tbody><tr><td>Hotfix content rows</td><td>~244K genuine (8,396 override + 231,199 new)</td></tr><tr><td>hotfix_data registry</td><td>226,984 entries</td></tr><tr><td>Server startup</td><td>17s (was 3m24s before optimization)</td></tr><tr><td>Client hotfix delivery</td><td>All corrections delivered on login</td></tr><tr><td>Zero-error boot</td><td>Clean server logs after repair</td></tr></tbody></table></div>
+<hr>
+<h2 id="additional-data-sources">Additional Data Sources</h2>
+<h3 id="allthethings-database">AllTheThings Database</h3>
+<p><code>att_to_sqlite.py</code> parses the entire AllTheThings addon database (1,576 Lua files) into a 60-table SQLite database. <code>att_generate_sql.py</code> cross-references against the server and generates validated SQL.</p>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Data Applied</th><th>Rows</th></tr></thead><tbody><tr><td>Quest starters (creature_queststarter)</td><td>+4,630</td></tr><tr><td>Quest chain links (PrevQuestID)</td><td>+3,081</td></tr><tr><td>Vendor items (npc_vendor)</td><td>+1,510</td></tr><tr><td><strong>Total</strong></td><td><strong>+9,221</strong></td></tr></tbody></table></div>
+<h3 id="lorewalkertdb">LoreWalkerTDB</h3>
+<p>Community TrinityCore database providing the bulk of world data:</p>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Category</th><th>Volume</th></tr></thead><tbody><tr><td>World DB rows</td><td>~1,004,000 net</td></tr><tr><td>SmartAI scripts</td><td>294,425 validated (from ~524K attempted)</td></tr><tr><td>Loot table entries</td><td>~242K net</td></tr></tbody></table></div>
+<h3 id="coordinate-transformer">Coordinate Transformer</h3>
+<p><code>coord_transformer.py</code> converts Wowhead zone-percent coordinates to world XYZ positions using nearest-neighbor Z interpolation from 527K existing spawns.</p>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Tier</th><th>Spawns Added</th></tr></thead><tbody><tr><td>Critical (quest NPCs)</td><td>1,541 applied</td></tr><tr><td>Phase-duplicate resolved</td><td>214 analyzed, 207 re-inserted</td></tr><tr><td>High (service NPCs)</td><td>1,626 ready</td></tr></tbody></table></div>
+<hr>
+<h2 id="pipeline-automation">Pipeline Automation</h2>
+<h3 id="one-command-rebuild">One-Command Rebuild</h3>
+<pre><code># Full pipeline from scratch
+python tact_extract.py           # Extract 1,097 DB2 tables (~50s)
+python merge_csv_sources.py      # Merge TACT + Wago CDN extras
+python repair_hotfix_tables.py --batch 1  # Repair in 5 batches
+python repair_hotfix_tables.py --batch 2
+python repair_hotfix_tables.py --batch 3
+python repair_hotfix_tables.py --batch 4
+python repair_hotfix_tables.py --batch 5</code></pre>
+<h3 id="build-bump-procedure">Build Bump Procedure</h3>
+<p>When a new WoW build drops:</p>
+<ol><li>Update <code>CURRENT_BUILD</code> in <code>wago_common.py</code></li><li>Run <code>tact_extract.py</code> (re-extract from updated client)</li><li>Run <code>merge_csv_sources.py</code> (re-merge with updated Wago data)</li><li>Run <code>repair_hotfix_tables.py</code> (re-repair against new baseline)</li><li>All 14+ consumer scripts pick up the new build automatically</li></ol>
 </article>
 </div>
 </main>

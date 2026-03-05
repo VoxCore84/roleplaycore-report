@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Open Source — VoxCore</title>
+<title>Project Status — VoxCore</title>
 <meta name="description" content="VoxCore — An AI-assisted open source MMO framework built on TrinityCore for WoW 12.x Midnight">
 <style>/* ══════════════════════════════════════════════════════════════════════════
    VoxCore Design System — Apple HIG x Warcraft Atmosphere
@@ -624,7 +624,7 @@ details .data-table { margin: 0 0 8px; }
 <nav class="site-nav" role="navigation" aria-label="Main">
 <div class="nav-inner">
 <a href="index.html" class="nav-logo">VoxCore</a>
-<div class="nav-links"><a href="framework.html">Framework</a><a href="pipeline.html">Pipeline</a><a href="data-import.html">Report</a><a href="tooling.html">Tooling</a><a href="ai-workflow.html">AI</a><a href="status.html">Status</a><a href="opensource.html" class="active">Open Source</a></div>
+<div class="nav-links"><a href="framework.html">Framework</a><a href="pipeline.html">Pipeline</a><a href="data-import.html">Report</a><a href="tooling.html">Tooling</a><a href="ai-workflow.html">AI</a><a href="status.html" class="active">Status</a><a href="opensource.html">Open Source</a></div>
 <div class="nav-end">
 <a href="https://github.com/VoxCore84/RoleplayCore" class="nav-github" aria-label="GitHub" target="_blank" rel="noopener"><svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg></a>
 <button class="nav-menu-btn" aria-label="Menu" aria-expanded="false">
@@ -636,53 +636,39 @@ details .data-table { margin: 0 0 8px; }
 <div class="mobile-nav" role="dialog" aria-label="Navigation"><a href="framework.html">The Framework</a><a href="pipeline.html">Data Pipeline</a><a href="tooling.html">Tooling</a><a href="ai-workflow.html">AI Workflow</a><a href="status.html">Project Status</a><a href="opensource.html">Open Source</a><div class="mobile-sep"></div><a href="data-import.html">Data Import & Hotfix Repair</a><a href="npc-audits.html">NPC Audits & Corrections</a><a href="quest-localization.html">Quests & Localization</a><a href="database-cleanup.html">Database Cleanup & Integrity</a><a href="performance.html">Performance & Build Diff</a><a href="placement.html">Placement Audits</a><a href="results.html">Tooling & Results</a><a href="hotfix-audit.html">Hotfix Redundancy Audit</a><a href="discoveries.html">Discoveries & Lessons</a><a href="reference.html">Timeline & Reference</a></div>
 <main>
 <header class="page-header">
-<nav class="breadcrumb"><a href="index.html">VoxCore</a> &rsaquo; Open Source</nav>
-<h1>Open Source</h1>
+<nav class="breadcrumb"><a href="index.html">VoxCore</a> &rsaquo; Project Status</nav>
+<h1>Project Status</h1>
 </header>
 <div class="page-layout">
-<button class="sidebar-toggle">On this page</button><nav class="sidebar" aria-label="Table of contents"><a href="#public-repositories">Public Repositories</a><a href="#voxcore84roleplaycore" class="toc-h3">VoxCore84/RoleplayCore</a><a href="#voxcore84transmogbridge" class="toc-h3">VoxCore84/TransmogBridge</a><a href="#voxcore84tc-npc-audit" class="toc-h3">VoxCore84/tc-npc-audit</a><a href="#voxcore84wago-pipeline" class="toc-h3">VoxCore84/wago-pipeline</a><a href="#voxcore84roleplaycore-report" class="toc-h3">VoxCore84/roleplaycore-report</a><a href="#additional-tooling">Additional Tooling</a><a href="#public-gists">Public Gists</a><a href="#reference-tools">Reference Tools</a><a href="#quick-start">Quick Start</a></nav>
+<button class="sidebar-toggle">On this page</button><nav class="sidebar" aria-label="Table of contents"><a href="#database-health">Database Health</a><a href="#size-row-counts-march-5-2026" class="toc-h3">Size & Row Counts (March 5, 2026)</a><a href="#data-quality-indicators" class="toc-h3">Data Quality Indicators</a><a href="#recent-sessions">Recent Sessions</a><a href="#open-issues">Open Issues</a><a href="#high-priority" class="toc-h3">HIGH Priority</a><a href="#medium-priority" class="toc-h3">MEDIUM Priority</a><a href="#ready-to-run" class="toc-h3">READY TO RUN</a><a href="#repository-activity">Repository Activity</a><a href="#tool-inventory-summary">Tool Inventory Summary</a><a href="#public-resources">Public Resources</a></nav>
 <article>
 
-<p>VoxCore's tooling is distributed across nine GitHub repositories and six public gists. Four repositories and all gists are public. The remaining five contain specialized tooling available on request.</p>
-<h2 id="public-repositories">Public Repositories</h2>
-<h3 id="voxcore84roleplaycore">VoxCore84/RoleplayCore</h3>
-<p>The core server. TrinityCore fork targeting WoW 12.x / Midnight with eleven custom roleplay systems, five databases, and a fully integrated AI development workflow.</p>
-<ul><li><strong>Language:</strong> C++</li><li><strong>Status:</strong> Active</li><li><a href="https://github.com/VoxCore84/RoleplayCore">View on GitHub</a></li></ul>
-<h3 id="voxcore84transmogbridge">VoxCore84/TransmogBridge</h3>
-<p>Client addon that patches a serializer bug in the 12.x transmog outfit system. The WoW client omits four or more equipment slots from outfit update packets. TransmogBridge intercepts, merges with a pre-snapshot, and delivers the complete payload.</p>
-<ul><li><strong>Language:</strong> Lua</li><li><strong>Status:</strong> Active</li><li><a href="https://github.com/VoxCore84/TransmogBridge">View on GitHub</a></li></ul>
-<h3 id="voxcore84tc-npc-audit">VoxCore84/tc-npc-audit</h3>
-<p>NPC audit and validation toolkit. Twenty scripts cross-reference the TrinityCore world database against Wowhead and LoreWalkerTDB. Validates factions, display models, level ranges, equipment, zones, and flags. Produced 78,475 corrections.</p>
-<ul><li><strong>Language:</strong> Python</li><li><strong>Status:</strong> Archived (complete)</li><li><a href="https://github.com/VoxCore84/tc-npc-audit">View on GitHub</a></li></ul>
-<h3 id="voxcore84wago-pipeline">VoxCore84/wago-pipeline</h3>
-<p>Data enrichment pipeline for importing and validating game data from Raidbots, Wago, and LoreWalkerTDB. Six scripts with an orchestrator handle item names, quest chains, quest POI, objectives, and Wowhead scraping.</p>
-<ul><li><strong>Language:</strong> Python</li><li><strong>Status:</strong> Archived (complete)</li><li><a href="https://github.com/VoxCore84/wago-pipeline">View on GitHub</a></li></ul>
-<h3 id="voxcore84roleplaycore-report">VoxCore84/roleplaycore-report</h3>
-<p>This website. A static site generator with Apple HIG aesthetic, built from Markdown sources by a Python script. Outputs to GitHub Pages.</p>
-<ul><li><strong>Language:</strong> Python</li><li><strong>Status:</strong> Active</li><li><a href="https://github.com/VoxCore84/roleplaycore-report">View on GitHub</a></li></ul>
+<p>Current state of the VoxCore project — database health, recent activity, and open work items.</p>
+<h2 id="database-health">Database Health</h2>
+<h3 id="size-row-counts-march-5-2026">Size & Row Counts (March 5, 2026)</h3>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Database</th><th>Tables</th><th>Size</th><th>Key Table</th><th>Rows</th></tr></thead><tbody><tr><td><strong>world</strong></td><td>259</td><td>1,267 MB</td><td>creature</td><td>662,536</td></tr><tr><td></td><td></td><td></td><td>smart_scripts</td><td>294,425</td></tr><tr><td></td><td></td><td></td><td>creature_loot_template</td><td>2,904,341</td></tr><tr><td></td><td></td><td></td><td>npc_vendor</td><td>167,312</td></tr><tr><td></td><td></td><td></td><td>quest_template_addon</td><td>49,736</td></tr><tr><td><strong>hotfixes</strong></td><td>517</td><td>535 MB</td><td>hotfix_data</td><td>226,984</td></tr><tr><td></td><td></td><td></td><td>broadcast_text</td><td>224,233</td></tr><tr><td></td><td></td><td></td><td>item_sparse</td><td>1,418</td></tr><tr><td><strong>characters</strong></td><td>151</td><td>7.6 MB</td><td></td><td></td></tr><tr><td><strong>auth</strong></td><td>50</td><td>1.9 MB</td><td></td><td></td></tr><tr><td><strong>roleplay</strong></td><td>5</td><td>0.1 MB</td><td></td><td></td></tr></tbody></table></div>
+<h3 id="data-quality-indicators">Data Quality Indicators</h3>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Check</th><th>Status</th><th>Detail</th></tr></thead><tbody><tr><td>Hotfix redundancy</td><td>Clean</td><td>97.8% redundant rows removed (10.6M to 244K)</td></tr><tr><td>SmartAI integrity</td><td>Clean</td><td>0 orphans (5,894 cleared, 181 GUID-based restored)</td></tr><tr><td>ContentTuningID coverage</td><td>98%</td><td>4,820 of 4,918 spawned CT=0 creatures enriched</td></tr><tr><td>DifficultyID=0 coverage</td><td>100%</td><td>26,745 missing Diff0 rows filled</td></tr><tr><td>Broadcast text coverage</td><td>100%</td><td>393 missing entries filled from Wago DB2</td></tr><tr><td>Hotfix_data orphans</td><td>Clean</td><td>608K orphaned entries removed</td></tr><tr><td>Loot table PKs</td><td>Enforced</td><td>193K pre-existing duplicates removed</td></tr><tr><td>NPC model validation</td><td>Clean</td><td>78,475 corrections applied</td></tr></tbody></table></div>
 <hr>
-<h2 id="additional-tooling">Additional Tooling</h2>
-<p>Five repositories contain specialized development tools.</p>
-<div class="table-wrap"><table class="data-table"><thead><tr><th>Repository</th><th>What it does</th><th>Language</th></tr></thead><tbody><tr><td>Wago Tooling</td><td>65+ scripts — TACT extractor, CSV merger, hotfix repair, ATT mega-parser, MCP server, build differ, redundancy audit</td><td>Python</td></tr><tr><td>Code Intelligence</td><td>Hybrid ctags + clangd MCP server — 416K symbols, 8 query tools</td><td>Python</td></tr><tr><td>Claude Skills</td><td>17 custom slash commands — build automation, lookups, packet analysis, SmartAI validation</td><td>Markdown</td></tr><tr><td>Packet Tools</td><td>Server launcher wrapper, WPP auto-parse, packet grep, build updater</td><td>Shell</td></tr><tr><td>TC NPC Audit</td><td>20 NPC validation scripts — model, faction, level, zone, flag cross-references</td><td>Python</td></tr></tbody></table></div>
+<h2 id="recent-sessions">Recent Sessions</h2>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>#</th><th>Date</th><th>Focus</th><th>Key Result</th></tr></thead><tbody><tr><td>55</td><td>Mar 5</td><td>Website QA</td><td>Cross-page sidebar, accuracy audit (30/30 verified)</td></tr><tr><td>54</td><td>Mar 5</td><td>ATT Mega-Parser</td><td>60 SQLite tables from 30 data sources (52.6 MB)</td></tr><tr><td>53</td><td>Mar 5</td><td>TACT/CSV Merge</td><td>Best-of-both dataset — 1,097 tables, 7,183 Wago extras</td></tr><tr><td>52</td><td>Mar 5</td><td>Retail Sniffer</td><td>DT=3 reverted, merge strategy corrected from 2.77M packet lines</td></tr><tr><td>51</td><td>Mar 5</td><td>Missing Spawns</td><td>1,748 quest NPCs deployed, 214 phase-dupes resolved</td></tr><tr><td>50</td><td>Mar 5</td><td>ATT Parser</td><td>8,950 validated rows — quest starters, chains, vendor items</td></tr><tr><td>49</td><td>Mar 5</td><td>TDB Delta</td><td>+1,967 quest_offer_reward rows, scraper hardened</td></tr><tr><td>48</td><td>Mar 5</td><td>World DB QA</td><td>9 SQL updates — CTD, SmartAI, spawns, waypoints, loot</td></tr><tr><td>47</td><td>Mar 5</td><td>Gist Audit</td><td>Verified all report numbers, cleaned 608K hotfix_data orphans</td></tr><tr><td>46</td><td>Mar 5</td><td>WPP Hardening</td><td>20-bug QA across 4 packet analysis scripts</td></tr></tbody></table></div>
 <hr>
-<h2 id="public-gists">Public Gists</h2>
-<div class="table-wrap"><table class="data-table"><thead><tr><th>Gist</th><th>What it contains</th></tr></thead><tbody><tr><td><a href="https://gist.github.com/VoxCore84/84656ef0960c699927e3a555e8248f7b">Operations Runbook</a></td><td>Complete reference for every tool, pipeline, and command — 22 sections</td></tr><tr><td><a href="https://gist.github.com/VoxCore84/4c63baf8154753d2a89475d9a4f5b2cc">Session Changelog</a></td><td>Chronological log of all 55+ development sessions with commit hashes</td></tr><tr><td><a href="https://gist.github.com/VoxCore84/528e801b53f6c62ce2e5c2ffe7e63e29">Database Report</a></td><td>Full 16-part data quality and optimization report</td></tr><tr><td><a href="https://gist.github.com/VoxCore84/2b69757faa2a53172c7acb5bfa3ad3c4">Open Issues</a></td><td>Prioritized issue tracker — HIGH / MEDIUM / LOW / DEFERRED</td></tr><tr><td><a href="https://gist.github.com/VoxCore84/a86d3dc8c88839c5f8aafef5908a9d5f">Packet Tools</a></td><td>Opcode analyzer (991 lines) + transmog packet extractor (342 lines)</td></tr><tr><td><a href="https://gist.github.com/VoxCore84/88ba6320d249b5758753ecb954b0ded2">Transmog Wiki</a></td><td>189 functions, 23 events, 24 structures across 4 client API namespaces</td></tr></tbody></table></div>
+<h2 id="open-issues">Open Issues</h2>
+<h3 id="high-priority">HIGH Priority</h3>
+<ul><li><strong>Transmog: 5-Bug Investigation</strong> — Diagnostic build deployed, DT/merge reverts applied from retail sniffer data. Next: expand slotMap from 14 to 30 entries</li><li><strong>Transmog: PR #760 Bugs</strong> — SetID mapping (F), pad byte parsing (G), CMSG never fires (H)</li><li><strong>Stale Hotfix Overrides</strong> — 7,119 entries where TACT+Wago agree but our hotfix disagrees (958 ItemSparse confirmed wrong)</li></ul>
+<h3 id="medium-priority">MEDIUM Priority</h3>
+<ul><li>Skyriding / Dragonriding — TODO outside Dragon Isles</li><li>Dead HandleTransmogrifyItems handler — 400 lines of unused code</li><li>Melee first-swing NotInRange bug — CombatReach=0 or same-tick race</li></ul>
+<h3 id="ready-to-run">READY TO RUN</h3>
+<ul><li><strong>Missing Spawns High Tier</strong> — 1,626 service NPC spawns transformable (<code>coord_transformer.py --tier high</code>)</li><li><strong>Quest Reward Text Scrape</strong> — 27,328 quests ready for Wowhead scrape (~2 hours)</li></ul>
 <hr>
-<h2 id="reference-tools">Reference Tools</h2>
-<p>Local development tools used in the project:</p>
-<div class="table-wrap"><table class="data-table"><thead><tr><th>Tool</th><th>What it does</th></tr></thead><tbody><tr><td>WowPacketParser</td><td>Packet capture decoder, locally patched for build 66220</td></tr><tr><td>wow.tools.local</td><td>Self-hosted DB2/DBC browser for visual data inspection</td></tr><tr><td>LoreWalkerTDB</td><td>Community TrinityCore database — world data import source</td></tr><tr><td>DBC2CSV</td><td>DB2-to-CSV converter with 1,315 table definition files</td></tr><tr><td>TACTSharp</td><td>Blizzard CASC storage extraction library</td></tr><tr><td>DB2Query</td><td>Interactive DB2 query CLI</td></tr><tr><td>AllTheThings Database</td><td>Community item, quest, and NPC collection data (1,576 Lua files, 174K items, 47K quests)</td></tr><tr><td>Lua Language Server</td><td>LSP for Eluna script and addon development</td></tr><tr><td>Ymir</td><td>Retail packet sniffer for build 66220</td></tr></tbody></table></div>
+<h2 id="repository-activity">Repository Activity</h2>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Repository</th><th>Latest Commit</th><th>Recent Work</th></tr></thead><tbody><tr><td>VoxCore84/RoleplayCore</td><td><code>fae00afb86</code></td><td>Transmog sniffer-informed fixes</td></tr><tr><td>VoxCore84/wago-tooling</td><td><code>b1f0bd0</code></td><td>ATT mega-parser, TACT pipeline</td></tr><tr><td>VoxCore84/tc-packet-tools</td><td><code>821e74f</code></td><td>WPP script hardening</td></tr><tr><td>VoxCore84/roleplaycore-report</td><td><code>068c81c</code></td><td>Website QA round 2</td></tr><tr><td>VoxCore84/trinitycore-claude-skills</td><td><code>25967f7</code></td><td>17 custom slash commands</td></tr></tbody></table></div>
 <hr>
-<h2 id="quick-start">Quick Start</h2>
-<pre><code># Clone the core server
-git clone https://github.com/VoxCore84/RoleplayCore.git
-
-# Install the transmog addon
-git clone https://github.com/VoxCore84/TransmogBridge.git
-# Copy to Interface/AddOns/TransmogBridge/
-
-# Run NPC audits
-git clone https://github.com/VoxCore84/tc-npc-audit.git
-python npc_audit.py --all</code></pre>
+<h2 id="tool-inventory-summary">Tool Inventory Summary</h2>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Category</th><th>Count</th><th>Examples</th></tr></thead><tbody><tr><td>Data pipelines</td><td>15</td><td>tact_extract, merge_csv_sources, repair_hotfix_tables</td></tr><tr><td>Audit & validation</td><td>12</td><td>npc_audit (27 checks), go_audit (15), quest_audit (15)</td></tr><tr><td>Hotfix system</td><td>6</td><td>hotfix_differ_r3, cleanup_hotfix_data_orphans</td></tr><tr><td>Transmog tools</td><td>5</td><td>TransmogBridge, extract_transmog_packets</td></tr><tr><td>Packet analysis</td><td>5</td><td>opcode_analyzer, wpp-inspect</td></tr><tr><td>Extraction & reference</td><td>9</td><td>TACTSharp, wow.tools.local, DB2Query</td></tr><tr><td>Build & operations</td><td>5</td><td>wago_db2_server (MCP), SOAP interface</td></tr><tr><td>Web scrapers</td><td>6</td><td>wowhead_scraper, att_to_sqlite, import_quest_rewards</td></tr><tr><td><strong>Total</strong></td><td><strong>65+</strong></td><td>Across Python, C++, Lua, SQL, Shell, C#</td></tr></tbody></table></div>
+<hr>
+<h2 id="public-resources">Public Resources</h2>
+<ul><li><a href="https://gist.github.com/VoxCore84/84656ef0960c699927e3a555e8248f7b">Operations Runbook</a> — 22-section reference for every tool and pipeline</li><li><a href="https://gist.github.com/VoxCore84/4c63baf8154753d2a89475d9a4f5b2cc">Session Changelog</a> — 55+ sessions with commit hashes</li><li><a href="https://gist.github.com/VoxCore84/528e801b53f6c62ce2e5c2ffe7e63e29">Database Report</a> — Full 16-part data quality report</li><li><a href="https://gist.github.com/VoxCore84/2b69757faa2a53172c7acb5bfa3ad3c4">Open Issues</a> — Prioritized issue tracker</li></ul>
 </article>
 </div>
 </main>

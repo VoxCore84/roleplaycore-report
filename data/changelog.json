@@ -1,8 +1,8 @@
 [
-  {"date": "Mar 5", "title": "AllTheThings Parser", "summary": "Built full Lua tokenizer for the ATT database \u2014 1,576 files parsed, 8,950 quest and vendor rows generated"},
-  {"date": "Mar 5", "title": "Gist Accuracy Audit", "summary": "Verified every report number against the live database, corrected 6 stale statistics"},
-  {"date": "Mar 5", "title": "Hotfix Registry Cleanup", "summary": "Removed 608K orphaned hotfix_data entries \u2014 registry reduced from 835K to 227K rows"},
-  {"date": "Mar 4", "title": "Packet Tool Hardening", "summary": "20-bug QA pass across 4 packet analysis scripts \u2014 EXIT traps, path guards, streaming extraction"},
-  {"date": "Mar 4", "title": "Tools Consolidation", "summary": "Unified tool paths across 4 repos \u2014 13 files updated, 7 missing tools inventoried"},
-  {"date": "Mar 3", "title": "Creature Database Fix", "summary": "Restored 26,745 missing DifficultyID=0 rows, cleared 5,894 SmartAI orphans"}
+  {"date": "Mar 5", "title": "VoxCore Website QA", "summary": "Cross-page sidebar, external CSS/JS, accuracy audit \u2014 30/30 stats verified against live database"},
+  {"date": "Mar 5", "title": "ATT Mega-Parser", "summary": "Built SQLite extractor for AllTheThings \u2014 60 tables from 30 data sources, 52.6 MB, 174K items"},
+  {"date": "Mar 5", "title": "TACT CSV Merge Pipeline", "summary": "TACT base + Wago CDN extras \u2014 best-of-both dataset across 1,097 tables with 7,183 extra rows"},
+  {"date": "Mar 5", "title": "Missing NPC Spawns", "summary": "1,748 quest NPC spawns deployed via coordinate transformer \u2014 214 phase-duplicate entries resolved"},
+  {"date": "Mar 5", "title": "ATT Data Applied", "summary": "4,630 quest starters, 3,081 chain links, 1,510 vendor items from AllTheThings database"},
+  {"date": "Mar 5", "title": "Retail Sniffer Decode", "summary": "Decoded 2.77M-line Ymir packet capture \u2014 corrected transmog DT assignment and merge strategy"}
 ]

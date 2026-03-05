@@ -31,8 +31,10 @@ CHANGELOG = _read_json(os.path.join(DATA_DIR, "changelog.json"))
 
 FEATURE_PAGES = [
     {"slug": "framework",   "title": "The Framework",  "desc": f"{STATS['custom_systems']} custom C++ systems, persistent RP commands, transmog outfits, companion AI"},
+    {"slug": "pipeline",    "title": "Data Pipeline",   "desc": f"TACT extraction \u2192 CSV merge \u2192 hotfix repair \u2192 validation \u2014 {STATS['db2_tables']} tables, fully automated"},
     {"slug": "tooling",     "title": "Tooling",        "desc": f"{STATS['tools_built']} tools \u2014 data pipelines, audit validators, packet analyzers, MCP servers"},
     {"slug": "ai-workflow", "title": "AI Workflow",     "desc": f"Claude Code integration \u2014 {STATS['claude_commands']} skills, 4 MCP servers, parallel agent architecture"},
+    {"slug": "status",      "title": "Project Status",  "desc": f"Database health, {STATS['dev_sessions']} sessions logged, open issues, repository activity"},
     {"slug": "opensource",  "title": "Open Source",     "desc": "9 repositories, 6 public gists, community tools and reference data"},
 ]
 
@@ -43,7 +45,7 @@ REPORT_PAGES = [
     {"slug": "database-cleanup",   "title": "Database Cleanup & Integrity",   "desc": f"{STATS['dead_rows_cleaned']} dead rows removed, loot PK discovery, 47K post-import cleanup"},
     {"slug": "performance",        "title": "Performance & Build Diff",      "desc": f"{STATS['server_startup_before']} to {STATS['server_startup_after']} startup, 5-build diff audit with zero breaking changes"},
     {"slug": "placement",          "title": "Placement Audits",              "desc": "31K placement fixes generated from LoreWalkerTDB comparison"},
-    {"slug": "results",            "title": "Tooling & Results",             "desc": f"{STATS['dev_sessions']} tools built, final DB state, before/after player impact"},
+    {"slug": "results",            "title": "Tooling & Results",             "desc": f"{STATS['tools_built']} tools built, final DB state, before/after player impact"},
     {"slug": "hotfix-audit",       "title": "Hotfix Redundancy Audit",       "desc": f"10.8M to {STATS['final_hotfix_content_rows']} rows \u2014 {STATS['redundant_rows_percent']} reduction in 3 rounds"},
     {"slug": "discoveries",        "title": "Discoveries & Lessons",         "desc": "9 community-relevant findings for any TrinityCore project"},
     {"slug": "reference",          "title": "Timeline & Reference",          "desc": f"Full timeline, {STATS['tools_built']} tool catalog, data sources, reproducibility"},
@@ -53,9 +55,11 @@ ALL_PAGES = FEATURE_PAGES + REPORT_PAGES
 
 NAV_ITEMS = [
     {"label": "Framework",   "slug": "framework"},
+    {"label": "Pipeline",    "slug": "pipeline"},
     {"label": "Report",      "slug": "data-import"},
     {"label": "Tooling",     "slug": "tooling"},
-    {"label": "AI Workflow", "slug": "ai-workflow"},
+    {"label": "AI",          "slug": "ai-workflow"},
+    {"label": "Status",      "slug": "status"},
     {"label": "Open Source", "slug": "opensource"},
 ]
 
@@ -90,6 +94,8 @@ ICONS = {
     "framework": '<svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 8l3 3-3 3"/><path d="M13 14h4"/></svg>',
     "tooling": '<svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>',
     "ai-workflow": '<svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="M4.93 19.07l2.83-2.83"/><path d="M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="4"/></svg>',
+    "pipeline": '<svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M3 12h4l3-9 4 18 3-9h4"/></svg>',
+    "status": '<svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>',
     "opensource": '<svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/><path d="M14 4l-4 16"/></svg>',
     "data-import": '<svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 5v14c0 1.66-4.03 3-9 3s-9-1.34-9-3V5"/><path d="M21 12c0 1.66-4.03 3-9 3s-9-1.34-9-3"/></svg>',
     "npc-audits": '<svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="m8 11 2 2 4-4"/></svg>',
@@ -139,6 +145,49 @@ ARCH_SVG = '''<div class="arch-wrap reveal"><svg viewBox="0 0 800 300" xmlns="ht
 <line x1="115" y1="192" x2="115" y2="250" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="4 3"/>
 <line x1="400" y1="192" x2="400" y2="250" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.35" stroke-dasharray="4 3"/>
 <line x1="685" y1="192" x2="685" y2="250" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="4 3"/>
+</svg></div>'''
+
+PIPELINE_SVG = '''<div class="arch-wrap reveal"><svg viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg" class="arch-diagram" role="img" aria-label="Data pipeline flow diagram">
+<!-- Stage 1: Extract -->
+<rect x="20" y="30" width="160" height="70" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.6"/>
+<text x="100" y="56" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="14">1. Extract</text>
+<text x="100" y="76" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">TACTSharp &middot; 1,097 DB2s</text>
+<text x="100" y="90" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">~50 seconds</text>
+
+<!-- Arrow 1 -->
+<line x1="180" y1="65" x2="215" y2="65" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.5"/>
+<polygon points="215,60 225,65 215,70" fill="var(--arcane)" fill-opacity="0.5"/>
+
+<!-- Stage 2: Merge -->
+<rect x="225" y="30" width="160" height="70" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.6"/>
+<text x="305" y="56" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="14">2. Merge</text>
+<text x="305" y="76" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">TACT + Wago CDN</text>
+<text x="305" y="90" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">+7,183 extra rows</text>
+
+<!-- Arrow 2 -->
+<line x1="385" y1="65" x2="420" y2="65" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.5"/>
+<polygon points="420,60 430,65 420,70" fill="var(--arcane)" fill-opacity="0.5"/>
+
+<!-- Stage 3: Repair -->
+<rect x="430" y="30" width="160" height="70" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.6"/>
+<text x="510" y="56" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="14">3. Repair</text>
+<text x="510" y="76" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">103K inserts &middot; 5 batches</text>
+<text x="510" y="90" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">388 tables compared</text>
+
+<!-- Arrow 3 -->
+<line x1="590" y1="65" x2="625" y2="65" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.5"/>
+<polygon points="625,60 635,65 625,70" fill="var(--arcane)" fill-opacity="0.5"/>
+
+<!-- Stage 4: Validate -->
+<rect x="635" y="30" width="145" height="70" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.6"/>
+<text x="707" y="56" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="14">4. Validate</text>
+<text x="707" y="76" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">~244K genuine rows</text>
+<text x="707" y="90" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">97.8% reduction</text>
+
+<!-- Bottom: Additional Sources -->
+<rect x="20" y="130" width="760" height="50" rx="12" fill="var(--bg-alt)" stroke="var(--border)" stroke-width="1" stroke-opacity="0.3"/>
+<text x="400" y="155" text-anchor="middle" fill="var(--text-2)" font-family="var(--font-display)" font-weight="500" font-size="12">Additional Sources: LoreWalkerTDB (~1M rows) &middot; AllTheThings (+9,221 rows) &middot; Raidbots (1.6M locales) &middot; Wowhead (78K NPC fixes) &middot; TDB (+1,967 rewards)</text>
+<line x1="400" y1="100" x2="400" y2="130" stroke="var(--border)" stroke-width="1" stroke-dasharray="4 3" stroke-opacity="0.4"/>
 </svg></div>'''
 
 # ── Markdown to HTML ──────────────────────────────────────────────────────────
@@ -622,10 +671,12 @@ def build_feature_page(page):
     html = md_to_html(md)
     toc = extract_toc(html)
 
-    # Inject architecture diagram at top of framework page
+    # Inject diagrams at top of specific pages
     extra_top = ''
     if page['slug'] == 'framework':
         extra_top = ARCH_SVG
+    elif page['slug'] == 'pipeline':
+        extra_top = PIPELINE_SVG
 
     body = f'''<main>
 <header class="page-header">

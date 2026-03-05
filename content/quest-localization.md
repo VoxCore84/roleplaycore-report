@@ -7,11 +7,12 @@ Using Wago's `QuestLineXQuest` DB2 CSV data, generated `PrevQuestID` and `NextQu
 
 | Metric | Value |
 |--------|-------|
-| Total quest_template_addon rows | 47,164 |
-| Quests with PrevQuestID | 21,758 (46.1%) |
-| Quests with NextQuestID | 17,636 (37.4%) |
+| Total quest_template_addon rows | 49,736 |
+| Quests with PrevQuestID | 24,868 (50.0%) |
+| Quests with NextQuestID | 17,636 (35.5%) |
 | Chain starters identified | 1,862 |
 | Quest lines processed | 1,605 |
+| ATT chain links added | +3,081 (from AllTheThings database cross-reference) |
 
 Zero self-references, zero circular chains, zero dangling references. Cycle detection (DFS-based) and dangling reference cleanup built into the pipeline.
 
@@ -34,7 +35,7 @@ Reimported from LoreWalkerTDB to ensure completeness:
 
 | Table | Rows |
 |-------|------|
-| creature_queststarter | 26,842 |
+| creature_queststarter | 30,746 (+4,630 from AllTheThings) |
 | creature_questender | 33,496 |
 | gameobject_queststarter | 1,615 |
 | gameobject_questender | 1,610 |

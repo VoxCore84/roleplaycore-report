@@ -123,7 +123,7 @@ blockquote {
 }
 
 .nav-links {
-  display: flex; justify-content: center; gap: 32px;
+  display: flex; justify-content: center; gap: 22px;
 }
 .nav-links a {
   font-size: 13px; font-weight: 500; color: var(--text-2);

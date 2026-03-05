@@ -40,13 +40,13 @@ hide:
 | 1 | [LoreWalkerTDB Integration](data-import.md) | ~1M rows imported |
 | 2 | [Hotfix Repair System](data-import.md#part-2-hotfix-repair-system) | 103K inserts + 1.8K fixes |
 | 3 | [NPC Audits & Corrections](npc-audits.md) | 78,475 fixes |
-| 4 | [Quest System Enrichment](quest-localization.md) | 21K chain links |
+| 4 | [Quest System Enrichment](quest-localization.md) | 24.8K chain links |
 | 5 | [Localization](quest-localization.md#part-5-localization) | 1.6M locale rows |
 | 6 | [Database Cleanup & Integrity](database-cleanup.md) | 412K dead rows removed |
 | 7 | [MySQL & Server Performance](performance.md) | 3m24s → 17s startup |
 | 8 | [Build Diff Audit](performance.md#part-8-build-diff-audit-5-builds) | Zero breaking changes |
 | 9 | [Placement Audits](placement.md) | 31K fixes generated |
-| 10 | [Custom Tooling Summary](results.md) | 50+ tools built |
+| 10 | [Custom Tooling Summary](results.md) | 65+ tools built |
 | 11 | [Final Database State](results.md#part-11-final-database-state) | Current row counts |
 | 12 | [What It All Means for Players](results.md#part-12-what-it-all-means-for-players) | Before / After |
 | 13 | [Hotfix Redundancy Audit](hotfix-audit.md) | 10.8M → 244K (97.8%) |
@@ -71,7 +71,7 @@ All figures are **net** — accounting for subsequent cleanup and deduplication.
 | **Data Imported** | LoreWalkerTDB world rows | ~1,004,000 net |
 | | Hotfix rows repaired | 103,153 inserts + 1,831 column fixes |
 | | Item locale translations | 1,628,651 rows across 10 languages |
-| | Quest chain links | 21,758 PrevQuestID/NextQuestID updates |
+| | Quest chain links | 24,868 PrevQuestID/NextQuestID updates |
 | | Quest POI/objectives | 2,880 POI + 5,199 points + 633 objectives |
 | **Data Corrected** | NPC fixes | 78,475 (23,904 audit + 54,571 Wowhead cross-ref) |
 | **Data Cleaned** | Hotfix redundancy audit | **10.6M redundant content rows removed (97.8%)** |
