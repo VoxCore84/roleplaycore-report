@@ -1,0 +1,8 @@
+[
+  {"date": "Mar 5", "title": "AllTheThings Parser", "summary": "Built full Lua tokenizer for the ATT database \u2014 1,576 files parsed, 8,950 quest and vendor rows generated"},
+  {"date": "Mar 5", "title": "Gist Accuracy Audit", "summary": "Verified every report number against the live database, corrected 6 stale statistics"},
+  {"date": "Mar 5", "title": "Hotfix Registry Cleanup", "summary": "Removed 608K orphaned hotfix_data entries \u2014 registry reduced from 835K to 227K rows"},
+  {"date": "Mar 4", "title": "Packet Tool Hardening", "summary": "20-bug QA pass across 4 packet analysis scripts \u2014 EXIT traps, path guards, streaming extraction"},
+  {"date": "Mar 4", "title": "Tools Consolidation", "summary": "Unified tool paths across 4 repos \u2014 13 files updated, 7 missing tools inventoried"},
+  {"date": "Mar 3", "title": "Creature Database Fix", "summary": "Restored 26,745 missing DifficultyID=0 rows, cleared 5,894 SmartAI orphans"}
+]

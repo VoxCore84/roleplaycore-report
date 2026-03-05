@@ -3,39 +3,75 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Database Report — VoxCore</title>
-<meta name="description" content="VoxCore Database Report — Data Quality & Optimization Summary">
-<style>:root {
+<title>VoxCore — VoxCore</title>
+<meta name="description" content="VoxCore — An AI-assisted open source MMO framework built on TrinityCore for WoW 12.x Midnight">
+<style>/* ══════════════════════════════════════════════════════════════════════════
+   VoxCore Design System — Apple HIG x Warcraft Atmosphere
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Tokens ── */
+:root {
   --font-body: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-mono: "SF Mono", SFMono-Regular, ui-monospace, Menlo, Consolas, monospace;
-  --bg: #fff; --bg-alt: #f5f5f7; --bg-card: #fff;
-  --text: #1d1d1f; --text-2: #6e6e73; --text-3: #86868b;
-  --accent: #0071e3; --accent-hover: #2997ff;
-  --border: #d2d2d7; --code-bg: #f5f5f7;
-  --nav-bg: rgba(255,255,255,0.72); --nav-border: rgba(0,0,0,0.08);
+
+  --bg: #fff;
+  --bg-alt: #f5f5f7;
+  --bg-card: #fff;
+  --text: #1d1d1f;
+  --text-2: #6e6e73;
+  --text-3: #86868b;
+  --accent: #0071e3;
+  --accent-hover: #2997ff;
+  --border: #d2d2d7;
+  --code-bg: #f5f5f7;
+  --nav-bg: rgba(255,255,255,0.72);
+  --nav-border: rgba(0,0,0,0.08);
   --card-shadow: 0 4px 12px rgba(0,0,0,0.08);
   --callout-bg: rgba(0,113,227,0.04);
   --table-stripe: rgba(0,0,0,0.02);
+
+  /* WoW accents */
+  --arcane: #7B68EE;
+  --gold: #C9A84C;
+  --arcane-glow: rgba(123, 104, 238, 0.3);
+  --arcane-subtle: rgba(123, 104, 238, 0.08);
+  --gold-subtle: rgba(201, 168, 76, 0.1);
 }
+
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #000; --bg-alt: #1d1d1f; --bg-card: #1d1d1f;
-    --text: #f5f5f7; --text-2: #a1a1a6; --text-3: #86868b;
-    --accent: #2997ff; --accent-hover: #2997ff;
-    --border: #424245; --code-bg: #1d1d1f;
-    --nav-bg: rgba(29,29,31,0.72); --nav-border: rgba(255,255,255,0.08);
+    --bg: #000;
+    --bg-alt: #1d1d1f;
+    --bg-card: #2d2d2d;
+    --text: #f5f5f7;
+    --text-2: #a1a1a6;
+    --text-3: #86868b;
+    --accent: #2997ff;
+    --accent-hover: #2997ff;
+    --border: #424245;
+    --code-bg: #1d1d1f;
+    --nav-bg: rgba(29,29,31,0.72);
+    --nav-border: rgba(255,255,255,0.08);
     --card-shadow: 0 4px 12px rgba(0,0,0,0.3);
     --callout-bg: rgba(41,151,255,0.06);
     --table-stripe: rgba(255,255,255,0.02);
+
+    --arcane-glow: rgba(123, 104, 238, 0.5);
+    --arcane-subtle: rgba(123, 104, 238, 0.15);
+    --gold-subtle: rgba(201, 168, 76, 0.15);
   }
 }
+
+/* ── Reset ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body {
   font-family: var(--font-body); font-size: 17px; line-height: 1.7;
   color: var(--text); background: var(--bg);
   -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
 }
+
+/* ── Typography ── */
 h1, h2, h3, h4, h5, h6 { font-family: var(--font-display); color: var(--text); line-height: 1.15; }
 h1 { font-size: 48px; font-weight: 700; letter-spacing: -0.03em; }
 h2 { font-size: 32px; font-weight: 600; letter-spacing: -0.02em; margin: 72px 0 20px; }
@@ -43,68 +79,84 @@ h3 { font-size: 24px; font-weight: 600; margin: 48px 0 14px; }
 h4 { font-size: 20px; font-weight: 600; margin: 32px 0 10px; }
 h5 { font-size: 17px; font-weight: 600; margin: 24px 0 8px; }
 article h2:first-child { margin-top: 0; }
+
 a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
 a:hover { color: var(--accent-hover); }
 p { margin: 0 0 20px; color: var(--text-2); }
 strong { color: var(--text); font-weight: 600; }
 em { font-style: italic; }
+
 code {
   font-family: var(--font-mono); font-size: 0.875em;
   background: var(--code-bg); padding: 2px 6px; border-radius: 4px;
 }
+pre {
+  background: var(--code-bg); border-radius: 12px;
+  padding: 16px 20px; margin: 24px 0; overflow-x: auto;
+}
+pre code { background: none; padding: 0; font-size: 14px; }
+
 hr { border: none; border-top: 1px solid var(--border); margin: 64px 0; }
 ul, ol { margin: 0 0 20px 24px; color: var(--text-2); }
 li { margin-bottom: 6px; line-height: 1.6; }
 li strong { color: var(--text); }
+
 blockquote {
   border-left: 3px solid var(--accent); padding: 0 0 0 20px;
   margin: 24px 0; color: var(--text-2); font-style: italic;
 }
 
-/* ── Nav ── */
+/* ── Navigation ── */
 .site-nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 48px;
-  background: var(--nav-bg); backdrop-filter: saturate(180%) blur(20px);
+  background: var(--nav-bg);
+  backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   border-bottom: 1px solid var(--nav-border);
 }
+
 .nav-inner {
   max-width: 980px; margin: 0 auto; padding: 0 24px;
-  height: 100%; display: flex; align-items: center; gap: 20px;
+  height: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
 }
+
 .nav-logo {
   font-family: var(--font-display); font-weight: 600; font-size: 17px;
   color: var(--text); text-decoration: none; flex-shrink: 0;
   letter-spacing: -0.02em;
 }
+
 .nav-links {
-  display: flex; gap: 6px; overflow-x: auto; flex: 1;
-  -webkit-overflow-scrolling: touch; scrollbar-width: none;
-  mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
-  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
+  display: flex; justify-content: center; gap: 32px;
 }
-.nav-links.no-fade {
-  mask-image: none; -webkit-mask-image: none;
-}
-.nav-links::-webkit-scrollbar { display: none; }
 .nav-links a {
-  font-size: 12px; font-weight: 500; color: var(--text-2);
-  text-decoration: none; white-space: nowrap; padding: 4px 6px;
-  letter-spacing: 0.01em; transition: color 0.2s; border-radius: 4px;
+  font-size: 13px; font-weight: 500; color: var(--text-2);
+  text-decoration: none; white-space: nowrap; padding: 6px 0;
+  letter-spacing: 0.01em; transition: color 0.2s;
 }
-.nav-links a:hover { background: var(--bg-alt); }
-.nav-links a:hover, .nav-links a.active { color: var(--text); }
-.nav-links a.active { font-weight: 600; }
-.nav-end { flex-shrink: 0; display: flex; align-items: center; gap: 16px; }
+.nav-links a:hover { color: var(--text); }
+.nav-links a.active { color: var(--text); font-weight: 600; }
+
+.nav-end {
+  display: flex; align-items: center; gap: 16px;
+  justify-content: flex-end;
+}
 .nav-github { color: var(--text-3); transition: color 0.2s; display: flex; }
 .nav-github:hover { color: var(--text); }
+
 .nav-menu-btn {
   display: none; background: none; border: none; cursor: pointer;
   color: var(--text-2); padding: 4px;
 }
+
+/* Mobile nav overlay */
 .mobile-nav {
   display: none; position: fixed; inset: 0; z-index: 99;
-  background: var(--nav-bg); backdrop-filter: saturate(180%) blur(40px);
+  background: var(--nav-bg);
+  backdrop-filter: saturate(180%) blur(40px);
   -webkit-backdrop-filter: saturate(180%) blur(40px);
   padding: 72px 32px 32px; flex-direction: column; gap: 4px;
 }
@@ -115,60 +167,149 @@ blockquote {
   text-decoration: none; transition: color 0.2s;
 }
 .mobile-nav a:hover { color: var(--text); }
+.mobile-nav .mobile-sep { height: 16px; border-bottom: none; }
 
 /* ── Hero ── */
-.hero { text-align: center; padding: 100px 24px 60px; max-width: 720px; margin: 0 auto; }
-.hero-label { font-size: 14px; font-weight: 500; color: var(--text-3); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px; }
-.hero h1 { font-size: clamp(48px, 8vw, 72px); margin-bottom: 12px; }
-.hero-sub { font-size: 21px; color: var(--text-2); margin-bottom: 8px; font-weight: 400; }
-.hero-meta { font-size: 14px; color: var(--text-3); font-weight: 500; }
+.hero-wrap {
+  background: linear-gradient(180deg,
+    #0a0e1a 0%,
+    #12162e 30%,
+    #1a1530 55%,
+    #2a2444 70%,
+    #f5f5f7 100%
+  );
+}
 
-/* ── Stat ribbon ── */
+@media (prefers-color-scheme: dark) {
+  .hero-wrap {
+    background: linear-gradient(180deg,
+      #0a0e1a 0%,
+      #12162e 30%,
+      #1a1530 55%,
+      #18122a 75%,
+      #000 100%
+    );
+  }
+}
+
+.hero {
+  text-align: center; padding: 120px 24px 60px;
+  max-width: 720px; margin: 0 auto;
+}
+
+.hero-label {
+  font-size: 14px; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; margin-bottom: 12px;
+  color: var(--arcane);
+}
+
+.hero h1 {
+  font-size: clamp(48px, 8vw, 72px); margin-bottom: 12px;
+  color: #f5f5f7;
+}
+
+.hero-sub {
+  font-size: 21px; font-weight: 400; margin-bottom: 8px;
+  color: rgba(245,245,247,0.7);
+}
+
+.hero-meta {
+  font-size: 14px; font-weight: 500;
+  color: rgba(245,245,247,0.45);
+}
+
+/* ── Stat Ribbon ── */
 .stat-ribbon {
   display: flex; justify-content: center; align-items: center; flex-wrap: wrap;
   gap: 0; padding: 48px 24px; max-width: 980px; margin: 0 auto;
 }
 .stat-item { text-align: center; padding: 0 28px; }
-.stat-sep { width: 1px; height: 40px; background: var(--border); flex-shrink: 0; }
+.stat-sep { width: 1px; height: 40px; background: rgba(245,245,247,0.15); flex-shrink: 0; }
 .stat-num {
   font-family: var(--font-display); font-size: 32px; font-weight: 700;
-  color: var(--text); letter-spacing: -0.02em; display: block;
+  color: var(--gold); letter-spacing: -0.02em; display: block;
 }
-.stat-label { font-size: 13px; color: var(--text-2); margin-top: 2px; display: block; }
+.stat-label {
+  font-size: 13px; color: rgba(245,245,247,0.5); margin-top: 2px; display: block;
+}
+
+/* After hero: stat ribbon on normal bg needs different colors */
+.stat-ribbon.on-bg .stat-sep { background: var(--border); }
+.stat-ribbon.on-bg .stat-num { color: var(--gold); }
+.stat-ribbon.on-bg .stat-label { color: var(--text-2); }
+
+/* ── Section Divider (arcane glow) ── */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--arcane-glow) 30%,
+    rgba(123, 104, 238, 0.5) 50%,
+    var(--arcane-glow) 70%,
+    transparent 100%
+  );
+  margin: 0 auto;
+  max-width: 600px;
+}
+
+/* ── Vision ── */
+.vision {
+  max-width: 720px; margin: 0 auto; padding: 48px 24px 80px;
+  text-align: center;
+}
+.vision p { font-size: 19px; line-height: 1.6; color: var(--text-2); margin: 0; }
 
 /* ── Banner ── */
 .banner {
   background: var(--callout-bg); padding: 20px 32px;
-  max-width: 980px; margin: 0 auto 64px; border-radius: 12px;
+  max-width: 980px; margin: 0 auto 0; border-radius: 12px;
   display: flex; align-items: center; gap: 12px;
   font-size: 15px; color: var(--text-2);
 }
-.banner svg { flex-shrink: 0; color: var(--accent); }
+.banner svg { flex-shrink: 0; color: var(--gold); }
 .banner a { font-weight: 500; }
 
-/* ── Summary grid ── */
-.summary { max-width: 980px; margin: 0 auto; padding: 0 24px 80px; }
-.summary h2 { font-size: 32px; margin-bottom: 8px; }
-.summary > p { color: var(--text-2); margin-bottom: 40px; font-size: 17px; }
-.summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
-.summary-col h3 {
-  font-size: 13px; font-weight: 600; color: var(--text-3);
-  letter-spacing: 0.06em; text-transform: uppercase; margin: 0 0 20px;
-}
-.summary-row {
-  display: flex; justify-content: space-between; align-items: baseline;
-  padding: 8px 0; border-bottom: 1px solid var(--border);
-}
-.summary-row:last-child { border-bottom: none; }
-.summary-row .label { font-size: 14px; color: var(--text-2); }
-.summary-row .value { font-size: 14px; font-weight: 600; color: var(--text); white-space: nowrap; margin-left: 16px; }
+/* ── Pillar Cards ── */
+.pillars { padding: 0 24px 80px; }
+.pillars-wrap { max-width: 1120px; margin: 0 auto; }
+.pillars-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
 
-/* ── Section cards ── */
-.cards-section { background: var(--bg-alt); padding: 80px 24px; }
-.cards-wrap { max-width: 1120px; margin: 0 auto; }
-.cards-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+.pillar-card {
+  background: var(--bg-alt); border-radius: 18px; padding: 40px 36px;
+  text-decoration: none; color: var(--text); display: block;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid var(--arcane-subtle);
 }
+.pillar-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--card-shadow);
+  color: var(--text);
+}
+
+.pillar-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 48px; height: 48px; border-radius: 12px;
+  background: radial-gradient(circle, rgba(123,104,238,0.08) 0%, transparent 70%);
+  margin-bottom: 16px; color: var(--text-3);
+}
+.pillar-icon svg { width: 28px; height: 28px; }
+.pillar-card:hover .pillar-icon { color: var(--accent); }
+
+.pillar-card h3 { font-size: 24px; font-weight: 600; margin: 0 0 10px; letter-spacing: -0.01em; }
+.pillar-card:hover h3 { color: var(--accent); }
+.pillar-card p { font-size: 15px; color: var(--text-2); margin: 0; line-height: 1.5; }
+
+/* ── Section Headings ── */
+.section-wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+.section-title { font-size: 32px; font-weight: 600; letter-spacing: -0.02em; margin: 0 0 8px; }
+.section-sub { font-size: 17px; color: var(--text-2); margin: 0 0 40px; }
+
+/* ── Cards Grid ── */
+.cards-section { background: var(--bg-alt); padding: 80px 24px; }
+.cards-section.bg-default { background: var(--bg); }
+.cards-wrap { max-width: 1120px; margin: 0 auto; }
+.cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+
 .card {
   background: var(--bg-card); border-radius: 18px; padding: 32px;
   text-decoration: none; color: var(--text); display: block;
@@ -178,45 +319,156 @@ blockquote {
 .card-icon { color: var(--text-3); margin-bottom: 16px; display: block; }
 .card:hover .card-icon { color: var(--accent); }
 .card h3 { font-size: 20px; font-weight: 600; margin: 0 0 8px; letter-spacing: -0.01em; }
-.card p { font-size: 15px; color: var(--text-2); margin: 0; line-height: 1.5; }
 .card:hover h3 { color: var(--accent); }
+.card p { font-size: 15px; color: var(--text-2); margin: 0; line-height: 1.5; }
 
-/* ── Page layout (interior) ── */
+/* ── Timeline ── */
+.timeline-section { padding: 80px 24px; max-width: 980px; margin: 0 auto; }
+.timeline-section h2 { font-size: 32px; font-weight: 600; letter-spacing: -0.02em; margin: 0 0 40px; }
+.timeline-entry { display: flex; gap: 24px; padding: 20px 0; border-bottom: 1px solid var(--border); }
+.timeline-entry:last-child { border-bottom: none; }
+.timeline-date {
+  font-size: 13px; font-weight: 500; color: var(--text-3);
+  flex-shrink: 0; width: 60px; padding-top: 2px;
+}
+.timeline-entry h3 { font-size: 17px; font-weight: 600; color: var(--text); margin: 0 0 4px; }
+.timeline-entry p { font-size: 15px; color: var(--text-2); margin: 0; line-height: 1.5; }
+
+/* ── Built-With Badges ── */
+.built-with {
+  display: flex; justify-content: center; align-items: center;
+  flex-wrap: wrap; gap: 8px; padding: 40px 24px 80px;
+  font-size: 13px; font-weight: 500; color: var(--text-3);
+  letter-spacing: 0.02em;
+}
+.bw-dot { color: var(--border); }
+
+/* ── Executive Summary Details ── */
+.exec-details { margin: 0 0 32px; }
+
+/* ── Page Layout (interior) ── */
 .page-header { max-width: 980px; margin: 0 auto; padding: 80px 24px 0; }
 .breadcrumb { font-size: 13px; color: var(--text-3); margin-bottom: 12px; }
 .breadcrumb a { color: var(--text-3); font-weight: 500; }
 .breadcrumb a:hover { color: var(--accent); }
 .page-header h1 { margin-bottom: 32px; }
+
 .page-layout {
   display: grid; grid-template-columns: 200px 1fr; gap: 60px;
-  max-width: 980px; margin: 0 auto; padding: 0 24px 80px;
-  align-items: start;
+  max-width: 980px; margin: 0 auto; padding: 0 24px 80px; align-items: start;
 }
-.sidebar { position: sticky; top: 72px; max-height: calc(100vh - 96px); overflow-y: auto; padding: 8px 0; }
-.sidebar a {
+article { min-width: 0; }
+
+/* ── Sidebar (shared base) ── */
+.sidebar {
+  position: sticky; top: 64px;
+  max-height: calc(100vh - 80px);
+  overflow-y: auto;
+  padding: 8px 0 40px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0,0,0,0.15) transparent;
+}
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 2px; }
+
+@media (prefers-color-scheme: dark) {
+  .sidebar { scrollbar-color: rgba(255,255,255,0.15) transparent; }
+  .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); }
+}
+
+/* ── Feature Sidebar (flat links) ── */
+.sidebar > a {
   display: block; font-size: 13px; color: var(--text-3); text-decoration: none;
-  padding: 5px 12px; border-left: 2px solid transparent; transition: all 0.2s;
-  line-height: 1.4;
+  padding: 5px 8px; transition: color 0.2s; line-height: 1.4;
+  border-left: 2px solid transparent;
 }
-.sidebar a:hover { color: var(--text-2); }
-.sidebar a.active { color: var(--accent); border-left-color: var(--accent); font-weight: 500; }
-.sidebar a.toc-h3 { padding-left: 24px; font-size: 12px; }
+.sidebar > a:hover { color: var(--text-2); }
+.sidebar > a.active {
+  color: var(--accent); border-left-color: var(--accent); font-weight: 500;
+}
+.sidebar > a.toc-h3 {
+  padding-left: 20px; font-size: 12px;
+}
+
+/* ── Report Sidebar (collapsible tree) ── */
+.toc-section { margin-bottom: 2px; }
+
+.toc-parent {
+  display: flex; align-items: center;
+}
+
+.toc-toggle {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 16px; height: 16px; flex-shrink: 0;
+  font-size: 8px; color: var(--text-3);
+  cursor: pointer; transition: transform 0.2s ease;
+  user-select: none; border: none; background: none; padding: 0;
+}
+.toc-section.expanded .toc-toggle { transform: rotate(90deg); }
+
+.toc-spacer { width: 16px; flex-shrink: 0; }
+
+.toc-parent > a {
+  display: block; font-size: 13px; color: var(--text-3); text-decoration: none;
+  padding: 5px 8px; transition: color 0.2s; line-height: 1.4;
+  border-left: 2px solid transparent;
+}
+.toc-parent > a:hover { color: var(--text-2); }
+.toc-parent > a.active {
+  color: var(--accent); border-left-color: var(--accent); font-weight: 500;
+}
+/* Current page highlight in report sidebar */
+.toc-parent > a.current {
+  color: var(--text); font-weight: 600;
+}
+
+.toc-children {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+.toc-section.expanded .toc-children { max-height: 2000px; }
+
+.toc-children a {
+  display: block; font-size: 12px; color: var(--text-3); text-decoration: none;
+  padding: 4px 8px 4px 36px; transition: color 0.2s; line-height: 1.4;
+  border-left: 2px solid transparent;
+}
+.toc-children a:hover { color: var(--text-2); }
+.toc-children a.active {
+  color: var(--accent); border-left-color: var(--accent); font-weight: 500;
+}
+.toc-children a.toc-h3 {
+  padding-left: 48px;
+}
+
 .sidebar-toggle {
   display: none; background: var(--bg-alt); border: 1px solid var(--border);
   border-radius: 8px; padding: 10px 16px; width: 100%; text-align: left;
   font-size: 14px; color: var(--text-2); cursor: pointer; margin-bottom: 24px;
   font-family: var(--font-body);
 }
-article { min-width: 0; }
 
-/* ── Data tables ── */
-.data-table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 15px; }
+/* ── Architecture Diagram ── */
+.arch-wrap {
+  margin: 0 0 40px; overflow-x: auto;
+}
+.arch-diagram {
+  width: 100%; max-width: 800px; height: auto;
+  display: block; margin: 0 auto;
+}
+
+/* ── Data Tables ── */
+.table-wrap { overflow-x: auto; margin: 24px 0; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 15px; }
 .data-table th {
   text-align: left; font-weight: 600; font-size: 13px; color: var(--text-2);
   padding: 10px 16px; border-bottom: 1px solid var(--border);
   letter-spacing: 0.02em;
 }
-.data-table td { padding: 10px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top; }
+.data-table td {
+  padding: 10px 16px; border-bottom: 1px solid var(--border);
+  color: var(--text-2); vertical-align: top;
+}
 .data-table tr:nth-child(even) td { background: var(--table-stripe); }
 .data-table td strong { color: var(--text); }
 .data-table code { font-size: 0.8em; }
@@ -229,21 +481,61 @@ article { min-width: 0; }
 }
 .callout strong { color: var(--text); }
 
-/* ── Details ── */
-details { margin: 24px 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+/* Tooling callout (special) */
+.callout-link {
+  background: var(--gold-subtle);
+  border-left: 4px solid var(--gold);
+  border-radius: 12px; padding: 20px 24px; margin: 24px 0;
+  font-size: 15px; color: var(--text-2);
+  display: flex; align-items: center; gap: 12px;
+}
+.callout-link a { font-weight: 600; }
+.callout-link svg { flex-shrink: 0; color: var(--gold); }
+
+/* ── Details / Accordion ── */
+details {
+  margin: 24px 0; border: 1px solid var(--border);
+  border-radius: 12px; overflow: hidden;
+}
 details summary {
   cursor: pointer; padding: 16px 20px; font-weight: 600; color: var(--text);
-  list-style: none; display: flex; align-items: center; justify-content: space-between;
+  list-style: none;
+  display: flex; align-items: center; gap: 12px;
   transition: background 0.2s;
 }
 details summary:hover { background: var(--bg-alt); }
 details summary::-webkit-details-marker { display: none; }
-details summary::after { content: "+"; font-weight: 400; color: var(--text-3); font-size: 20px; }
-details[open] summary::after { content: "\2212"; }
-details > div, details > p, details > table { padding: 0 20px 16px; }
+
+details summary::before {
+  content: "\25B6"; font-size: 9px; color: var(--text-3);
+  transition: transform 0.2s ease; display: inline-block;
+  flex-shrink: 0; width: 12px;
+}
+details[open] summary::before { transform: rotate(90deg); }
+
+details > div, details > p, details > table, details > .table-wrap {
+  padding: 4px 20px 20px;
+}
 details .data-table { margin: 0 0 8px; }
 
-/* ── Prev/Next nav ── */
+/* ── Back to Top Button ── */
+.back-to-top {
+  position: fixed; bottom: 32px; right: 32px; z-index: 90;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--bg-card); border: 1px solid var(--border);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  color: var(--text-2); transition: opacity 0.3s, transform 0.3s, color 0.2s;
+  opacity: 0; pointer-events: none; transform: translateY(8px);
+}
+.back-to-top.visible {
+  opacity: 1; pointer-events: auto; transform: translateY(0);
+}
+.back-to-top:hover {
+  color: var(--accent); border-color: var(--accent);
+}
+
+/* ── Prev/Next Nav ── */
 .page-nav {
   display: flex; justify-content: space-between; margin-top: 80px;
   padding-top: 32px; border-top: 1px solid var(--border);
@@ -253,10 +545,14 @@ details .data-table { margin: 0 0 8px; }
   transition: color 0.2s; max-width: 45%;
 }
 .page-nav a:hover { color: var(--accent); }
-.page-nav .nav-label { font-size: 12px; color: var(--text-3); display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 500; }
+.page-nav .nav-label {
+  font-size: 12px; color: var(--text-3); display: block; margin-bottom: 4px;
+  text-transform: uppercase; letter-spacing: 0.04em; font-weight: 500;
+}
 .page-nav .next { text-align: right; margin-left: auto; }
 
 /* ── Footer ── */
+.footer-wrap { border-top: 1px solid var(--border); margin-top: 80px; }
 .site-footer {
   border-top: 1px solid var(--border); padding: 24px; margin-top: 0;
   display: flex; justify-content: space-between; align-items: center;
@@ -264,39 +560,63 @@ details .data-table { margin: 0 0 8px; }
 }
 .site-footer a { color: var(--text-3); text-decoration: none; }
 .site-footer a:hover { color: var(--accent); }
-.footer-wrap { border-top: 1px solid var(--border); margin-top: 80px; }
+
+/* ── Konami Easter Egg ── */
+.konami-flash {
+  position: fixed; inset: 0; z-index: 9999;
+  pointer-events: none;
+  background: radial-gradient(circle at center, rgba(201,168,76,0.3) 0%, transparent 70%);
+  animation: konamiPulse 1.2s ease-out forwards;
+}
+@keyframes konamiPulse {
+  0% { opacity: 0; }
+  20% { opacity: 1; }
+  100% { opacity: 0; }
+}
 
 /* ── Animations ── */
-.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s cubic-bezier(0.25,0.46,0.45,0.94), transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94); }
+.reveal {
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.7s cubic-bezier(0.25,0.46,0.45,0.94),
+              transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94);
+}
 .reveal.visible { opacity: 1; transform: none; }
+
 @media (prefers-reduced-motion: reduce) {
   .reveal { opacity: 1; transform: none; transition: none; }
-  .card { transition: none; }
-  .card:hover { transform: none; }
+  .card, .pillar-card { transition: none; }
+  .card:hover, .pillar-card:hover { transform: none; }
+  .back-to-top { transition: none; }
+  .konami-flash { animation: none; }
 }
 
 /* ── Responsive ── */
 @media (max-width: 1024px) {
   .page-layout { grid-template-columns: 1fr; gap: 0; }
-  .sidebar { display: none; }
+  .sidebar { display: none; position: static; max-height: none; }
+  .sidebar.mobile-open { display: block; }
   .sidebar-toggle { display: block; }
-  .summary-grid { grid-template-columns: 1fr 1fr; }
+  .pillars-grid { grid-template-columns: 1fr 1fr; }
   .cards-grid { grid-template-columns: 1fr 1fr; }
 }
+
 @media (max-width: 768px) {
   h1 { font-size: 36px; }
   h2 { font-size: 26px; margin-top: 48px; }
   h3 { font-size: 20px; margin-top: 32px; }
   .nav-links { display: none; }
   .nav-menu-btn { display: block; }
-  .summary-grid { grid-template-columns: 1fr; gap: 32px; }
+  .pillars-grid { grid-template-columns: 1fr; }
   .cards-grid { grid-template-columns: 1fr; }
   .stat-ribbon { flex-direction: column; gap: 20px; }
   .stat-sep { width: 40px; height: 1px; }
   .page-nav { flex-direction: column; gap: 16px; }
   .page-nav .next { text-align: left; margin-left: 0; }
-  .hero { padding-top: 72px; }
+  .hero { padding-top: 80px; }
   .page-header { padding-top: 64px; }
+  .timeline-entry { flex-direction: column; gap: 4px; }
+  .timeline-date { width: auto; }
+  .back-to-top { bottom: 20px; right: 20px; width: 40px; height: 40px; }
 }
 </style>
 </head>
@@ -304,59 +624,107 @@ details .data-table { margin: 0 0 8px; }
 <nav class="site-nav" role="navigation" aria-label="Main">
 <div class="nav-inner">
 <a href="index.html" class="nav-logo">VoxCore</a>
-<div class="nav-links"><a href="data-import.html">Import</a><a href="npc-audits.html">NPCs</a><a href="quest-localization.html">Quests</a><a href="database-cleanup.html">Cleanup</a><a href="performance.html">Performance</a><a href="placement.html">Placement</a><a href="results.html">Tooling</a><a href="hotfix-audit.html">Hotfix Audit</a><a href="discoveries.html">Discoveries</a><a href="reference.html">Timeline</a></div>
+<div class="nav-links"><a href="framework.html">Framework</a><a href="data-import.html">Report</a><a href="tooling.html">Tooling</a><a href="ai-workflow.html">AI Workflow</a><a href="opensource.html">Open Source</a></div>
 <div class="nav-end">
-<a href="https://github.com/VoxCore84/roleplaycore-report" class="nav-github" aria-label="GitHub"><svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg></a>
+<a href="https://github.com/VoxCore84/RoleplayCore" class="nav-github" aria-label="GitHub" target="_blank" rel="noopener"><svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg></a>
 <button class="nav-menu-btn" aria-label="Menu" aria-expanded="false">
 <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
 </button>
 </div>
 </div>
 </nav>
-<div class="mobile-nav" role="dialog" aria-label="Navigation"><a href="data-import.html">Data Import & Hotfix Repair</a><a href="npc-audits.html">NPC Audits & Corrections</a><a href="quest-localization.html">Quests & Localization</a><a href="database-cleanup.html">Database Cleanup & Integrity</a><a href="performance.html">Performance & Build Diff</a><a href="placement.html">Placement Audits</a><a href="results.html">Tooling & Results</a><a href="hotfix-audit.html">Hotfix Redundancy Audit</a><a href="discoveries.html">Discoveries & Lessons</a><a href="reference.html">Timeline & Reference</a></div>
+<div class="mobile-nav" role="dialog" aria-label="Navigation"><a href="framework.html">The Framework</a><a href="tooling.html">Tooling</a><a href="ai-workflow.html">AI Workflow</a><a href="opensource.html">Open Source</a><div class="mobile-sep"></div><a href="data-import.html">Data Import & Hotfix Repair</a><a href="npc-audits.html">NPC Audits & Corrections</a><a href="quest-localization.html">Quests & Localization</a><a href="database-cleanup.html">Database Cleanup & Integrity</a><a href="performance.html">Performance & Build Diff</a><a href="placement.html">Placement Audits</a><a href="results.html">Tooling & Results</a><a href="hotfix-audit.html">Hotfix Redundancy Audit</a><a href="discoveries.html">Discoveries & Lessons</a><a href="reference.html">Timeline & Reference</a></div>
 <main>
+<div class="hero-wrap">
 <section class="hero reveal">
-<p class="hero-label">Database Report</p>
+<p class="hero-label">WoW 12.x / Midnight</p>
 <h1>VoxCore</h1>
-<p class="hero-sub">Data Quality & Optimization Summary</p>
-<p class="hero-meta">Prepared for CaptainCore (LoreWalkerTDB) &middot; March 2026 &middot; WoW 12.x Midnight &middot; Build 66220</p>
+<p class="hero-sub">An AI-Assisted Open Source MMO Framework</p>
+<p class="hero-meta">Built on TrinityCore &middot; Build 66220 &middot; 11 custom systems &middot; 60+ tools</p>
+</section>
+<section class="stat-ribbon reveal"><div class="stat-item"><span class="stat-num" data-countup="~1M">~1M</span><span class="stat-label">rows imported</span></div><span class="stat-sep"></span><div class="stat-item"><span class="stat-num" data-countup="103K">103K</span><span class="stat-label">hotfix entries repaired</span></div><span class="stat-sep"></span><div class="stat-item"><span class="stat-num" data-countup="97.8%">97.8%</span><span class="stat-label">redundant rows removed</span></div><span class="stat-sep"></span><div class="stat-item"><span class="stat-num" data-countup="78K">78K</span><span class="stat-label">NPC corrections</span></div><span class="stat-sep"></span><div class="stat-item"><span class="stat-num" data-countup="60+">60+</span><span class="stat-label">tools built</span></div><span class="stat-sep"></span><div class="stat-item"><span class="stat-num" data-countup="17s">17s</span><span class="stat-label">server startup</span></div></section>
+</div>
+
+<div class="section-divider"></div>
+
+<section class="vision reveal">
+<p>A TrinityCore fork enhanced by an AI-assisted development workflow that produced 60+ custom tools, 1M+ database corrections, and a 92%% server startup improvement in under two months. Every pipeline is scripted, every audit is reproducible, and every number on this site is backed by a commit hash.</p>
 </section>
 
-<section class="stat-ribbon reveal"><div class="stat-item"><span class="stat-num" data-countup="~1M">~1M</span><span class="stat-label">rows imported</span></div><span class="stat-sep"></span><div class="stat-item"><span class="stat-num" data-countup="103K">103K</span><span class="stat-label">hotfix entries repaired</span></div><span class="stat-sep"></span><div class="stat-item"><span class="stat-num" data-countup="97.8%">97.8%</span><span class="stat-label">redundant rows removed</span></div><span class="stat-sep"></span><div class="stat-item"><span class="stat-num" data-countup="78K">78K</span><span class="stat-label">NPC corrections</span></div><span class="stat-sep"></span><div class="stat-item"><span class="stat-num" data-countup="1.6M">1.6M</span><span class="stat-label">item translations</span></div><span class="stat-sep"></span><div class="stat-item"><span class="stat-num" data-countup="17s">17s</span><span class="stat-label">server startup</span></div></section>
-
-<div class="banner reveal"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span>All tooling is open and reproducible. Every operation can be re-run from scripts in the repository. See <a href="reference.html#appendix-b-reproducibility">Reproducibility</a>.</span></div>
-
-<section class="summary reveal">
-<h2>Executive Summary</h2>
-<p>Over February–March 2026, VoxCore imported, validated, and repaired data from four major sources, performed multi-pass audits across all five databases, and built a Python tooling pipeline to make the process repeatable.</p>
-<div class="summary-grid"><div class="summary-col"><h3>Data Imported</h3><div class="summary-row"><span class="label">LoreWalkerTDB world rows</span><span class="value">~1,004,000 net</span></div><div class="summary-row"><span class="label">Hotfix rows repaired</span><span class="value">103,153 inserts + 1,831 fixes</span></div><div class="summary-row"><span class="label">Item locale translations</span><span class="value">1,628,651 rows (10 languages)</span></div><div class="summary-row"><span class="label">Quest chain links</span><span class="value">21,758 updates</span></div><div class="summary-row"><span class="label">Quest POI / objectives</span><span class="value">2,880 POI + 5,199 pts + 633 obj</span></div></div><div class="summary-col"><h3>Corrected & Cleaned</h3><div class="summary-row"><span class="label">NPC fixes (audit + Wowhead)</span><span class="value">78,475 corrections</span></div><div class="summary-row"><span class="label">Hotfix redundancy audit</span><span class="value">10.6M rows removed (97.8%)</span></div><div class="summary-row"><span class="label">Pre-existing dead rows</span><span class="value">~412,000</span></div><div class="summary-row"><span class="label">Duplicate loot rows</span><span class="value">193,542</span></div><div class="summary-row"><span class="label">Post-import cleanup</span><span class="value">~47,000</span></div></div><div class="summary-col"><h3>Performance</h3><div class="summary-row"><span class="label">Server startup</span><span class="value">3m24s → 17s (92%)</span></div><div class="summary-row"><span class="label">Hotfix content tables</span><span class="value">10.8M → ~244K rows</span></div></div></div>
+<section class="pillars">
+<div class="pillars-wrap">
+<div class="pillars-grid"><a href="framework.html" class="pillar-card reveal"><span class="pillar-icon"><svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 8l3 3-3 3"/><path d="M13 14h4"/></svg></span><h3>The Framework</h3><p>11 custom C++ systems, persistent RP commands, transmog outfits, companion AI</p></a>
+<a href="tooling.html" class="pillar-card reveal"><span class="pillar-icon"><svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span><h3>Tooling</h3><p>60+ tools — data pipelines, audit validators, packet analyzers, MCP servers</p></a>
+<a href="ai-workflow.html" class="pillar-card reveal"><span class="pillar-icon"><svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="M4.93 19.07l2.83-2.83"/><path d="M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="4"/></svg></span><h3>AI Workflow</h3><p>Claude Code integration — 17 skills, 4 MCP servers, parallel agent architecture</p></a>
+<a href="opensource.html" class="pillar-card reveal"><span class="pillar-icon"><svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/><path d="M14 4l-4 16"/></svg></span><h3>Open Source</h3><p>9 repositories, 6 public gists, community tools and reference data</p></a>
+</div>
+</div>
 </section>
 
-<section class="cards-section">
+<div class="banner reveal" style="margin-bottom: 80px"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span>All tooling is open and reproducible. Every operation can be re-run from scripts in the repository.</span></div>
+
+<section class="cards-section" id="report">
 <div class="cards-wrap">
+<h2 class="section-title">Data Quality Report</h2>
+<p class="section-sub">~1M rows imported, validated, and repaired across five databases. Prepared for CaptainCore (LoreWalkerTDB) &middot; March 2026.</p>
+
+<details class="exec-details reveal">
+<summary>Executive Summary &mdash; By the Numbers</summary>
+<div>
+<p style="font-size:14px;color:var(--text-3);margin:0 0 16px">All figures are <strong>net</strong> &mdash; accounting for subsequent cleanup and deduplication.</p>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Category</th><th>Metric</th><th>Value</th></tr></thead><tbody><tr><td><strong>Data Imported</strong></td><td>LoreWalkerTDB world rows</td><td>~1,004,000</td></tr><tr><td></td><td>Hotfix rows repaired</td><td>103,153 inserts + 1,831 column fixes</td></tr><tr><td></td><td>Item locale translations</td><td>1,628,651 rows across 10 languages</td></tr><tr><td></td><td>Quest chain links</td><td>21,758 PrevQuestID/NextQuestID updates</td></tr><tr><td></td><td>Quest POI/objectives</td><td>2,880 POI + 5,199 points + 633 objectives</td></tr><tr><td><strong>Data Corrected</strong></td><td>NPC fixes</td><td>78,475 (23,904 audit + 54,571 Wowhead cross-ref)</td></tr><tr><td><strong>Data Cleaned</strong></td><td>Hotfix redundancy audit</td><td>10.6M redundant rows removed (97.8%)</td></tr><tr><td></td><td>Pre-existing orphan/dead rows</td><td>~412,000</td></tr><tr><td></td><td>Pre-existing duplicate loot rows</td><td>193,542</td></tr><tr><td></td><td>Post-import cleanup</td><td>~47,000</td></tr><tr><td><strong>Performance</strong></td><td>Server startup</td><td>3m24s → 17s (92%% reduction)</td></tr><tr><td></td><td>Hotfix content tables</td><td>10.8M rows → ~244K rows</td></tr></tbody></table></div>
+</div>
+</details>
+
 <div class="cards-grid"><a href="data-import.html" class="card reveal"><span class="card-icon"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 5v14c0 1.66-4.03 3-9 3s-9-1.34-9-3V5"/><path d="M21 12c0 1.66-4.03 3-9 3s-9-1.34-9-3"/></svg></span><h3>Data Import & Hotfix Repair</h3><p>~1M rows imported, 103K hotfix entries repaired</p></a>
 <a href="npc-audits.html" class="card reveal"><span class="card-icon"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="m8 11 2 2 4-4"/></svg></span><h3>NPC Audits & Corrections</h3><p>78,475 fixes across 27-check validator + Wowhead mega-audit</p></a>
-<a href="quest-localization.html" class="card reveal"><span class="card-icon"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/></svg></span><h3>Quests & Localization</h3><p>21K chain links, 1.6M locale rows across 10 languages</p></a>
-<a href="database-cleanup.html" class="card reveal"><span class="card-icon"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="m19 6-.867 12.142A2 2 0 0 1 16.138 20H7.862a2 2 0 0 1-1.995-1.858L5 6"/><path d="M10 11v5"/><path d="M14 11v5"/></svg></span><h3>Database Cleanup & Integrity</h3><p>412K dead rows removed, loot PK discovery, 47K post-import cleanup</p></a>
+<a href="quest-localization.html" class="card reveal"><span class="card-icon"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/></svg></span><h3>Quests & Localization</h3><p>21,758 chain links, 1.6M locale rows across 10 languages</p></a>
+<a href="database-cleanup.html" class="card reveal"><span class="card-icon"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="m19 6-.867 12.142A2 2 0 0 1 16.138 20H7.862a2 2 0 0 1-1.995-1.858L5 6"/><path d="M10 11v5"/><path d="M14 11v5"/></svg></span><h3>Database Cleanup & Integrity</h3><p>~412,000 dead rows removed, loot PK discovery, 47K post-import cleanup</p></a>
 <a href="performance.html" class="card reveal"><span class="card-icon"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></span><h3>Performance & Build Diff</h3><p>3m24s to 17s startup, 5-build diff audit with zero breaking changes</p></a>
 <a href="placement.html" class="card reveal"><span class="card-icon"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 1 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></span><h3>Placement Audits</h3><p>31K placement fixes generated from LoreWalkerTDB comparison</p></a>
-<a href="results.html" class="card reveal"><span class="card-icon"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span><h3>Tooling & Results</h3><p>50+ tools built, final DB state, before/after player impact</p></a>
-<a href="hotfix-audit.html" class="card reveal"><span class="card-icon"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/><path d="m9 7-3 3-3-3"/></svg></span><h3>Hotfix Redundancy Audit</h3><p>10.8M to 244K rows — 97.8% reduction in 3 rounds</p></a>
+<a href="results.html" class="card reveal"><span class="card-icon"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg></span><h3>Tooling & Results</h3><p>50+ tools built, final DB state, before/after player impact</p></a>
+<a href="hotfix-audit.html" class="card reveal"><span class="card-icon"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/><path d="m9 7-3 3-3-3"/></svg></span><h3>Hotfix Redundancy Audit</h3><p>10.8M to ~244K rows — 97.8% reduction in 3 rounds</p></a>
 <a href="discoveries.html" class="card reveal"><span class="card-icon"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg></span><h3>Discoveries & Lessons</h3><p>9 community-relevant findings for any TrinityCore project</p></a>
-<a href="reference.html" class="card reveal"><span class="card-icon"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span><h3>Timeline & Reference</h3><p>Full timeline, 50+ tool catalog, data sources, reproducibility</p></a>
+<a href="reference.html" class="card reveal"><span class="card-icon"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span><h3>Timeline & Reference</h3><p>Full timeline, 60+ tool catalog, data sources, reproducibility</p></a>
 </div>
 </div>
 </section>
+
+<div class="section-divider" style="margin-top:0"></div>
+
+<section class="timeline-section">
+<h2>Recent Activity</h2>
+<div class="timeline-entry reveal"><span class="timeline-date">Mar 5</span><div><h3>AllTheThings Parser</h3><p>Built full Lua tokenizer for the ATT database — 1,576 files parsed, 8,950 quest and vendor rows generated</p></div></div>
+<div class="timeline-entry reveal"><span class="timeline-date">Mar 5</span><div><h3>Gist Accuracy Audit</h3><p>Verified every report number against the live database, corrected 6 stale statistics</p></div></div>
+<div class="timeline-entry reveal"><span class="timeline-date">Mar 5</span><div><h3>Hotfix Registry Cleanup</h3><p>Removed 608K orphaned hotfix_data entries — registry reduced from 835K to 227K rows</p></div></div>
+<div class="timeline-entry reveal"><span class="timeline-date">Mar 4</span><div><h3>Packet Tool Hardening</h3><p>20-bug QA pass across 4 packet analysis scripts — EXIT traps, path guards, streaming extraction</p></div></div>
+<div class="timeline-entry reveal"><span class="timeline-date">Mar 4</span><div><h3>Tools Consolidation</h3><p>Unified tool paths across 4 repos — 13 files updated, 7 missing tools inventoried</p></div></div>
+<div class="timeline-entry reveal"><span class="timeline-date">Mar 3</span><div><h3>Creature Database Fix</h3><p>Restored 26,745 missing DifficultyID=0 rows, cleared 5,894 SmartAI orphans</p></div></div>
+
+</section>
+
+<div class="built-with reveal">
+<span>C++</span><span class="bw-dot">&middot;</span>
+<span>Python</span><span class="bw-dot">&middot;</span>
+<span>MySQL</span><span class="bw-dot">&middot;</span>
+<span>Lua</span><span class="bw-dot">&middot;</span>
+<span>Claude Code</span><span class="bw-dot">&middot;</span>
+<span>CMake</span><span class="bw-dot">&middot;</span>
+<span>Ninja</span><span class="bw-dot">&middot;</span>
+<span>Git</span>
+</div>
 </main>
+<button class="back-to-top" aria-label="Back to top">
+<svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M18 15l-6-6-6 6"/></svg>
+</button>
 <div class="footer-wrap"><footer class="site-footer">
 <span>VoxCore &mdash; March 2026</span>
-<a href="https://github.com/VoxCore84/roleplaycore-report">GitHub</a>
+<a href="https://github.com/VoxCore84/RoleplayCore">GitHub</a>
 </footer></div>
 <script>(function(){
-  // Reduced motion check
   var rm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // Scroll reveal
+  // ── Scroll reveal ──
   if (!rm) {
     var obs = new IntersectionObserver(function(entries) {
       entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('visible'); });
@@ -366,7 +734,7 @@ details .data-table { margin: 0 0 8px; }
     document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('visible'); });
   }
 
-  // Count-up animation
+  // ── Count-up animation ──
   document.querySelectorAll('[data-countup]').forEach(function(el) {
     if (rm) return;
     var o = new IntersectionObserver(function(entries) {
@@ -393,7 +761,7 @@ details .data-table { margin: 0 0 8px; }
     requestAnimationFrame(tick);
   }
 
-  // Mobile nav
+  // ── Mobile nav ──
   var btn = document.querySelector('.nav-menu-btn');
   var mn = document.querySelector('.mobile-nav');
   if (btn && mn) {
@@ -403,53 +771,102 @@ details .data-table { margin: 0 0 8px; }
     });
   }
 
-  // Nav scroll fade — remove mask when scrolled to end
-  var nl = document.querySelector('.nav-links');
-  if (nl) {
-    function checkFade() {
-      if (nl.scrollWidth <= nl.clientWidth || nl.scrollLeft + nl.clientWidth >= nl.scrollWidth - 4) {
-        nl.classList.add('no-fade');
-      } else {
-        nl.classList.remove('no-fade');
-      }
-    }
-    nl.addEventListener('scroll', checkFade);
-    checkFade();
-    window.addEventListener('resize', checkFade);
-  }
+  // ── Sidebar TOC ──
+  var sidebar = document.querySelector('.sidebar');
+  if (sidebar) {
+    var sections = sidebar.querySelectorAll('.toc-section');
+    var isReportSidebar = sections.length > 0;
 
-  // Sidebar TOC active tracking
-  var tocLinks = document.querySelectorAll('.sidebar a');
-  if (tocLinks.length > 0) {
+    // Toggle expand/collapse on triangle click (report sidebar)
+    sections.forEach(function(section) {
+      var toggle = section.querySelector('.toc-toggle');
+      if (toggle) {
+        toggle.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          section.classList.toggle('expanded');
+        });
+      }
+    });
+
+    // Scroll-spy: collect all local anchor links
+    var allLinks = sidebar.querySelectorAll('a[href^="#"]');
     var headings = [];
-    tocLinks.forEach(function(a) {
+    allLinks.forEach(function(a) {
       var id = a.getAttribute('href');
-      if (id && id.charAt(0) === '#') {
+      if (id && id.length > 1) {
         var el = document.getElementById(id.slice(1));
         if (el) headings.push({ el: el, link: a });
       }
     });
-    var tocObs = new IntersectionObserver(function(entries) {
-      entries.forEach(function(e) {
-        if (e.isIntersecting) {
-          tocLinks.forEach(function(l) { l.classList.remove('active'); });
-          headings.forEach(function(h) {
-            if (h.el === e.target) h.link.classList.add('active');
-          });
-        }
-      });
-    }, { rootMargin: '-80px 0px -60% 0px' });
-    headings.forEach(function(h) { tocObs.observe(h.el); });
+
+    if (headings.length > 0) {
+      var tocObs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            // Clear active on local links only
+            allLinks.forEach(function(l) { l.classList.remove('active'); });
+
+            headings.forEach(function(h) {
+              if (h.el === entry.target) {
+                h.link.classList.add('active');
+
+                // Auto-expand the parent toc-section if in report sidebar
+                if (isReportSidebar) {
+                  var parentSection = h.link.closest('.toc-section');
+                  if (parentSection) parentSection.classList.add('expanded');
+                }
+              }
+            });
+          }
+        });
+      }, { rootMargin: '-80px 0px -60% 0px' });
+
+      headings.forEach(function(h) { tocObs.observe(h.el); });
+    }
   }
 
-  // Sidebar toggle (mobile/tablet)
+  // ── Sidebar toggle (tablet/mobile) ──
   var st = document.querySelector('.sidebar-toggle');
   var sb = document.querySelector('.sidebar');
   if (st && sb) {
     st.addEventListener('click', function() {
-      sb.style.display = sb.style.display === 'block' ? 'none' : 'block';
+      sb.classList.toggle('mobile-open');
     });
   }
+
+  // ── Back to top button ──
+  var btt = document.querySelector('.back-to-top');
+  if (btt) {
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 600) {
+        btt.classList.add('visible');
+      } else {
+        btt.classList.remove('visible');
+      }
+    }, { passive: true });
+    btt.addEventListener('click', function() {
+      window.scrollTo({ top: 0, behavior: rm ? 'auto' : 'smooth' });
+    });
+  }
+
+  // ── Konami Code Easter Egg ──
+  var konamiSeq = [38,38,40,40,37,39,37,39,66,65];
+  var konamiPos = 0;
+  document.addEventListener('keydown', function(e) {
+    if (e.keyCode === konamiSeq[konamiPos]) {
+      konamiPos++;
+      if (konamiPos === konamiSeq.length) {
+        konamiPos = 0;
+        var flash = document.createElement('div');
+        flash.className = 'konami-flash';
+        document.body.appendChild(flash);
+        setTimeout(function() { flash.remove(); }, 1300);
+      }
+    } else {
+      konamiPos = 0;
+    }
+  });
 })();
 </script>
 </body>

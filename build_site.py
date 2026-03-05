@@ -1,480 +1,149 @@
 #!/usr/bin/env python3
-"""Build the VoxCore Report static site — Apple HIG aesthetic."""
+"""Build the VoxCore site — Apple HIG x Warcraft atmosphere."""
 
-import re
+import json
 import os
+import re
 import shutil
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 CONTENT_DIR = os.path.join(ROOT, "content")
 OUTPUT_DIR = os.path.join(ROOT, "docs")
+STATIC_DIR = os.path.join(ROOT, "static")
+DATA_DIR = os.path.join(ROOT, "data")
 
-# ── Page definitions (no section numbers) ─────────────────────────────────────
+# ── Load external assets ─────────────────────────────────────────────────────
 
-PAGES = [
-    {"slug": "data-import",       "title": "Data Import & Hotfix Repair",  "desc": "~1M rows imported, 103K hotfix entries repaired"},
-    {"slug": "npc-audits",        "title": "NPC Audits & Corrections",     "desc": "78,475 fixes across 27-check validator + Wowhead mega-audit"},
-    {"slug": "quest-localization", "title": "Quests & Localization",        "desc": "21K chain links, 1.6M locale rows across 10 languages"},
-    {"slug": "database-cleanup",  "title": "Database Cleanup & Integrity",  "desc": "412K dead rows removed, loot PK discovery, 47K post-import cleanup"},
-    {"slug": "performance",       "title": "Performance & Build Diff",     "desc": "3m24s to 17s startup, 5-build diff audit with zero breaking changes"},
-    {"slug": "placement",         "title": "Placement Audits",             "desc": "31K placement fixes generated from LoreWalkerTDB comparison"},
-    {"slug": "results",           "title": "Tooling & Results",            "desc": "50+ tools built, final DB state, before/after player impact"},
-    {"slug": "hotfix-audit",      "title": "Hotfix Redundancy Audit",      "desc": "10.8M to 244K rows \u2014 97.8% reduction in 3 rounds"},
-    {"slug": "discoveries",       "title": "Discoveries & Lessons",        "desc": "9 community-relevant findings for any TrinityCore project"},
-    {"slug": "reference",         "title": "Timeline & Reference",         "desc": "Full timeline, 50+ tool catalog, data sources, reproducibility"},
+def _read(path):
+    with open(path, 'r', encoding='utf-8') as f:
+        return f.read()
+
+def _read_json(path):
+    with open(path, 'r', encoding='utf-8') as f:
+        return json.load(f)
+
+CSS = _read(os.path.join(STATIC_DIR, "css", "style.css"))
+JS = _read(os.path.join(STATIC_DIR, "js", "main.js"))
+STATS = _read_json(os.path.join(DATA_DIR, "stats.json"))
+CHANGELOG = _read_json(os.path.join(DATA_DIR, "changelog.json"))
+
+# ── Page definitions ──────────────────────────────────────────────────────────
+
+FEATURE_PAGES = [
+    {"slug": "framework",   "title": "The Framework",  "desc": f"{STATS['custom_systems']} custom C++ systems, persistent RP commands, transmog outfits, companion AI"},
+    {"slug": "tooling",     "title": "Tooling",        "desc": f"{STATS['tools_built']} tools \u2014 data pipelines, audit validators, packet analyzers, MCP servers"},
+    {"slug": "ai-workflow", "title": "AI Workflow",     "desc": f"Claude Code integration \u2014 {STATS['claude_commands']} skills, 4 MCP servers, parallel agent architecture"},
+    {"slug": "opensource",  "title": "Open Source",     "desc": "9 repositories, 6 public gists, community tools and reference data"},
+]
+
+REPORT_PAGES = [
+    {"slug": "data-import",        "title": "Data Import & Hotfix Repair",   "desc": f"{STATS['rows_imported_short']} rows imported, {STATS['hotfix_entries_short']} hotfix entries repaired"},
+    {"slug": "npc-audits",         "title": "NPC Audits & Corrections",      "desc": f"{STATS['npc_corrections']} fixes across 27-check validator + Wowhead mega-audit"},
+    {"slug": "quest-localization",  "title": "Quests & Localization",         "desc": f"{STATS['quest_chain_links']} chain links, {STATS['item_translations_short']} locale rows across 10 languages"},
+    {"slug": "database-cleanup",   "title": "Database Cleanup & Integrity",   "desc": f"{STATS['dead_rows_cleaned']} dead rows removed, loot PK discovery, 47K post-import cleanup"},
+    {"slug": "performance",        "title": "Performance & Build Diff",      "desc": f"{STATS['server_startup_before']} to {STATS['server_startup_after']} startup, 5-build diff audit with zero breaking changes"},
+    {"slug": "placement",          "title": "Placement Audits",              "desc": "31K placement fixes generated from LoreWalkerTDB comparison"},
+    {"slug": "results",            "title": "Tooling & Results",             "desc": f"{STATS['dev_sessions']} tools built, final DB state, before/after player impact"},
+    {"slug": "hotfix-audit",       "title": "Hotfix Redundancy Audit",       "desc": f"10.8M to {STATS['final_hotfix_content_rows']} rows \u2014 {STATS['redundant_rows_percent']} reduction in 3 rounds"},
+    {"slug": "discoveries",        "title": "Discoveries & Lessons",         "desc": "9 community-relevant findings for any TrinityCore project"},
+    {"slug": "reference",          "title": "Timeline & Reference",          "desc": f"Full timeline, {STATS['tools_built']} tool catalog, data sources, reproducibility"},
+]
+
+ALL_PAGES = FEATURE_PAGES + REPORT_PAGES
+
+NAV_ITEMS = [
+    {"label": "Framework",   "slug": "framework"},
+    {"label": "Report",      "slug": "data-import"},
+    {"label": "Tooling",     "slug": "tooling"},
+    {"label": "AI Workflow", "slug": "ai-workflow"},
+    {"label": "Open Source", "slug": "opensource"},
 ]
 
 HERO_STATS = [
-    ("~1M",   "rows imported"),
-    ("103K",  "hotfix entries repaired"),
-    ("97.8%", "redundant rows removed"),
-    ("78K",   "NPC corrections"),
-    ("1.6M",  "item translations"),
-    ("17s",   "server startup"),
+    (STATS['rows_imported_short'], "rows imported"),
+    (STATS['hotfix_entries_short'], "hotfix entries repaired"),
+    (STATS['redundant_rows_percent'], "redundant rows removed"),
+    (STATS['npc_corrections_short'], "NPC corrections"),
+    (STATS['tools_built'], "tools built"),
+    (STATS['server_startup_after'], "server startup"),
 ]
 
-EXEC_GROUPS = [
-    ("Data Imported", [
-        ("LoreWalkerTDB world rows",  "~1,004,000 net"),
-        ("Hotfix rows repaired",      "103,153 inserts + 1,831 fixes"),
-        ("Item locale translations",  "1,628,651 rows (10 languages)"),
-        ("Quest chain links",         "21,758 updates"),
-        ("Quest POI / objectives",    "2,880 POI + 5,199 pts + 633 obj"),
-    ]),
-    ("Corrected & Cleaned", [
-        ("NPC fixes (audit + Wowhead)", "78,475 corrections"),
-        ("Hotfix redundancy audit",     "10.6M rows removed (97.8%)"),
-        ("Pre-existing dead rows",      "~412,000"),
-        ("Duplicate loot rows",         "193,542"),
-        ("Post-import cleanup",         "~47,000"),
-    ]),
-    ("Performance", [
-        ("Server startup",          "3m24s \u2192 17s (92%)"),
-        ("Hotfix content tables",   "10.8M \u2192 ~244K rows"),
-    ]),
+# Executive summary data (from verified gist accuracy audit)
+EXEC_SUMMARY = [
+    ("Data Imported", "LoreWalkerTDB world rows", STATS['rows_imported']),
+    ("", "Hotfix rows repaired", f"{STATS['hotfix_entries_repaired']} inserts + {STATS['hotfix_column_fixes']} column fixes"),
+    ("", "Item locale translations", f"{STATS['item_translations']} rows across 10 languages"),
+    ("", "Quest chain links", f"{STATS['quest_chain_links']} PrevQuestID/NextQuestID updates"),
+    ("", "Quest POI/objectives", "2,880 POI + 5,199 points + 633 objectives"),
+    ("Data Corrected", "NPC fixes", f"{STATS['npc_corrections']} ({STATS['npc_audit_corrections']} audit + {STATS['npc_wowhead_corrections']} Wowhead cross-ref)"),
+    ("Data Cleaned", "Hotfix redundancy audit", f"{STATS['redundant_rows_removed']} redundant rows removed ({STATS['redundant_rows_percent']})"),
+    ("", "Pre-existing orphan/dead rows", STATS['dead_rows_cleaned']),
+    ("", "Pre-existing duplicate loot rows", "193,542"),
+    ("", "Post-import cleanup", "~47,000"),
+    ("Performance", "Server startup", f"{STATS['server_startup_before']} \u2192 {STATS['server_startup_after']} ({STATS['server_startup_reduction']}% reduction)"),
+    ("", "Hotfix content tables", f"10.8M rows \u2192 {STATS['final_hotfix_content_rows']} rows"),
 ]
 
-# ── SVG icons (24px, 1.5px stroke, rounded) ──────────────────────────────────
+# ── SVG Icons ─────────────────────────────────────────────────────────────────
 
 ICONS = {
+    "framework": '<svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 8l3 3-3 3"/><path d="M13 14h4"/></svg>',
+    "tooling": '<svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>',
+    "ai-workflow": '<svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="M4.93 19.07l2.83-2.83"/><path d="M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="4"/></svg>',
+    "opensource": '<svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/><path d="M14 4l-4 16"/></svg>',
     "data-import": '<svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 5v14c0 1.66-4.03 3-9 3s-9-1.34-9-3V5"/><path d="M21 12c0 1.66-4.03 3-9 3s-9-1.34-9-3"/></svg>',
     "npc-audits": '<svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="m8 11 2 2 4-4"/></svg>',
     "quest-localization": '<svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/></svg>',
     "database-cleanup": '<svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="m19 6-.867 12.142A2 2 0 0 1 16.138 20H7.862a2 2 0 0 1-1.995-1.858L5 6"/><path d="M10 11v5"/><path d="M14 11v5"/></svg>',
     "performance": '<svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>',
     "placement": '<svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 1 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>',
-    "results": '<svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>',
+    "results": '<svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>',
     "hotfix-audit": '<svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/><path d="m9 7-3 3-3-3"/></svg>',
     "discoveries": '<svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>',
     "reference": '<svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
 }
 
-# ── CSS ───────────────────────────────────────────────────────────────────────
+GITHUB_ICON = '<svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>'
+CHECK_ICON = '<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>'
 
-CSS = """\
-:root {
-  --font-body: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --font-mono: "SF Mono", SFMono-Regular, ui-monospace, Menlo, Consolas, monospace;
-  --bg: #fff; --bg-alt: #f5f5f7; --bg-card: #fff;
-  --text: #1d1d1f; --text-2: #6e6e73; --text-3: #86868b;
-  --accent: #0071e3; --accent-hover: #2997ff;
-  --border: #d2d2d7; --code-bg: #f5f5f7;
-  --nav-bg: rgba(255,255,255,0.72); --nav-border: rgba(0,0,0,0.08);
-  --card-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  --callout-bg: rgba(0,113,227,0.04);
-  --table-stripe: rgba(0,0,0,0.02);
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #000; --bg-alt: #1d1d1f; --bg-card: #1d1d1f;
-    --text: #f5f5f7; --text-2: #a1a1a6; --text-3: #86868b;
-    --accent: #2997ff; --accent-hover: #2997ff;
-    --border: #424245; --code-bg: #1d1d1f;
-    --nav-bg: rgba(29,29,31,0.72); --nav-border: rgba(255,255,255,0.08);
-    --card-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    --callout-bg: rgba(41,151,255,0.06);
-    --table-stripe: rgba(255,255,255,0.02);
-  }
-}
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: var(--font-body); font-size: 17px; line-height: 1.7;
-  color: var(--text); background: var(--bg);
-  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
-}
-h1, h2, h3, h4, h5, h6 { font-family: var(--font-display); color: var(--text); line-height: 1.15; }
-h1 { font-size: 48px; font-weight: 700; letter-spacing: -0.03em; }
-h2 { font-size: 32px; font-weight: 600; letter-spacing: -0.02em; margin: 72px 0 20px; }
-h3 { font-size: 24px; font-weight: 600; margin: 48px 0 14px; }
-h4 { font-size: 20px; font-weight: 600; margin: 32px 0 10px; }
-h5 { font-size: 17px; font-weight: 600; margin: 24px 0 8px; }
-article h2:first-child { margin-top: 0; }
-a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
-a:hover { color: var(--accent-hover); }
-p { margin: 0 0 20px; color: var(--text-2); }
-strong { color: var(--text); font-weight: 600; }
-em { font-style: italic; }
-code {
-  font-family: var(--font-mono); font-size: 0.875em;
-  background: var(--code-bg); padding: 2px 6px; border-radius: 4px;
-}
-hr { border: none; border-top: 1px solid var(--border); margin: 64px 0; }
-ul, ol { margin: 0 0 20px 24px; color: var(--text-2); }
-li { margin-bottom: 6px; line-height: 1.6; }
-li strong { color: var(--text); }
-blockquote {
-  border-left: 3px solid var(--accent); padding: 0 0 0 20px;
-  margin: 24px 0; color: var(--text-2); font-style: italic;
-}
+# ── Architecture Diagram ─────────────────────────────────────────────────────
 
-/* ── Nav ── */
-.site-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 48px;
-  background: var(--nav-bg); backdrop-filter: saturate(180%) blur(20px);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
-  border-bottom: 1px solid var(--nav-border);
-}
-.nav-inner {
-  max-width: 980px; margin: 0 auto; padding: 0 24px;
-  height: 100%; display: flex; align-items: center; gap: 20px;
-}
-.nav-logo {
-  font-family: var(--font-display); font-weight: 600; font-size: 17px;
-  color: var(--text); text-decoration: none; flex-shrink: 0;
-  letter-spacing: -0.02em;
-}
-.nav-links {
-  display: flex; gap: 6px; overflow-x: auto; flex: 1;
-  -webkit-overflow-scrolling: touch; scrollbar-width: none;
-  mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
-  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
-}
-.nav-links.no-fade {
-  mask-image: none; -webkit-mask-image: none;
-}
-.nav-links::-webkit-scrollbar { display: none; }
-.nav-links a {
-  font-size: 12px; font-weight: 500; color: var(--text-2);
-  text-decoration: none; white-space: nowrap; padding: 4px 6px;
-  letter-spacing: 0.01em; transition: color 0.2s; border-radius: 4px;
-}
-.nav-links a:hover { background: var(--bg-alt); }
-.nav-links a:hover, .nav-links a.active { color: var(--text); }
-.nav-links a.active { font-weight: 600; }
-.nav-end { flex-shrink: 0; display: flex; align-items: center; gap: 16px; }
-.nav-github { color: var(--text-3); transition: color 0.2s; display: flex; }
-.nav-github:hover { color: var(--text); }
-.nav-menu-btn {
-  display: none; background: none; border: none; cursor: pointer;
-  color: var(--text-2); padding: 4px;
-}
-.mobile-nav {
-  display: none; position: fixed; inset: 0; z-index: 99;
-  background: var(--nav-bg); backdrop-filter: saturate(180%) blur(40px);
-  -webkit-backdrop-filter: saturate(180%) blur(40px);
-  padding: 72px 32px 32px; flex-direction: column; gap: 4px;
-}
-.mobile-nav.open { display: flex; }
-.mobile-nav a {
-  font-size: 17px; font-weight: 400; color: var(--text-2);
-  padding: 12px 0; border-bottom: 1px solid var(--border);
-  text-decoration: none; transition: color 0.2s;
-}
-.mobile-nav a:hover { color: var(--text); }
-
-/* ── Hero ── */
-.hero { text-align: center; padding: 100px 24px 60px; max-width: 720px; margin: 0 auto; }
-.hero-label { font-size: 14px; font-weight: 500; color: var(--text-3); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px; }
-.hero h1 { font-size: clamp(48px, 8vw, 72px); margin-bottom: 12px; }
-.hero-sub { font-size: 21px; color: var(--text-2); margin-bottom: 8px; font-weight: 400; }
-.hero-meta { font-size: 14px; color: var(--text-3); font-weight: 500; }
-
-/* ── Stat ribbon ── */
-.stat-ribbon {
-  display: flex; justify-content: center; align-items: center; flex-wrap: wrap;
-  gap: 0; padding: 48px 24px; max-width: 980px; margin: 0 auto;
-}
-.stat-item { text-align: center; padding: 0 28px; }
-.stat-sep { width: 1px; height: 40px; background: var(--border); flex-shrink: 0; }
-.stat-num {
-  font-family: var(--font-display); font-size: 32px; font-weight: 700;
-  color: var(--text); letter-spacing: -0.02em; display: block;
-}
-.stat-label { font-size: 13px; color: var(--text-2); margin-top: 2px; display: block; }
-
-/* ── Banner ── */
-.banner {
-  background: var(--callout-bg); padding: 20px 32px;
-  max-width: 980px; margin: 0 auto 64px; border-radius: 12px;
-  display: flex; align-items: center; gap: 12px;
-  font-size: 15px; color: var(--text-2);
-}
-.banner svg { flex-shrink: 0; color: var(--accent); }
-.banner a { font-weight: 500; }
-
-/* ── Summary grid ── */
-.summary { max-width: 980px; margin: 0 auto; padding: 0 24px 80px; }
-.summary h2 { font-size: 32px; margin-bottom: 8px; }
-.summary > p { color: var(--text-2); margin-bottom: 40px; font-size: 17px; }
-.summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
-.summary-col h3 {
-  font-size: 13px; font-weight: 600; color: var(--text-3);
-  letter-spacing: 0.06em; text-transform: uppercase; margin: 0 0 20px;
-}
-.summary-row {
-  display: flex; justify-content: space-between; align-items: baseline;
-  padding: 8px 0; border-bottom: 1px solid var(--border);
-}
-.summary-row:last-child { border-bottom: none; }
-.summary-row .label { font-size: 14px; color: var(--text-2); }
-.summary-row .value { font-size: 14px; font-weight: 600; color: var(--text); white-space: nowrap; margin-left: 16px; }
-
-/* ── Section cards ── */
-.cards-section { background: var(--bg-alt); padding: 80px 24px; }
-.cards-wrap { max-width: 1120px; margin: 0 auto; }
-.cards-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
-}
-.card {
-  background: var(--bg-card); border-radius: 18px; padding: 32px;
-  text-decoration: none; color: var(--text); display: block;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.card:hover { transform: translateY(-2px); box-shadow: var(--card-shadow); color: var(--text); }
-.card-icon { color: var(--text-3); margin-bottom: 16px; display: block; }
-.card:hover .card-icon { color: var(--accent); }
-.card h3 { font-size: 20px; font-weight: 600; margin: 0 0 8px; letter-spacing: -0.01em; }
-.card p { font-size: 15px; color: var(--text-2); margin: 0; line-height: 1.5; }
-.card:hover h3 { color: var(--accent); }
-
-/* ── Page layout (interior) ── */
-.page-header { max-width: 980px; margin: 0 auto; padding: 80px 24px 0; }
-.breadcrumb { font-size: 13px; color: var(--text-3); margin-bottom: 12px; }
-.breadcrumb a { color: var(--text-3); font-weight: 500; }
-.breadcrumb a:hover { color: var(--accent); }
-.page-header h1 { margin-bottom: 32px; }
-.page-layout {
-  display: grid; grid-template-columns: 200px 1fr; gap: 60px;
-  max-width: 980px; margin: 0 auto; padding: 0 24px 80px;
-  align-items: start;
-}
-.sidebar { position: sticky; top: 72px; max-height: calc(100vh - 96px); overflow-y: auto; padding: 8px 0; }
-.sidebar a {
-  display: block; font-size: 13px; color: var(--text-3); text-decoration: none;
-  padding: 5px 12px; border-left: 2px solid transparent; transition: all 0.2s;
-  line-height: 1.4;
-}
-.sidebar a:hover { color: var(--text-2); }
-.sidebar a.active { color: var(--accent); border-left-color: var(--accent); font-weight: 500; }
-.sidebar a.toc-h3 { padding-left: 24px; font-size: 12px; }
-.sidebar-toggle {
-  display: none; background: var(--bg-alt); border: 1px solid var(--border);
-  border-radius: 8px; padding: 10px 16px; width: 100%; text-align: left;
-  font-size: 14px; color: var(--text-2); cursor: pointer; margin-bottom: 24px;
-  font-family: var(--font-body);
-}
-article { min-width: 0; }
-
-/* ── Data tables ── */
-.data-table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 15px; }
-.data-table th {
-  text-align: left; font-weight: 600; font-size: 13px; color: var(--text-2);
-  padding: 10px 16px; border-bottom: 1px solid var(--border);
-  letter-spacing: 0.02em;
-}
-.data-table td { padding: 10px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top; }
-.data-table tr:nth-child(even) td { background: var(--table-stripe); }
-.data-table td strong { color: var(--text); }
-.data-table code { font-size: 0.8em; }
-
-/* ── Callout ── */
-.callout {
-  background: var(--callout-bg); border-left: 4px solid var(--accent);
-  border-radius: 12px; padding: 20px 24px; margin: 24px 0;
-  font-size: 15px; color: var(--text-2);
-}
-.callout strong { color: var(--text); }
-
-/* ── Details ── */
-details { margin: 24px 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
-details summary {
-  cursor: pointer; padding: 16px 20px; font-weight: 600; color: var(--text);
-  list-style: none; display: flex; align-items: center; justify-content: space-between;
-  transition: background 0.2s;
-}
-details summary:hover { background: var(--bg-alt); }
-details summary::-webkit-details-marker { display: none; }
-details summary::after { content: "+"; font-weight: 400; color: var(--text-3); font-size: 20px; }
-details[open] summary::after { content: "\\2212"; }
-details > div, details > p, details > table { padding: 0 20px 16px; }
-details .data-table { margin: 0 0 8px; }
-
-/* ── Prev/Next nav ── */
-.page-nav {
-  display: flex; justify-content: space-between; margin-top: 80px;
-  padding-top: 32px; border-top: 1px solid var(--border);
-}
-.page-nav a {
-  font-size: 15px; color: var(--text-2); text-decoration: none;
-  transition: color 0.2s; max-width: 45%;
-}
-.page-nav a:hover { color: var(--accent); }
-.page-nav .nav-label { font-size: 12px; color: var(--text-3); display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 500; }
-.page-nav .next { text-align: right; margin-left: auto; }
-
-/* ── Footer ── */
-.site-footer {
-  border-top: 1px solid var(--border); padding: 24px; margin-top: 0;
-  display: flex; justify-content: space-between; align-items: center;
-  max-width: 980px; margin: 0 auto; font-size: 13px; color: var(--text-3);
-}
-.site-footer a { color: var(--text-3); text-decoration: none; }
-.site-footer a:hover { color: var(--accent); }
-.footer-wrap { border-top: 1px solid var(--border); margin-top: 80px; }
-
-/* ── Animations ── */
-.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s cubic-bezier(0.25,0.46,0.45,0.94), transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94); }
-.reveal.visible { opacity: 1; transform: none; }
-@media (prefers-reduced-motion: reduce) {
-  .reveal { opacity: 1; transform: none; transition: none; }
-  .card { transition: none; }
-  .card:hover { transform: none; }
-}
-
-/* ── Responsive ── */
-@media (max-width: 1024px) {
-  .page-layout { grid-template-columns: 1fr; gap: 0; }
-  .sidebar { display: none; }
-  .sidebar-toggle { display: block; }
-  .summary-grid { grid-template-columns: 1fr 1fr; }
-  .cards-grid { grid-template-columns: 1fr 1fr; }
-}
-@media (max-width: 768px) {
-  h1 { font-size: 36px; }
-  h2 { font-size: 26px; margin-top: 48px; }
-  h3 { font-size: 20px; margin-top: 32px; }
-  .nav-links { display: none; }
-  .nav-menu-btn { display: block; }
-  .summary-grid { grid-template-columns: 1fr; gap: 32px; }
-  .cards-grid { grid-template-columns: 1fr; }
-  .stat-ribbon { flex-direction: column; gap: 20px; }
-  .stat-sep { width: 40px; height: 1px; }
-  .page-nav { flex-direction: column; gap: 16px; }
-  .page-nav .next { text-align: left; margin-left: 0; }
-  .hero { padding-top: 72px; }
-  .page-header { padding-top: 64px; }
-}
-"""
-
-# ── JavaScript ────────────────────────────────────────────────────────────────
-
-JS = """\
-(function(){
-  // Reduced motion check
-  var rm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  // Scroll reveal
-  if (!rm) {
-    var obs = new IntersectionObserver(function(entries) {
-      entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-    document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
-  } else {
-    document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('visible'); });
-  }
-
-  // Count-up animation
-  document.querySelectorAll('[data-countup]').forEach(function(el) {
-    if (rm) return;
-    var o = new IntersectionObserver(function(entries) {
-      entries.forEach(function(e) {
-        if (e.isIntersecting) { countUp(el, el.getAttribute('data-countup')); o.unobserve(el); }
-      });
-    }, { threshold: 0.5 });
-    o.observe(el);
-  });
-
-  function countUp(el, target) {
-    var m = target.match(/([~]?)([\\d,.]+)(.*)/);
-    if (!m) { el.textContent = target; return; }
-    var pfx = m[1], num = parseFloat(m[2].replace(/,/g, '')), sfx = m[3];
-    var hasDot = m[2].indexOf('.') !== -1, start = performance.now();
-    function tick(now) {
-      var p = Math.min((now - start) / 1400, 1);
-      var e = 1 - Math.pow(1 - p, 3);
-      var c = num * e;
-      var d = hasDot ? c.toFixed(1) : (num >= 1000 ? Math.floor(c).toLocaleString() : Math.floor(c).toString());
-      el.textContent = pfx + d + sfx;
-      if (p < 1) requestAnimationFrame(tick);
-    }
-    requestAnimationFrame(tick);
-  }
-
-  // Mobile nav
-  var btn = document.querySelector('.nav-menu-btn');
-  var mn = document.querySelector('.mobile-nav');
-  if (btn && mn) {
-    btn.addEventListener('click', function() {
-      mn.classList.toggle('open');
-      btn.setAttribute('aria-expanded', mn.classList.contains('open'));
-    });
-  }
-
-  // Nav scroll fade — remove mask when scrolled to end
-  var nl = document.querySelector('.nav-links');
-  if (nl) {
-    function checkFade() {
-      if (nl.scrollWidth <= nl.clientWidth || nl.scrollLeft + nl.clientWidth >= nl.scrollWidth - 4) {
-        nl.classList.add('no-fade');
-      } else {
-        nl.classList.remove('no-fade');
-      }
-    }
-    nl.addEventListener('scroll', checkFade);
-    checkFade();
-    window.addEventListener('resize', checkFade);
-  }
-
-  // Sidebar TOC active tracking
-  var tocLinks = document.querySelectorAll('.sidebar a');
-  if (tocLinks.length > 0) {
-    var headings = [];
-    tocLinks.forEach(function(a) {
-      var id = a.getAttribute('href');
-      if (id && id.charAt(0) === '#') {
-        var el = document.getElementById(id.slice(1));
-        if (el) headings.push({ el: el, link: a });
-      }
-    });
-    var tocObs = new IntersectionObserver(function(entries) {
-      entries.forEach(function(e) {
-        if (e.isIntersecting) {
-          tocLinks.forEach(function(l) { l.classList.remove('active'); });
-          headings.forEach(function(h) {
-            if (h.el === e.target) h.link.classList.add('active');
-          });
-        }
-      });
-    }, { rootMargin: '-80px 0px -60% 0px' });
-    headings.forEach(function(h) { tocObs.observe(h.el); });
-  }
-
-  // Sidebar toggle (mobile/tablet)
-  var st = document.querySelector('.sidebar-toggle');
-  var sb = document.querySelector('.sidebar');
-  if (st && sb) {
-    st.addEventListener('click', function() {
-      sb.style.display = sb.style.display === 'block' ? 'none' : 'block';
-    });
-  }
-})();
-"""
+ARCH_SVG = '''<div class="arch-wrap reveal"><svg viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg" class="arch-diagram" role="img" aria-label="VoxCore architecture diagram">
+<rect x="30" y="20" width="170" height="56" rx="12" fill="var(--bg-alt)" stroke="var(--border)" stroke-width="1"/>
+<text x="115" y="44" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="14">WoW 12.x Client</text>
+<text x="115" y="62" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">Build 66220</text>
+<rect x="315" y="20" width="170" height="56" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1" stroke-opacity="0.4"/>
+<text x="400" y="44" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="14">Worldserver</text>
+<text x="400" y="62" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">C++20 &middot; 11 Systems</text>
+<rect x="600" y="20" width="170" height="56" rx="12" fill="var(--bg-alt)" stroke="var(--border)" stroke-width="1"/>
+<text x="685" y="44" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="14">MySQL 8.0</text>
+<text x="685" y="62" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">5 Databases</text>
+<rect x="30" y="136" width="170" height="56" rx="12" fill="var(--bg-alt)" stroke="var(--border)" stroke-width="1"/>
+<text x="115" y="160" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="14">Eluna Lua</text>
+<text x="115" y="178" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">Scripting Engine</text>
+<rect x="315" y="136" width="170" height="56" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1" stroke-opacity="0.4"/>
+<text x="400" y="160" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="14">Claude Code</text>
+<text x="400" y="178" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">17 Skills &middot; Agents</text>
+<rect x="600" y="136" width="170" height="56" rx="12" fill="var(--bg-alt)" stroke="var(--border)" stroke-width="1"/>
+<text x="685" y="160" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="14">MCP Servers</text>
+<text x="685" y="178" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">DB2 &middot; MySQL &middot; C++</text>
+<rect x="30" y="250" width="740" height="40" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1" stroke-opacity="0.2"/>
+<text x="400" y="275" text-anchor="middle" fill="var(--text-2)" font-family="var(--font-display)" font-weight="500" font-size="13">Python Pipeline &mdash; 60+ Tools</text>
+<line x1="200" y1="48" x2="315" y2="48" stroke="var(--border)" stroke-width="1.5"/>
+<line x1="485" y1="48" x2="600" y2="48" stroke="var(--border)" stroke-width="1.5"/>
+<line x1="115" y1="76" x2="115" y2="136" stroke="var(--border)" stroke-width="1.5"/>
+<line x1="400" y1="76" x2="400" y2="136" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.35"/>
+<line x1="685" y1="76" x2="685" y2="136" stroke="var(--border)" stroke-width="1.5"/>
+<line x1="200" y1="164" x2="315" y2="164" stroke="var(--border)" stroke-width="1.5"/>
+<line x1="485" y1="164" x2="600" y2="164" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.35"/>
+<line x1="115" y1="192" x2="115" y2="250" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="4 3"/>
+<line x1="400" y1="192" x2="400" y2="250" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.35" stroke-dasharray="4 3"/>
+<line x1="685" y1="192" x2="685" y2="250" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="4 3"/>
+</svg></div>'''
 
 # ── Markdown to HTML ──────────────────────────────────────────────────────────
 
 def inline_md(text):
-    """Process inline markdown: links, bold, code, italic."""
     text = re.sub(
         r'\[([^\]]+)\]\(([^)]+)\)',
         lambda m: '<a href="{}">{}</a>'.format(m.group(2).replace('.md', '.html'), m.group(1)),
@@ -486,13 +155,11 @@ def inline_md(text):
 
 
 def convert_table(lines):
-    """Convert markdown table lines to HTML table."""
     if len(lines) < 2:
         return ''
     headers = [c.strip() for c in lines[0].split('|')[1:-1]]
     start = 2 if re.match(r'^[\s|:-]+$', lines[1]) else 1
     rows = [[c.strip() for c in line.split('|')[1:-1]] for line in lines[start:]]
-
     th = ''.join(f'<th>{inline_md(h)}</th>' for h in headers)
     trs = ''.join(
         '<tr>' + ''.join(f'<td>{inline_md(c)}</td>' for c in row) + '</tr>'
@@ -501,26 +168,21 @@ def convert_table(lines):
 
 
 def strip_heading_numbers(text):
-    """Strip 'Part N:' prefix from headings."""
-    text = re.sub(r'^Part\s+\d+:\s*', '', text)
-    return text
+    return re.sub(r'^Part\s+\d+:\s*', '', text)
 
 
 def md_to_html(md_text):
-    """Convert markdown to semantic HTML."""
     lines = md_text.split('\n')
     out = []
     i = 0
     n = len(lines)
 
-    # Skip YAML frontmatter
     if lines and lines[0].strip() == '---':
         i = 1
         while i < n and lines[i].strip() != '---':
             i += 1
         i += 1
 
-    # Skip <style> blocks
     while i < n:
         s = lines[i].strip()
         if s.startswith('<style'):
@@ -539,7 +201,6 @@ def md_to_html(md_text):
             i += 1
             continue
 
-        # Skip MkDocs-specific HTML
         if s.startswith('<p class="hero-') or s.startswith('<div class="stat-'):
             if 'stat-grid' in s:
                 while i < n and '</div>' not in lines[i]:
@@ -550,7 +211,6 @@ def md_to_html(md_text):
             i += 1
             continue
 
-        # Admonitions
         if s.startswith('!!!') or s.startswith('\\!\\!\\!'):
             m = re.match(r'[\\!]+\s+(\w+)\s*(?:"([^"]*)")?', s)
             atitle = (m.group(2) if m and m.lastindex and m.lastindex >= 2 and m.group(2) else 'Note')
@@ -563,13 +223,11 @@ def md_to_html(md_text):
             out.append(f'<div class="callout"><strong>{atitle}.</strong> {inline_md(" ".join(body))}</div>')
             continue
 
-        # HR
         if s == '---':
             out.append('<hr>')
             i += 1
             continue
 
-        # Headers
         hm = re.match(r'^(#{1,6})\s+(.+)$', s)
         if hm:
             level = len(hm.group(1))
@@ -581,7 +239,19 @@ def md_to_html(md_text):
             i += 1
             continue
 
-        # Details blocks
+        if s.startswith('```'):
+            i += 1
+            code_lines = []
+            while i < n and not lines[i].strip().startswith('```'):
+                code_lines.append(lines[i].rstrip())
+                i += 1
+            if i < n:
+                i += 1
+            code_text = '\n'.join(code_lines)
+            code_text = code_text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+            out.append(f'<pre><code>{code_text}</code></pre>')
+            continue
+
         if s.startswith('<details'):
             block = []
             depth = 0
@@ -598,12 +268,10 @@ def md_to_html(md_text):
             block_html = '\n'.join(block)
             block_html = re.sub(r'\.md(#|")', r'.html\1', block_html)
             block_html = re.sub(r'`([^`]+)`', r'<code>\1</code>', block_html)
-            # Convert tables inside details
             block_html = _style_tables_in_html(block_html)
             out.append(block_html)
             continue
 
-        # Blockquotes
         if s.startswith('>'):
             bq = []
             while i < n and lines[i].strip().startswith('>'):
@@ -612,7 +280,6 @@ def md_to_html(md_text):
             out.append(f'<blockquote>{inline_md(" ".join(bq))}</blockquote>')
             continue
 
-        # Tables
         if s.startswith('|') and '|' in s[1:]:
             tbl = []
             while i < n and lines[i].strip().startswith('|'):
@@ -621,7 +288,6 @@ def md_to_html(md_text):
             out.append(convert_table(tbl))
             continue
 
-        # Unordered list
         if re.match(r'^[-*]\s', s):
             items = []
             while i < n and re.match(r'^[-*]\s', lines[i].strip()):
@@ -630,7 +296,6 @@ def md_to_html(md_text):
             out.append('<ul>' + ''.join(f'<li>{it}</li>' for it in items) + '</ul>')
             continue
 
-        # Ordered list
         if re.match(r'^\d+\.\s', s):
             items = []
             while i < n and re.match(r'^\d+\.\s', lines[i].strip()):
@@ -639,7 +304,6 @@ def md_to_html(md_text):
             out.append('<ol>' + ''.join(f'<li>{it}</li>' for it in items) + '</ol>')
             continue
 
-        # Paragraph
         para = []
         start_i = i
         while i < n:
@@ -650,7 +314,7 @@ def md_to_html(md_text):
                     or ls.startswith('\\!\\!\\!') or ls.startswith('<details') \
                     or ls.startswith('</details') or ls.startswith('<summary') \
                     or ls.startswith('</summary') or ls.startswith('<p class=') \
-                    or ls.startswith('<div class='):
+                    or ls.startswith('<div class=') or ls.startswith('```'):
                 break
             para.append(ls)
             i += 1
@@ -663,7 +327,6 @@ def md_to_html(md_text):
 
 
 def _style_tables_in_html(html):
-    """Convert markdown tables inside raw HTML blocks."""
     lines = html.split('\n')
     result = []
     i = 0
@@ -685,7 +348,6 @@ def _style_tables_in_html(html):
 
 
 def extract_toc(html):
-    """Extract h2/h3 headings for sidebar TOC."""
     toc = []
     for m in re.finditer(r'<(h[23]) id="([^"]*)"[^>]*>(.*?)</\1>', html):
         level = int(m.group(1)[1])
@@ -695,70 +357,123 @@ def extract_toc(html):
     return toc
 
 
+# ── First pass: extract all report TOCs ───────────────────────────────────────
+
+def extract_all_report_data():
+    """Read all report pages, convert to HTML, extract TOCs. Returns dict."""
+    data = {}
+    for page in REPORT_PAGES:
+        md_path = os.path.join(CONTENT_DIR, f"{page['slug']}.md")
+        with open(md_path, 'r', encoding='utf-8') as f:
+            md = f.read()
+        md = re.sub(r'^#\s+[^\n]+\n', '', md.strip(), count=1)
+        html = md_to_html(md)
+        toc = extract_toc(html)
+        data[page['slug']] = {'html': html, 'toc': toc}
+    return data
+
+
 # ── HTML generation ───────────────────────────────────────────────────────────
 
-GITHUB_ICON = '<svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>'
-CHECK_ICON = '<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>'
+def _is_report_page(slug):
+    return any(p['slug'] == slug for p in REPORT_PAGES)
 
 
-NAV_LABELS = {
-    "Data Import & Hotfix Repair": "Import",
-    "NPC Audits & Corrections": "NPCs",
-    "Quests & Localization": "Quests",
-    "Database Cleanup & Integrity": "Cleanup",
-    "Performance & Build Diff": "Performance",
-    "Placement Audits": "Placement",
-    "Tooling & Results": "Tooling",
-    "Hotfix Redundancy Audit": "Hotfix Audit",
-    "Discoveries & Lessons": "Discoveries",
-    "Timeline & Reference": "Timeline",
-}
-
-
-def nav_label(title):
-    return NAV_LABELS.get(title, title)
+def _nav_active(current_slug):
+    if _is_report_page(current_slug):
+        return 'data-import'
+    return current_slug
 
 
 def nav_html(current_slug=None):
+    active = _nav_active(current_slug) if current_slug else None
     links = ''.join(
-        '<a href="{s}.html"{c}>{t}</a>'.format(
-            s=p['slug'],
-            t=nav_label(p['title']),
-            c=' class="active"' if p['slug'] == current_slug else '')
-        for p in PAGES)
+        '<a href="{slug}.html"{cls}>{label}</a>'.format(
+            slug=item['slug'], label=item['label'],
+            cls=' class="active"' if item['slug'] == active else '')
+        for item in NAV_ITEMS)
 
-    mobile_links = ''.join(
-        f'<a href="{p["slug"]}.html">{p["title"]}</a>' for p in PAGES)
+    mobile_feature = ''.join(f'<a href="{p["slug"]}.html">{p["title"]}</a>' for p in FEATURE_PAGES)
+    mobile_report = ''.join(f'<a href="{p["slug"]}.html">{p["title"]}</a>' for p in REPORT_PAGES)
 
     return f'''<nav class="site-nav" role="navigation" aria-label="Main">
 <div class="nav-inner">
 <a href="index.html" class="nav-logo">VoxCore</a>
 <div class="nav-links">{links}</div>
 <div class="nav-end">
-<a href="https://github.com/VoxCore84/roleplaycore-report" class="nav-github" aria-label="GitHub">{GITHUB_ICON}</a>
+<a href="https://github.com/VoxCore84/RoleplayCore" class="nav-github" aria-label="GitHub" target="_blank" rel="noopener">{GITHUB_ICON}</a>
 <button class="nav-menu-btn" aria-label="Menu" aria-expanded="false">
 <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
 </button>
 </div>
 </div>
 </nav>
-<div class="mobile-nav" role="dialog" aria-label="Navigation">{mobile_links}</div>'''
+<div class="mobile-nav" role="dialog" aria-label="Navigation">{mobile_feature}<div class="mobile-sep"></div>{mobile_report}</div>'''
 
 
 def footer_html():
     return '''<div class="footer-wrap"><footer class="site-footer">
 <span>VoxCore &mdash; March 2026</span>
-<a href="https://github.com/VoxCore84/roleplaycore-report">GitHub</a>
+<a href="https://github.com/VoxCore84/RoleplayCore">GitHub</a>
 </footer></div>'''
 
 
-def sidebar_html(toc):
+def feature_sidebar_html(toc):
+    """Flat TOC sidebar for feature pages — all items visible, no tree."""
     if not toc:
         return ''
-    links = ''.join(
-        f'<a href="#{anchor}" class="{"toc-h3" if level == 3 else ""}">{title}</a>'
-        for level, anchor, title in toc)
-    return f'<button class="sidebar-toggle">On this page</button><nav class="sidebar" aria-label="Table of contents">{links}</nav>'
+    html = '<button class="sidebar-toggle">On this page</button>'
+    html += '<nav class="sidebar" aria-label="Table of contents">'
+    for level, anchor, title in toc:
+        cls = ' class="toc-h3"' if level == 3 else ''
+        html += f'<a href="#{anchor}"{cls}>{title}</a>'
+    html += '</nav>'
+    return html
+
+
+def report_sidebar_html(current_slug, report_data):
+    """Cross-page report sidebar — full outline, current section expanded."""
+    html = '<button class="sidebar-toggle">Report sections</button>'
+    html += '<nav class="sidebar" aria-label="Report navigation">'
+
+    for page in REPORT_PAGES:
+        slug = page['slug']
+        toc = report_data.get(slug, {}).get('toc', [])
+        is_current = (slug == current_slug)
+
+        expanded = ' expanded' if is_current else ''
+        html += f'<div class="toc-section{expanded}">'
+
+        # Page title as the parent node
+        has_children = len(toc) > 0
+        html += '<div class="toc-parent">'
+        if has_children:
+            html += '<button class="toc-toggle" aria-label="Expand">&#9654;</button>'
+        else:
+            html += '<span class="toc-spacer"></span>'
+
+        current_cls = ' current' if is_current else ''
+        html += f'<a href="{slug}.html" class="toc-page{current_cls}">{page["title"]}</a>'
+        html += '</div>'
+
+        if has_children:
+            html += '<div class="toc-children">'
+            if is_current:
+                # Full h2+h3 tree with local anchors
+                for level, anchor, title in toc:
+                    cls = ' class="toc-h3"' if level == 3 else ''
+                    html += f'<a href="#{anchor}"{cls}>{title}</a>'
+            else:
+                # Just h2 titles linking to the other page
+                for level, anchor, title in toc:
+                    if level == 2:
+                        html += f'<a href="{slug}.html#{anchor}">{title}</a>'
+            html += '</div>'
+
+        html += '</div>'
+
+    html += '</nav>'
+    return html
 
 
 def prev_next_html(prev_page, next_page):
@@ -774,19 +489,26 @@ def prev_next_html(prev_page, next_page):
     return f'<nav class="page-nav">{parts[0]}{parts[1]}</nav>'
 
 
-def base_page(title, body, current_slug=None, is_index=False):
+BACK_TO_TOP = '''<button class="back-to-top" aria-label="Back to top">
+<svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M18 15l-6-6-6 6"/></svg>
+</button>'''
+
+
+def base_page(title, body, current_slug=None):
+    desc = "VoxCore \u2014 An AI-assisted open source MMO framework built on TrinityCore for WoW 12.x Midnight"
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{title} — VoxCore</title>
-<meta name="description" content="VoxCore Database Report — Data Quality & Optimization Summary">
+<title>{title} \u2014 VoxCore</title>
+<meta name="description" content="{desc}">
 <style>{CSS}</style>
 </head>
 <body>
 {nav_html(current_slug)}
 {body}
+{BACK_TO_TOP}
 {footer_html()}
 <script>{JS}</script>
 </body>
@@ -798,64 +520,112 @@ def base_page(title, body, current_slug=None, is_index=False):
 def build_index():
     # Stat ribbon
     stat_items = []
-    for i, (val, label) in enumerate(HERO_STATS):
-        if i > 0:
+    for idx, (val, label) in enumerate(HERO_STATS):
+        if idx > 0:
             stat_items.append('<span class="stat-sep"></span>')
         stat_items.append(f'<div class="stat-item"><span class="stat-num" data-countup="{val}">{val}</span><span class="stat-label">{label}</span></div>')
     stats_html = ''.join(stat_items)
 
-    # Exec summary
-    cols = ''
-    for cat, items in EXEC_GROUPS:
-        rows = ''.join(
-            f'<div class="summary-row"><span class="label">{label}</span><span class="value">{value}</span></div>'
-            for label, value in items)
-        cols += f'<div class="summary-col"><h3>{cat}</h3>{rows}</div>'
+    # Executive summary table
+    exec_rows = ''
+    for cat, metric, value in EXEC_SUMMARY:
+        cat_cell = f'<strong>{cat}</strong>' if cat else ''
+        exec_rows += f'<tr><td>{cat_cell}</td><td>{metric}</td><td>{value}</td></tr>'
 
-    # Section cards
-    cards = ''
-    for p in PAGES:
+    # Pillar cards
+    pillar_cards = ''
+    for p in FEATURE_PAGES:
         icon = ICONS.get(p['slug'], '')
-        cards += f'<a href="{p["slug"]}.html" class="card reveal"><span class="card-icon">{icon}</span><h3>{p["title"]}</h3><p>{p["desc"]}</p></a>\n'
+        pillar_cards += f'<a href="{p["slug"]}.html" class="pillar-card reveal"><span class="pillar-icon">{icon}</span><h3>{p["title"]}</h3><p>{p["desc"]}</p></a>\n'
+
+    # Report cards
+    report_cards = ''
+    for p in REPORT_PAGES:
+        icon = ICONS.get(p['slug'], '')
+        report_cards += f'<a href="{p["slug"]}.html" class="card reveal"><span class="card-icon">{icon}</span><h3>{p["title"]}</h3><p>{p["desc"]}</p></a>\n'
+
+    # Timeline
+    timeline_entries = ''
+    for entry in CHANGELOG:
+        timeline_entries += f'<div class="timeline-entry reveal"><span class="timeline-date">{entry["date"]}</span><div><h3>{entry["title"]}</h3><p>{entry["summary"]}</p></div></div>\n'
 
     body = f'''<main>
+<div class="hero-wrap">
 <section class="hero reveal">
-<p class="hero-label">Database Report</p>
+<p class="hero-label">WoW 12.x / Midnight</p>
 <h1>VoxCore</h1>
-<p class="hero-sub">Data Quality & Optimization Summary</p>
-<p class="hero-meta">Prepared for CaptainCore (LoreWalkerTDB) &middot; March 2026 &middot; WoW 12.x Midnight &middot; Build 66220</p>
+<p class="hero-sub">An AI-Assisted Open Source MMO Framework</p>
+<p class="hero-meta">Built on TrinityCore &middot; Build {STATS['build_number']} &middot; {STATS['custom_systems']} custom systems &middot; {STATS['tools_built']} tools</p>
 </section>
-
 <section class="stat-ribbon reveal">{stats_html}</section>
+</div>
 
-<div class="banner reveal">{CHECK_ICON}<span>All tooling is open and reproducible. Every operation can be re-run from scripts in the repository. See <a href="reference.html#appendix-b-reproducibility">Reproducibility</a>.</span></div>
+<div class="section-divider"></div>
 
-<section class="summary reveal">
-<h2>Executive Summary</h2>
-<p>Over February\u2013March 2026, VoxCore imported, validated, and repaired data from four major sources, performed multi-pass audits across all five databases, and built a Python tooling pipeline to make the process repeatable.</p>
-<div class="summary-grid">{cols}</div>
+<section class="vision reveal">
+<p>A TrinityCore fork enhanced by an AI-assisted development workflow that produced {STATS['tools_built']} custom tools, 1M+ database corrections, and a {STATS['server_startup_reduction']}% server startup improvement in under two months. Every pipeline is scripted, every audit is reproducible, and every number on this site is backed by a commit hash.</p>
 </section>
 
-<section class="cards-section">
-<div class="cards-wrap">
-<div class="cards-grid">{cards}</div>
+<section class="pillars">
+<div class="pillars-wrap">
+<div class="pillars-grid">{pillar_cards}</div>
 </div>
 </section>
+
+<div class="banner reveal" style="margin-bottom: 80px">{CHECK_ICON}<span>All tooling is open and reproducible. Every operation can be re-run from scripts in the repository.</span></div>
+
+<section class="cards-section" id="report">
+<div class="cards-wrap">
+<h2 class="section-title">Data Quality Report</h2>
+<p class="section-sub">{STATS['rows_imported_short']} rows imported, validated, and repaired across five databases. Prepared for CaptainCore (LoreWalkerTDB) &middot; March 2026.</p>
+
+<details class="exec-details reveal">
+<summary>Executive Summary &mdash; By the Numbers</summary>
+<div>
+<p style="font-size:14px;color:var(--text-3);margin:0 0 16px">All figures are <strong>net</strong> &mdash; accounting for subsequent cleanup and deduplication.</p>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Category</th><th>Metric</th><th>Value</th></tr></thead><tbody>{exec_rows}</tbody></table></div>
+</div>
+</details>
+
+<div class="cards-grid">{report_cards}</div>
+</div>
+</section>
+
+<div class="section-divider" style="margin-top:0"></div>
+
+<section class="timeline-section">
+<h2>Recent Activity</h2>
+{timeline_entries}
+</section>
+
+<div class="built-with reveal">
+<span>C++</span><span class="bw-dot">&middot;</span>
+<span>Python</span><span class="bw-dot">&middot;</span>
+<span>MySQL</span><span class="bw-dot">&middot;</span>
+<span>Lua</span><span class="bw-dot">&middot;</span>
+<span>Claude Code</span><span class="bw-dot">&middot;</span>
+<span>CMake</span><span class="bw-dot">&middot;</span>
+<span>Ninja</span><span class="bw-dot">&middot;</span>
+<span>Git</span>
+</div>
 </main>'''
 
-    return base_page("Database Report", body, is_index=True)
+    return base_page("VoxCore", body)
 
 
-def build_page(page, prev_p, next_p):
+def build_feature_page(page):
     md_path = os.path.join(CONTENT_DIR, f"{page['slug']}.md")
     with open(md_path, 'r', encoding='utf-8') as f:
         md = f.read()
 
-    # Strip first heading
     md = re.sub(r'^#\s+[^\n]+\n', '', md.strip(), count=1)
-
     html = md_to_html(md)
     toc = extract_toc(html)
+
+    # Inject architecture diagram at top of framework page
+    extra_top = ''
+    if page['slug'] == 'framework':
+        extra_top = ARCH_SVG
 
     body = f'''<main>
 <header class="page-header">
@@ -863,7 +633,28 @@ def build_page(page, prev_p, next_p):
 <h1>{page["title"]}</h1>
 </header>
 <div class="page-layout">
-{sidebar_html(toc)}
+{feature_sidebar_html(toc)}
+<article>
+{extra_top}
+{html}
+</article>
+</div>
+</main>'''
+
+    return base_page(page['title'], body, current_slug=page['slug'])
+
+
+def build_report_page(page, prev_p, next_p, report_data):
+    cached = report_data.get(page['slug'], {})
+    html = cached.get('html', '')
+
+    body = f'''<main>
+<header class="page-header">
+<nav class="breadcrumb"><a href="index.html">VoxCore</a> &rsaquo; <a href="index.html#report">Report</a> &rsaquo; {page["title"]}</nav>
+<h1>{page["title"]}</h1>
+</header>
+<div class="page-layout">
+{report_sidebar_html(page['slug'], report_data)}
 <article>
 {html}
 {prev_next_html(prev_p, next_p)}
@@ -881,24 +672,47 @@ def main():
         shutil.rmtree(OUTPUT_DIR)
     os.makedirs(OUTPUT_DIR)
 
+    # First pass: extract all report page data
+    report_data = extract_all_report_data()
+
+    total_size = 0
+
     # Index
-    with open(os.path.join(OUTPUT_DIR, 'index.html'), 'w', encoding='utf-8') as f:
-        f.write(build_index())
-    print("Built: index.html")
+    html = build_index()
+    path = os.path.join(OUTPUT_DIR, 'index.html')
+    with open(path, 'w', encoding='utf-8') as f:
+        f.write(html)
+    sz = os.path.getsize(path)
+    total_size += sz
+    print(f"  index.html ({sz // 1024}KB)")
 
-    # Interior pages
-    for i, page in enumerate(PAGES):
-        prev_p = PAGES[i - 1] if i > 0 else None
-        next_p = PAGES[i + 1] if i < len(PAGES) - 1 else None
-        html = build_page(page, prev_p, next_p)
-        with open(os.path.join(OUTPUT_DIR, f"{page['slug']}.html"), 'w', encoding='utf-8') as f:
+    # Feature pages
+    for page in FEATURE_PAGES:
+        html = build_feature_page(page)
+        path = os.path.join(OUTPUT_DIR, f"{page['slug']}.html")
+        with open(path, 'w', encoding='utf-8') as f:
             f.write(html)
-        print(f"Built: {page['slug']}.html")
+        sz = os.path.getsize(path)
+        total_size += sz
+        print(f"  {page['slug']}.html ({sz // 1024}KB)")
 
-    # .nojekyll to prevent GitHub Pages Jekyll processing
+    # Report pages (use cached data from first pass)
+    for i, page in enumerate(REPORT_PAGES):
+        prev_p = REPORT_PAGES[i - 1] if i > 0 else None
+        next_p = REPORT_PAGES[i + 1] if i < len(REPORT_PAGES) - 1 else None
+        html = build_report_page(page, prev_p, next_p, report_data)
+        path = os.path.join(OUTPUT_DIR, f"{page['slug']}.html")
+        with open(path, 'w', encoding='utf-8') as f:
+            f.write(html)
+        sz = os.path.getsize(path)
+        total_size += sz
+        print(f"  {page['slug']}.html ({sz // 1024}KB)")
+
+    # .nojekyll
     open(os.path.join(OUTPUT_DIR, '.nojekyll'), 'w').close()
 
-    print(f"\nDone: {len(PAGES) + 1} pages in {OUTPUT_DIR}/")
+    total = 1 + len(FEATURE_PAGES) + len(REPORT_PAGES)
+    print(f"\n  {total} pages, {total_size // 1024}KB total")
 
 
 if __name__ == '__main__':

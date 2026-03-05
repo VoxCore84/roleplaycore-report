@@ -43,7 +43,7 @@ Over 50 Python scripts, MCP servers, audit tools, and SQL generators were built 
 
 | Table | Rows | Notes |
 |-------|------|-------|
-| hotfix_data | 835,385 | Client correction registry |
+| hotfix_data | 226,984 | Client correction registry |
 | broadcast_text | 224,233 | TC community + custom text entries |
 | hotfix_blob | 6,766 | Binary hotfix data |
 | phase | 5,714 | Phase definitions |
@@ -69,7 +69,7 @@ Over 50 Python scripts, MCP servers, audit tools, and SQL generators were built 
 | Database | Tables | Size |
 |----------|--------|------|
 | world | 259 | 1,267 MB |
-| hotfixes | 517 | 637 MB |
+| hotfixes | 517 | 535 MB |
 | characters | 151 | 7.6 MB |
 | auth | 50 | 1.9 MB |
 | roleplay | 5 | 0.1 MB |

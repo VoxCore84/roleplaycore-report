@@ -64,11 +64,11 @@ Found 767,672 additional redundant rows across 109 tables.
 |--------|--------|-------|
 | **Hotfix content rows** | ~10.8M | ~244,000 |
 | **Content reduction** | — | **97.8%** |
-| hotfix_data entries | 1,084,369 | 835,385 |
-| Hotfix DB on disk | 1,309 MB | 637 MB |
+| hotfix_data entries | 1,084,369 | 226,984 |
+| Hotfix DB on disk | 1,309 MB | 535 MB |
 
 \!\!\! note
-    The content table cleanup (deleting redundant rows from tables like spell_name, spell_effect, etc.) was fully applied across all 3 rounds. The hotfix_data registry was partially cleaned (orphan removal in R2), reducing it from 1.08M to ~835K. The remaining hotfix_data entries include both references to the ~244K genuine content rows and stale entries referencing deleted rows — the server skips these harmlessly at load time.
+    The content table cleanup (deleting redundant rows from tables like spell_name, spell_effect, etc.) was fully applied across all 3 rounds. The hotfix_data registry was cleaned through orphan removal in R2 and R3, reducing it from 1.08M to ~227K entries. These correspond to the ~244K genuine content rows (some content rows share hotfix_data entries).
 
 **Remaining ~244K content rows:**
 

@@ -4,38 +4,74 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Quests & Localization — VoxCore</title>
-<meta name="description" content="VoxCore Database Report — Data Quality & Optimization Summary">
-<style>:root {
+<meta name="description" content="VoxCore — An AI-assisted open source MMO framework built on TrinityCore for WoW 12.x Midnight">
+<style>/* ══════════════════════════════════════════════════════════════════════════
+   VoxCore Design System — Apple HIG x Warcraft Atmosphere
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Tokens ── */
+:root {
   --font-body: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-mono: "SF Mono", SFMono-Regular, ui-monospace, Menlo, Consolas, monospace;
-  --bg: #fff; --bg-alt: #f5f5f7; --bg-card: #fff;
-  --text: #1d1d1f; --text-2: #6e6e73; --text-3: #86868b;
-  --accent: #0071e3; --accent-hover: #2997ff;
-  --border: #d2d2d7; --code-bg: #f5f5f7;
-  --nav-bg: rgba(255,255,255,0.72); --nav-border: rgba(0,0,0,0.08);
+
+  --bg: #fff;
+  --bg-alt: #f5f5f7;
+  --bg-card: #fff;
+  --text: #1d1d1f;
+  --text-2: #6e6e73;
+  --text-3: #86868b;
+  --accent: #0071e3;
+  --accent-hover: #2997ff;
+  --border: #d2d2d7;
+  --code-bg: #f5f5f7;
+  --nav-bg: rgba(255,255,255,0.72);
+  --nav-border: rgba(0,0,0,0.08);
   --card-shadow: 0 4px 12px rgba(0,0,0,0.08);
   --callout-bg: rgba(0,113,227,0.04);
   --table-stripe: rgba(0,0,0,0.02);
+
+  /* WoW accents */
+  --arcane: #7B68EE;
+  --gold: #C9A84C;
+  --arcane-glow: rgba(123, 104, 238, 0.3);
+  --arcane-subtle: rgba(123, 104, 238, 0.08);
+  --gold-subtle: rgba(201, 168, 76, 0.1);
 }
+
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #000; --bg-alt: #1d1d1f; --bg-card: #1d1d1f;
-    --text: #f5f5f7; --text-2: #a1a1a6; --text-3: #86868b;
-    --accent: #2997ff; --accent-hover: #2997ff;
-    --border: #424245; --code-bg: #1d1d1f;
-    --nav-bg: rgba(29,29,31,0.72); --nav-border: rgba(255,255,255,0.08);
+    --bg: #000;
+    --bg-alt: #1d1d1f;
+    --bg-card: #2d2d2d;
+    --text: #f5f5f7;
+    --text-2: #a1a1a6;
+    --text-3: #86868b;
+    --accent: #2997ff;
+    --accent-hover: #2997ff;
+    --border: #424245;
+    --code-bg: #1d1d1f;
+    --nav-bg: rgba(29,29,31,0.72);
+    --nav-border: rgba(255,255,255,0.08);
     --card-shadow: 0 4px 12px rgba(0,0,0,0.3);
     --callout-bg: rgba(41,151,255,0.06);
     --table-stripe: rgba(255,255,255,0.02);
+
+    --arcane-glow: rgba(123, 104, 238, 0.5);
+    --arcane-subtle: rgba(123, 104, 238, 0.15);
+    --gold-subtle: rgba(201, 168, 76, 0.15);
   }
 }
+
+/* ── Reset ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body {
   font-family: var(--font-body); font-size: 17px; line-height: 1.7;
   color: var(--text); background: var(--bg);
   -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
 }
+
+/* ── Typography ── */
 h1, h2, h3, h4, h5, h6 { font-family: var(--font-display); color: var(--text); line-height: 1.15; }
 h1 { font-size: 48px; font-weight: 700; letter-spacing: -0.03em; }
 h2 { font-size: 32px; font-weight: 600; letter-spacing: -0.02em; margin: 72px 0 20px; }
@@ -43,68 +79,84 @@ h3 { font-size: 24px; font-weight: 600; margin: 48px 0 14px; }
 h4 { font-size: 20px; font-weight: 600; margin: 32px 0 10px; }
 h5 { font-size: 17px; font-weight: 600; margin: 24px 0 8px; }
 article h2:first-child { margin-top: 0; }
+
 a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
 a:hover { color: var(--accent-hover); }
 p { margin: 0 0 20px; color: var(--text-2); }
 strong { color: var(--text); font-weight: 600; }
 em { font-style: italic; }
+
 code {
   font-family: var(--font-mono); font-size: 0.875em;
   background: var(--code-bg); padding: 2px 6px; border-radius: 4px;
 }
+pre {
+  background: var(--code-bg); border-radius: 12px;
+  padding: 16px 20px; margin: 24px 0; overflow-x: auto;
+}
+pre code { background: none; padding: 0; font-size: 14px; }
+
 hr { border: none; border-top: 1px solid var(--border); margin: 64px 0; }
 ul, ol { margin: 0 0 20px 24px; color: var(--text-2); }
 li { margin-bottom: 6px; line-height: 1.6; }
 li strong { color: var(--text); }
+
 blockquote {
   border-left: 3px solid var(--accent); padding: 0 0 0 20px;
   margin: 24px 0; color: var(--text-2); font-style: italic;
 }
 
-/* ── Nav ── */
+/* ── Navigation ── */
 .site-nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 48px;
-  background: var(--nav-bg); backdrop-filter: saturate(180%) blur(20px);
+  background: var(--nav-bg);
+  backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   border-bottom: 1px solid var(--nav-border);
 }
+
 .nav-inner {
   max-width: 980px; margin: 0 auto; padding: 0 24px;
-  height: 100%; display: flex; align-items: center; gap: 20px;
+  height: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
 }
+
 .nav-logo {
   font-family: var(--font-display); font-weight: 600; font-size: 17px;
   color: var(--text); text-decoration: none; flex-shrink: 0;
   letter-spacing: -0.02em;
 }
+
 .nav-links {
-  display: flex; gap: 6px; overflow-x: auto; flex: 1;
-  -webkit-overflow-scrolling: touch; scrollbar-width: none;
-  mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
-  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
+  display: flex; justify-content: center; gap: 32px;
 }
-.nav-links.no-fade {
-  mask-image: none; -webkit-mask-image: none;
-}
-.nav-links::-webkit-scrollbar { display: none; }
 .nav-links a {
-  font-size: 12px; font-weight: 500; color: var(--text-2);
-  text-decoration: none; white-space: nowrap; padding: 4px 6px;
-  letter-spacing: 0.01em; transition: color 0.2s; border-radius: 4px;
+  font-size: 13px; font-weight: 500; color: var(--text-2);
+  text-decoration: none; white-space: nowrap; padding: 6px 0;
+  letter-spacing: 0.01em; transition: color 0.2s;
 }
-.nav-links a:hover { background: var(--bg-alt); }
-.nav-links a:hover, .nav-links a.active { color: var(--text); }
-.nav-links a.active { font-weight: 600; }
-.nav-end { flex-shrink: 0; display: flex; align-items: center; gap: 16px; }
+.nav-links a:hover { color: var(--text); }
+.nav-links a.active { color: var(--text); font-weight: 600; }
+
+.nav-end {
+  display: flex; align-items: center; gap: 16px;
+  justify-content: flex-end;
+}
 .nav-github { color: var(--text-3); transition: color 0.2s; display: flex; }
 .nav-github:hover { color: var(--text); }
+
 .nav-menu-btn {
   display: none; background: none; border: none; cursor: pointer;
   color: var(--text-2); padding: 4px;
 }
+
+/* Mobile nav overlay */
 .mobile-nav {
   display: none; position: fixed; inset: 0; z-index: 99;
-  background: var(--nav-bg); backdrop-filter: saturate(180%) blur(40px);
+  background: var(--nav-bg);
+  backdrop-filter: saturate(180%) blur(40px);
   -webkit-backdrop-filter: saturate(180%) blur(40px);
   padding: 72px 32px 32px; flex-direction: column; gap: 4px;
 }
@@ -115,60 +167,149 @@ blockquote {
   text-decoration: none; transition: color 0.2s;
 }
 .mobile-nav a:hover { color: var(--text); }
+.mobile-nav .mobile-sep { height: 16px; border-bottom: none; }
 
 /* ── Hero ── */
-.hero { text-align: center; padding: 100px 24px 60px; max-width: 720px; margin: 0 auto; }
-.hero-label { font-size: 14px; font-weight: 500; color: var(--text-3); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px; }
-.hero h1 { font-size: clamp(48px, 8vw, 72px); margin-bottom: 12px; }
-.hero-sub { font-size: 21px; color: var(--text-2); margin-bottom: 8px; font-weight: 400; }
-.hero-meta { font-size: 14px; color: var(--text-3); font-weight: 500; }
+.hero-wrap {
+  background: linear-gradient(180deg,
+    #0a0e1a 0%,
+    #12162e 30%,
+    #1a1530 55%,
+    #2a2444 70%,
+    #f5f5f7 100%
+  );
+}
 
-/* ── Stat ribbon ── */
+@media (prefers-color-scheme: dark) {
+  .hero-wrap {
+    background: linear-gradient(180deg,
+      #0a0e1a 0%,
+      #12162e 30%,
+      #1a1530 55%,
+      #18122a 75%,
+      #000 100%
+    );
+  }
+}
+
+.hero {
+  text-align: center; padding: 120px 24px 60px;
+  max-width: 720px; margin: 0 auto;
+}
+
+.hero-label {
+  font-size: 14px; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; margin-bottom: 12px;
+  color: var(--arcane);
+}
+
+.hero h1 {
+  font-size: clamp(48px, 8vw, 72px); margin-bottom: 12px;
+  color: #f5f5f7;
+}
+
+.hero-sub {
+  font-size: 21px; font-weight: 400; margin-bottom: 8px;
+  color: rgba(245,245,247,0.7);
+}
+
+.hero-meta {
+  font-size: 14px; font-weight: 500;
+  color: rgba(245,245,247,0.45);
+}
+
+/* ── Stat Ribbon ── */
 .stat-ribbon {
   display: flex; justify-content: center; align-items: center; flex-wrap: wrap;
   gap: 0; padding: 48px 24px; max-width: 980px; margin: 0 auto;
 }
 .stat-item { text-align: center; padding: 0 28px; }
-.stat-sep { width: 1px; height: 40px; background: var(--border); flex-shrink: 0; }
+.stat-sep { width: 1px; height: 40px; background: rgba(245,245,247,0.15); flex-shrink: 0; }
 .stat-num {
   font-family: var(--font-display); font-size: 32px; font-weight: 700;
-  color: var(--text); letter-spacing: -0.02em; display: block;
+  color: var(--gold); letter-spacing: -0.02em; display: block;
 }
-.stat-label { font-size: 13px; color: var(--text-2); margin-top: 2px; display: block; }
+.stat-label {
+  font-size: 13px; color: rgba(245,245,247,0.5); margin-top: 2px; display: block;
+}
+
+/* After hero: stat ribbon on normal bg needs different colors */
+.stat-ribbon.on-bg .stat-sep { background: var(--border); }
+.stat-ribbon.on-bg .stat-num { color: var(--gold); }
+.stat-ribbon.on-bg .stat-label { color: var(--text-2); }
+
+/* ── Section Divider (arcane glow) ── */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--arcane-glow) 30%,
+    rgba(123, 104, 238, 0.5) 50%,
+    var(--arcane-glow) 70%,
+    transparent 100%
+  );
+  margin: 0 auto;
+  max-width: 600px;
+}
+
+/* ── Vision ── */
+.vision {
+  max-width: 720px; margin: 0 auto; padding: 48px 24px 80px;
+  text-align: center;
+}
+.vision p { font-size: 19px; line-height: 1.6; color: var(--text-2); margin: 0; }
 
 /* ── Banner ── */
 .banner {
   background: var(--callout-bg); padding: 20px 32px;
-  max-width: 980px; margin: 0 auto 64px; border-radius: 12px;
+  max-width: 980px; margin: 0 auto 0; border-radius: 12px;
   display: flex; align-items: center; gap: 12px;
   font-size: 15px; color: var(--text-2);
 }
-.banner svg { flex-shrink: 0; color: var(--accent); }
+.banner svg { flex-shrink: 0; color: var(--gold); }
 .banner a { font-weight: 500; }
 
-/* ── Summary grid ── */
-.summary { max-width: 980px; margin: 0 auto; padding: 0 24px 80px; }
-.summary h2 { font-size: 32px; margin-bottom: 8px; }
-.summary > p { color: var(--text-2); margin-bottom: 40px; font-size: 17px; }
-.summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
-.summary-col h3 {
-  font-size: 13px; font-weight: 600; color: var(--text-3);
-  letter-spacing: 0.06em; text-transform: uppercase; margin: 0 0 20px;
-}
-.summary-row {
-  display: flex; justify-content: space-between; align-items: baseline;
-  padding: 8px 0; border-bottom: 1px solid var(--border);
-}
-.summary-row:last-child { border-bottom: none; }
-.summary-row .label { font-size: 14px; color: var(--text-2); }
-.summary-row .value { font-size: 14px; font-weight: 600; color: var(--text); white-space: nowrap; margin-left: 16px; }
+/* ── Pillar Cards ── */
+.pillars { padding: 0 24px 80px; }
+.pillars-wrap { max-width: 1120px; margin: 0 auto; }
+.pillars-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
 
-/* ── Section cards ── */
-.cards-section { background: var(--bg-alt); padding: 80px 24px; }
-.cards-wrap { max-width: 1120px; margin: 0 auto; }
-.cards-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+.pillar-card {
+  background: var(--bg-alt); border-radius: 18px; padding: 40px 36px;
+  text-decoration: none; color: var(--text); display: block;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid var(--arcane-subtle);
 }
+.pillar-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--card-shadow);
+  color: var(--text);
+}
+
+.pillar-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 48px; height: 48px; border-radius: 12px;
+  background: radial-gradient(circle, rgba(123,104,238,0.08) 0%, transparent 70%);
+  margin-bottom: 16px; color: var(--text-3);
+}
+.pillar-icon svg { width: 28px; height: 28px; }
+.pillar-card:hover .pillar-icon { color: var(--accent); }
+
+.pillar-card h3 { font-size: 24px; font-weight: 600; margin: 0 0 10px; letter-spacing: -0.01em; }
+.pillar-card:hover h3 { color: var(--accent); }
+.pillar-card p { font-size: 15px; color: var(--text-2); margin: 0; line-height: 1.5; }
+
+/* ── Section Headings ── */
+.section-wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+.section-title { font-size: 32px; font-weight: 600; letter-spacing: -0.02em; margin: 0 0 8px; }
+.section-sub { font-size: 17px; color: var(--text-2); margin: 0 0 40px; }
+
+/* ── Cards Grid ── */
+.cards-section { background: var(--bg-alt); padding: 80px 24px; }
+.cards-section.bg-default { background: var(--bg); }
+.cards-wrap { max-width: 1120px; margin: 0 auto; }
+.cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+
 .card {
   background: var(--bg-card); border-radius: 18px; padding: 32px;
   text-decoration: none; color: var(--text); display: block;
@@ -178,45 +319,156 @@ blockquote {
 .card-icon { color: var(--text-3); margin-bottom: 16px; display: block; }
 .card:hover .card-icon { color: var(--accent); }
 .card h3 { font-size: 20px; font-weight: 600; margin: 0 0 8px; letter-spacing: -0.01em; }
-.card p { font-size: 15px; color: var(--text-2); margin: 0; line-height: 1.5; }
 .card:hover h3 { color: var(--accent); }
+.card p { font-size: 15px; color: var(--text-2); margin: 0; line-height: 1.5; }
 
-/* ── Page layout (interior) ── */
+/* ── Timeline ── */
+.timeline-section { padding: 80px 24px; max-width: 980px; margin: 0 auto; }
+.timeline-section h2 { font-size: 32px; font-weight: 600; letter-spacing: -0.02em; margin: 0 0 40px; }
+.timeline-entry { display: flex; gap: 24px; padding: 20px 0; border-bottom: 1px solid var(--border); }
+.timeline-entry:last-child { border-bottom: none; }
+.timeline-date {
+  font-size: 13px; font-weight: 500; color: var(--text-3);
+  flex-shrink: 0; width: 60px; padding-top: 2px;
+}
+.timeline-entry h3 { font-size: 17px; font-weight: 600; color: var(--text); margin: 0 0 4px; }
+.timeline-entry p { font-size: 15px; color: var(--text-2); margin: 0; line-height: 1.5; }
+
+/* ── Built-With Badges ── */
+.built-with {
+  display: flex; justify-content: center; align-items: center;
+  flex-wrap: wrap; gap: 8px; padding: 40px 24px 80px;
+  font-size: 13px; font-weight: 500; color: var(--text-3);
+  letter-spacing: 0.02em;
+}
+.bw-dot { color: var(--border); }
+
+/* ── Executive Summary Details ── */
+.exec-details { margin: 0 0 32px; }
+
+/* ── Page Layout (interior) ── */
 .page-header { max-width: 980px; margin: 0 auto; padding: 80px 24px 0; }
 .breadcrumb { font-size: 13px; color: var(--text-3); margin-bottom: 12px; }
 .breadcrumb a { color: var(--text-3); font-weight: 500; }
 .breadcrumb a:hover { color: var(--accent); }
 .page-header h1 { margin-bottom: 32px; }
+
 .page-layout {
   display: grid; grid-template-columns: 200px 1fr; gap: 60px;
-  max-width: 980px; margin: 0 auto; padding: 0 24px 80px;
-  align-items: start;
+  max-width: 980px; margin: 0 auto; padding: 0 24px 80px; align-items: start;
 }
-.sidebar { position: sticky; top: 72px; max-height: calc(100vh - 96px); overflow-y: auto; padding: 8px 0; }
-.sidebar a {
+article { min-width: 0; }
+
+/* ── Sidebar (shared base) ── */
+.sidebar {
+  position: sticky; top: 64px;
+  max-height: calc(100vh - 80px);
+  overflow-y: auto;
+  padding: 8px 0 40px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0,0,0,0.15) transparent;
+}
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 2px; }
+
+@media (prefers-color-scheme: dark) {
+  .sidebar { scrollbar-color: rgba(255,255,255,0.15) transparent; }
+  .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); }
+}
+
+/* ── Feature Sidebar (flat links) ── */
+.sidebar > a {
   display: block; font-size: 13px; color: var(--text-3); text-decoration: none;
-  padding: 5px 12px; border-left: 2px solid transparent; transition: all 0.2s;
-  line-height: 1.4;
+  padding: 5px 8px; transition: color 0.2s; line-height: 1.4;
+  border-left: 2px solid transparent;
 }
-.sidebar a:hover { color: var(--text-2); }
-.sidebar a.active { color: var(--accent); border-left-color: var(--accent); font-weight: 500; }
-.sidebar a.toc-h3 { padding-left: 24px; font-size: 12px; }
+.sidebar > a:hover { color: var(--text-2); }
+.sidebar > a.active {
+  color: var(--accent); border-left-color: var(--accent); font-weight: 500;
+}
+.sidebar > a.toc-h3 {
+  padding-left: 20px; font-size: 12px;
+}
+
+/* ── Report Sidebar (collapsible tree) ── */
+.toc-section { margin-bottom: 2px; }
+
+.toc-parent {
+  display: flex; align-items: center;
+}
+
+.toc-toggle {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 16px; height: 16px; flex-shrink: 0;
+  font-size: 8px; color: var(--text-3);
+  cursor: pointer; transition: transform 0.2s ease;
+  user-select: none; border: none; background: none; padding: 0;
+}
+.toc-section.expanded .toc-toggle { transform: rotate(90deg); }
+
+.toc-spacer { width: 16px; flex-shrink: 0; }
+
+.toc-parent > a {
+  display: block; font-size: 13px; color: var(--text-3); text-decoration: none;
+  padding: 5px 8px; transition: color 0.2s; line-height: 1.4;
+  border-left: 2px solid transparent;
+}
+.toc-parent > a:hover { color: var(--text-2); }
+.toc-parent > a.active {
+  color: var(--accent); border-left-color: var(--accent); font-weight: 500;
+}
+/* Current page highlight in report sidebar */
+.toc-parent > a.current {
+  color: var(--text); font-weight: 600;
+}
+
+.toc-children {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+.toc-section.expanded .toc-children { max-height: 2000px; }
+
+.toc-children a {
+  display: block; font-size: 12px; color: var(--text-3); text-decoration: none;
+  padding: 4px 8px 4px 36px; transition: color 0.2s; line-height: 1.4;
+  border-left: 2px solid transparent;
+}
+.toc-children a:hover { color: var(--text-2); }
+.toc-children a.active {
+  color: var(--accent); border-left-color: var(--accent); font-weight: 500;
+}
+.toc-children a.toc-h3 {
+  padding-left: 48px;
+}
+
 .sidebar-toggle {
   display: none; background: var(--bg-alt); border: 1px solid var(--border);
   border-radius: 8px; padding: 10px 16px; width: 100%; text-align: left;
   font-size: 14px; color: var(--text-2); cursor: pointer; margin-bottom: 24px;
   font-family: var(--font-body);
 }
-article { min-width: 0; }
 
-/* ── Data tables ── */
-.data-table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 15px; }
+/* ── Architecture Diagram ── */
+.arch-wrap {
+  margin: 0 0 40px; overflow-x: auto;
+}
+.arch-diagram {
+  width: 100%; max-width: 800px; height: auto;
+  display: block; margin: 0 auto;
+}
+
+/* ── Data Tables ── */
+.table-wrap { overflow-x: auto; margin: 24px 0; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 15px; }
 .data-table th {
   text-align: left; font-weight: 600; font-size: 13px; color: var(--text-2);
   padding: 10px 16px; border-bottom: 1px solid var(--border);
   letter-spacing: 0.02em;
 }
-.data-table td { padding: 10px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top; }
+.data-table td {
+  padding: 10px 16px; border-bottom: 1px solid var(--border);
+  color: var(--text-2); vertical-align: top;
+}
 .data-table tr:nth-child(even) td { background: var(--table-stripe); }
 .data-table td strong { color: var(--text); }
 .data-table code { font-size: 0.8em; }
@@ -229,21 +481,61 @@ article { min-width: 0; }
 }
 .callout strong { color: var(--text); }
 
-/* ── Details ── */
-details { margin: 24px 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+/* Tooling callout (special) */
+.callout-link {
+  background: var(--gold-subtle);
+  border-left: 4px solid var(--gold);
+  border-radius: 12px; padding: 20px 24px; margin: 24px 0;
+  font-size: 15px; color: var(--text-2);
+  display: flex; align-items: center; gap: 12px;
+}
+.callout-link a { font-weight: 600; }
+.callout-link svg { flex-shrink: 0; color: var(--gold); }
+
+/* ── Details / Accordion ── */
+details {
+  margin: 24px 0; border: 1px solid var(--border);
+  border-radius: 12px; overflow: hidden;
+}
 details summary {
   cursor: pointer; padding: 16px 20px; font-weight: 600; color: var(--text);
-  list-style: none; display: flex; align-items: center; justify-content: space-between;
+  list-style: none;
+  display: flex; align-items: center; gap: 12px;
   transition: background 0.2s;
 }
 details summary:hover { background: var(--bg-alt); }
 details summary::-webkit-details-marker { display: none; }
-details summary::after { content: "+"; font-weight: 400; color: var(--text-3); font-size: 20px; }
-details[open] summary::after { content: "\2212"; }
-details > div, details > p, details > table { padding: 0 20px 16px; }
+
+details summary::before {
+  content: "\25B6"; font-size: 9px; color: var(--text-3);
+  transition: transform 0.2s ease; display: inline-block;
+  flex-shrink: 0; width: 12px;
+}
+details[open] summary::before { transform: rotate(90deg); }
+
+details > div, details > p, details > table, details > .table-wrap {
+  padding: 4px 20px 20px;
+}
 details .data-table { margin: 0 0 8px; }
 
-/* ── Prev/Next nav ── */
+/* ── Back to Top Button ── */
+.back-to-top {
+  position: fixed; bottom: 32px; right: 32px; z-index: 90;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--bg-card); border: 1px solid var(--border);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  color: var(--text-2); transition: opacity 0.3s, transform 0.3s, color 0.2s;
+  opacity: 0; pointer-events: none; transform: translateY(8px);
+}
+.back-to-top.visible {
+  opacity: 1; pointer-events: auto; transform: translateY(0);
+}
+.back-to-top:hover {
+  color: var(--accent); border-color: var(--accent);
+}
+
+/* ── Prev/Next Nav ── */
 .page-nav {
   display: flex; justify-content: space-between; margin-top: 80px;
   padding-top: 32px; border-top: 1px solid var(--border);
@@ -253,10 +545,14 @@ details .data-table { margin: 0 0 8px; }
   transition: color 0.2s; max-width: 45%;
 }
 .page-nav a:hover { color: var(--accent); }
-.page-nav .nav-label { font-size: 12px; color: var(--text-3); display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 500; }
+.page-nav .nav-label {
+  font-size: 12px; color: var(--text-3); display: block; margin-bottom: 4px;
+  text-transform: uppercase; letter-spacing: 0.04em; font-weight: 500;
+}
 .page-nav .next { text-align: right; margin-left: auto; }
 
 /* ── Footer ── */
+.footer-wrap { border-top: 1px solid var(--border); margin-top: 80px; }
 .site-footer {
   border-top: 1px solid var(--border); padding: 24px; margin-top: 0;
   display: flex; justify-content: space-between; align-items: center;
@@ -264,39 +560,63 @@ details .data-table { margin: 0 0 8px; }
 }
 .site-footer a { color: var(--text-3); text-decoration: none; }
 .site-footer a:hover { color: var(--accent); }
-.footer-wrap { border-top: 1px solid var(--border); margin-top: 80px; }
+
+/* ── Konami Easter Egg ── */
+.konami-flash {
+  position: fixed; inset: 0; z-index: 9999;
+  pointer-events: none;
+  background: radial-gradient(circle at center, rgba(201,168,76,0.3) 0%, transparent 70%);
+  animation: konamiPulse 1.2s ease-out forwards;
+}
+@keyframes konamiPulse {
+  0% { opacity: 0; }
+  20% { opacity: 1; }
+  100% { opacity: 0; }
+}
 
 /* ── Animations ── */
-.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s cubic-bezier(0.25,0.46,0.45,0.94), transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94); }
+.reveal {
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.7s cubic-bezier(0.25,0.46,0.45,0.94),
+              transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94);
+}
 .reveal.visible { opacity: 1; transform: none; }
+
 @media (prefers-reduced-motion: reduce) {
   .reveal { opacity: 1; transform: none; transition: none; }
-  .card { transition: none; }
-  .card:hover { transform: none; }
+  .card, .pillar-card { transition: none; }
+  .card:hover, .pillar-card:hover { transform: none; }
+  .back-to-top { transition: none; }
+  .konami-flash { animation: none; }
 }
 
 /* ── Responsive ── */
 @media (max-width: 1024px) {
   .page-layout { grid-template-columns: 1fr; gap: 0; }
-  .sidebar { display: none; }
+  .sidebar { display: none; position: static; max-height: none; }
+  .sidebar.mobile-open { display: block; }
   .sidebar-toggle { display: block; }
-  .summary-grid { grid-template-columns: 1fr 1fr; }
+  .pillars-grid { grid-template-columns: 1fr 1fr; }
   .cards-grid { grid-template-columns: 1fr 1fr; }
 }
+
 @media (max-width: 768px) {
   h1 { font-size: 36px; }
   h2 { font-size: 26px; margin-top: 48px; }
   h3 { font-size: 20px; margin-top: 32px; }
   .nav-links { display: none; }
   .nav-menu-btn { display: block; }
-  .summary-grid { grid-template-columns: 1fr; gap: 32px; }
+  .pillars-grid { grid-template-columns: 1fr; }
   .cards-grid { grid-template-columns: 1fr; }
   .stat-ribbon { flex-direction: column; gap: 20px; }
   .stat-sep { width: 40px; height: 1px; }
   .page-nav { flex-direction: column; gap: 16px; }
   .page-nav .next { text-align: left; margin-left: 0; }
-  .hero { padding-top: 72px; }
+  .hero { padding-top: 80px; }
   .page-header { padding-top: 64px; }
+  .timeline-entry { flex-direction: column; gap: 4px; }
+  .timeline-date { width: auto; }
+  .back-to-top { bottom: 20px; right: 20px; width: 40px; height: 40px; }
 }
 </style>
 </head>
@@ -304,23 +624,23 @@ details .data-table { margin: 0 0 8px; }
 <nav class="site-nav" role="navigation" aria-label="Main">
 <div class="nav-inner">
 <a href="index.html" class="nav-logo">VoxCore</a>
-<div class="nav-links"><a href="data-import.html">Import</a><a href="npc-audits.html">NPCs</a><a href="quest-localization.html" class="active">Quests</a><a href="database-cleanup.html">Cleanup</a><a href="performance.html">Performance</a><a href="placement.html">Placement</a><a href="results.html">Tooling</a><a href="hotfix-audit.html">Hotfix Audit</a><a href="discoveries.html">Discoveries</a><a href="reference.html">Timeline</a></div>
+<div class="nav-links"><a href="framework.html">Framework</a><a href="data-import.html" class="active">Report</a><a href="tooling.html">Tooling</a><a href="ai-workflow.html">AI Workflow</a><a href="opensource.html">Open Source</a></div>
 <div class="nav-end">
-<a href="https://github.com/VoxCore84/roleplaycore-report" class="nav-github" aria-label="GitHub"><svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg></a>
+<a href="https://github.com/VoxCore84/RoleplayCore" class="nav-github" aria-label="GitHub" target="_blank" rel="noopener"><svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg></a>
 <button class="nav-menu-btn" aria-label="Menu" aria-expanded="false">
 <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
 </button>
 </div>
 </div>
 </nav>
-<div class="mobile-nav" role="dialog" aria-label="Navigation"><a href="data-import.html">Data Import & Hotfix Repair</a><a href="npc-audits.html">NPC Audits & Corrections</a><a href="quest-localization.html">Quests & Localization</a><a href="database-cleanup.html">Database Cleanup & Integrity</a><a href="performance.html">Performance & Build Diff</a><a href="placement.html">Placement Audits</a><a href="results.html">Tooling & Results</a><a href="hotfix-audit.html">Hotfix Redundancy Audit</a><a href="discoveries.html">Discoveries & Lessons</a><a href="reference.html">Timeline & Reference</a></div>
+<div class="mobile-nav" role="dialog" aria-label="Navigation"><a href="framework.html">The Framework</a><a href="tooling.html">Tooling</a><a href="ai-workflow.html">AI Workflow</a><a href="opensource.html">Open Source</a><div class="mobile-sep"></div><a href="data-import.html">Data Import & Hotfix Repair</a><a href="npc-audits.html">NPC Audits & Corrections</a><a href="quest-localization.html">Quests & Localization</a><a href="database-cleanup.html">Database Cleanup & Integrity</a><a href="performance.html">Performance & Build Diff</a><a href="placement.html">Placement Audits</a><a href="results.html">Tooling & Results</a><a href="hotfix-audit.html">Hotfix Redundancy Audit</a><a href="discoveries.html">Discoveries & Lessons</a><a href="reference.html">Timeline & Reference</a></div>
 <main>
 <header class="page-header">
-<nav class="breadcrumb"><a href="index.html">VoxCore</a> &rsaquo; Quests & Localization</nav>
+<nav class="breadcrumb"><a href="index.html">VoxCore</a> &rsaquo; <a href="index.html#report">Report</a> &rsaquo; Quests & Localization</nav>
 <h1>Quests & Localization</h1>
 </header>
 <div class="page-layout">
-<button class="sidebar-toggle">On this page</button><nav class="sidebar" aria-label="Table of contents"><a href="#quest-system-enrichment" class="">Quest System Enrichment</a><a href="#41-quest-chains" class="toc-h3">4.1 Quest Chains</a><a href="#42-quest-points-of-interest-poi" class="toc-h3">4.2 Quest Points of Interest (POI)</a><a href="#43-quest-objectives" class="toc-h3">4.3 Quest Objectives</a><a href="#44-quest-starters-enders" class="toc-h3">4.4 Quest Starters & Enders</a><a href="#45-heros-call-warchiefs-command-board-dedup" class="toc-h3">4.5 Hero's Call / Warchief's Command Board Dedup</a><a href="#localization" class="">Localization</a><a href="#51-item-locales-from-raidbots" class="toc-h3">5.1 Item Locales (from Raidbots)</a></nav>
+<button class="sidebar-toggle">Report sections</button><nav class="sidebar" aria-label="Report navigation"><div class="toc-section"><div class="toc-parent"><button class="toc-toggle" aria-label="Expand">&#9654;</button><a href="data-import.html" class="toc-page">Data Import & Hotfix Repair</a></div><div class="toc-children"><a href="data-import.html#lorewalkertdb-integration">LoreWalkerTDB Integration</a><a href="data-import.html#hotfix-repair-system">Hotfix Repair System</a></div></div><div class="toc-section"><div class="toc-parent"><button class="toc-toggle" aria-label="Expand">&#9654;</button><a href="npc-audits.html" class="toc-page">NPC Audits & Corrections</a></div><div class="toc-children"><a href="npc-audits.html#npc-audits-corrections">NPC Audits & Corrections</a></div></div><div class="toc-section expanded"><div class="toc-parent"><button class="toc-toggle" aria-label="Expand">&#9654;</button><a href="quest-localization.html" class="toc-page current">Quests & Localization</a></div><div class="toc-children"><a href="#quest-system-enrichment">Quest System Enrichment</a><a href="#41-quest-chains" class="toc-h3">4.1 Quest Chains</a><a href="#42-quest-points-of-interest-poi" class="toc-h3">4.2 Quest Points of Interest (POI)</a><a href="#43-quest-objectives" class="toc-h3">4.3 Quest Objectives</a><a href="#44-quest-starters-enders" class="toc-h3">4.4 Quest Starters & Enders</a><a href="#45-heros-call-warchiefs-command-board-dedup" class="toc-h3">4.5 Hero's Call / Warchief's Command Board Dedup</a><a href="#localization">Localization</a><a href="#51-item-locales-from-raidbots" class="toc-h3">5.1 Item Locales (from Raidbots)</a></div></div><div class="toc-section"><div class="toc-parent"><button class="toc-toggle" aria-label="Expand">&#9654;</button><a href="database-cleanup.html" class="toc-page">Database Cleanup & Integrity</a></div><div class="toc-children"><a href="database-cleanup.html#database-cleanup-integrity">Database Cleanup & Integrity</a></div></div><div class="toc-section"><div class="toc-parent"><button class="toc-toggle" aria-label="Expand">&#9654;</button><a href="performance.html" class="toc-page">Performance & Build Diff</a></div><div class="toc-children"><a href="performance.html#mysql-server-performance">MySQL & Server Performance</a><a href="performance.html#build-diff-audit-5-builds">Build Diff Audit (5 Builds)</a></div></div><div class="toc-section"><div class="toc-parent"><button class="toc-toggle" aria-label="Expand">&#9654;</button><a href="placement.html" class="toc-page">Placement Audits</a></div><div class="toc-children"><a href="placement.html#placement-audits">Placement Audits</a></div></div><div class="toc-section"><div class="toc-parent"><button class="toc-toggle" aria-label="Expand">&#9654;</button><a href="results.html" class="toc-page">Tooling & Results</a></div><div class="toc-children"><a href="results.html#custom-tooling-summary">Custom Tooling Summary</a><a href="results.html#final-database-state">Final Database State</a><a href="results.html#what-it-all-means-for-players">What It All Means for Players</a></div></div><div class="toc-section"><div class="toc-parent"><button class="toc-toggle" aria-label="Expand">&#9654;</button><a href="hotfix-audit.html" class="toc-page">Hotfix Redundancy Audit</a></div><div class="toc-children"><a href="hotfix-audit.html#hotfix-redundancy-audit-complete">Hotfix Redundancy Audit (Complete)</a></div></div><div class="toc-section"><div class="toc-parent"><button class="toc-toggle" aria-label="Expand">&#9654;</button><a href="discoveries.html" class="toc-page">Discoveries & Lessons</a></div><div class="toc-children"><a href="discoveries.html#discoveries-lessons-useful-for-the-community">Discoveries & Lessons (Useful for the Community)</a></div></div><div class="toc-section"><div class="toc-parent"><button class="toc-toggle" aria-label="Expand">&#9654;</button><a href="reference.html" class="toc-page">Timeline & Reference</a></div><div class="toc-children"><a href="reference.html#timeline">Timeline</a><a href="reference.html#complete-tooling-catalog">Complete Tooling Catalog</a><a href="reference.html#appendix-a-data-sources">Appendix A: Data Sources</a><a href="reference.html#appendix-b-reproducibility">Appendix B: Reproducibility</a></div></div></nav>
 <article>
 <h2 id="quest-system-enrichment">Quest System Enrichment</h2>
 <h3 id="41-quest-chains">4.1 Quest Chains</h3>
@@ -350,15 +670,17 @@ details .data-table { margin: 0 0 8px; }
 </article>
 </div>
 </main>
+<button class="back-to-top" aria-label="Back to top">
+<svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M18 15l-6-6-6 6"/></svg>
+</button>
 <div class="footer-wrap"><footer class="site-footer">
 <span>VoxCore &mdash; March 2026</span>
-<a href="https://github.com/VoxCore84/roleplaycore-report">GitHub</a>
+<a href="https://github.com/VoxCore84/RoleplayCore">GitHub</a>
 </footer></div>
 <script>(function(){
-  // Reduced motion check
   var rm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // Scroll reveal
+  // ── Scroll reveal ──
   if (!rm) {
     var obs = new IntersectionObserver(function(entries) {
       entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('visible'); });
@@ -368,7 +690,7 @@ details .data-table { margin: 0 0 8px; }
     document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('visible'); });
   }
 
-  // Count-up animation
+  // ── Count-up animation ──
   document.querySelectorAll('[data-countup]').forEach(function(el) {
     if (rm) return;
     var o = new IntersectionObserver(function(entries) {
@@ -395,7 +717,7 @@ details .data-table { margin: 0 0 8px; }
     requestAnimationFrame(tick);
   }
 
-  // Mobile nav
+  // ── Mobile nav ──
   var btn = document.querySelector('.nav-menu-btn');
   var mn = document.querySelector('.mobile-nav');
   if (btn && mn) {
@@ -405,53 +727,102 @@ details .data-table { margin: 0 0 8px; }
     });
   }
 
-  // Nav scroll fade — remove mask when scrolled to end
-  var nl = document.querySelector('.nav-links');
-  if (nl) {
-    function checkFade() {
-      if (nl.scrollWidth <= nl.clientWidth || nl.scrollLeft + nl.clientWidth >= nl.scrollWidth - 4) {
-        nl.classList.add('no-fade');
-      } else {
-        nl.classList.remove('no-fade');
-      }
-    }
-    nl.addEventListener('scroll', checkFade);
-    checkFade();
-    window.addEventListener('resize', checkFade);
-  }
+  // ── Sidebar TOC ──
+  var sidebar = document.querySelector('.sidebar');
+  if (sidebar) {
+    var sections = sidebar.querySelectorAll('.toc-section');
+    var isReportSidebar = sections.length > 0;
 
-  // Sidebar TOC active tracking
-  var tocLinks = document.querySelectorAll('.sidebar a');
-  if (tocLinks.length > 0) {
+    // Toggle expand/collapse on triangle click (report sidebar)
+    sections.forEach(function(section) {
+      var toggle = section.querySelector('.toc-toggle');
+      if (toggle) {
+        toggle.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          section.classList.toggle('expanded');
+        });
+      }
+    });
+
+    // Scroll-spy: collect all local anchor links
+    var allLinks = sidebar.querySelectorAll('a[href^="#"]');
     var headings = [];
-    tocLinks.forEach(function(a) {
+    allLinks.forEach(function(a) {
       var id = a.getAttribute('href');
-      if (id && id.charAt(0) === '#') {
+      if (id && id.length > 1) {
         var el = document.getElementById(id.slice(1));
         if (el) headings.push({ el: el, link: a });
       }
     });
-    var tocObs = new IntersectionObserver(function(entries) {
-      entries.forEach(function(e) {
-        if (e.isIntersecting) {
-          tocLinks.forEach(function(l) { l.classList.remove('active'); });
-          headings.forEach(function(h) {
-            if (h.el === e.target) h.link.classList.add('active');
-          });
-        }
-      });
-    }, { rootMargin: '-80px 0px -60% 0px' });
-    headings.forEach(function(h) { tocObs.observe(h.el); });
+
+    if (headings.length > 0) {
+      var tocObs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            // Clear active on local links only
+            allLinks.forEach(function(l) { l.classList.remove('active'); });
+
+            headings.forEach(function(h) {
+              if (h.el === entry.target) {
+                h.link.classList.add('active');
+
+                // Auto-expand the parent toc-section if in report sidebar
+                if (isReportSidebar) {
+                  var parentSection = h.link.closest('.toc-section');
+                  if (parentSection) parentSection.classList.add('expanded');
+                }
+              }
+            });
+          }
+        });
+      }, { rootMargin: '-80px 0px -60% 0px' });
+
+      headings.forEach(function(h) { tocObs.observe(h.el); });
+    }
   }
 
-  // Sidebar toggle (mobile/tablet)
+  // ── Sidebar toggle (tablet/mobile) ──
   var st = document.querySelector('.sidebar-toggle');
   var sb = document.querySelector('.sidebar');
   if (st && sb) {
     st.addEventListener('click', function() {
-      sb.style.display = sb.style.display === 'block' ? 'none' : 'block';
+      sb.classList.toggle('mobile-open');
     });
   }
+
+  // ── Back to top button ──
+  var btt = document.querySelector('.back-to-top');
+  if (btt) {
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 600) {
+        btt.classList.add('visible');
+      } else {
+        btt.classList.remove('visible');
+      }
+    }, { passive: true });
+    btt.addEventListener('click', function() {
+      window.scrollTo({ top: 0, behavior: rm ? 'auto' : 'smooth' });
+    });
+  }
+
+  // ── Konami Code Easter Egg ──
+  var konamiSeq = [38,38,40,40,37,39,37,39,66,65];
+  var konamiPos = 0;
+  document.addEventListener('keydown', function(e) {
+    if (e.keyCode === konamiSeq[konamiPos]) {
+      konamiPos++;
+      if (konamiPos === konamiSeq.length) {
+        konamiPos = 0;
+        var flash = document.createElement('div');
+        flash.className = 'konami-flash';
+        document.body.appendChild(flash);
+        setTimeout(function() { flash.remove(); }, 1300);
+      }
+    } else {
+      konamiPos = 0;
+    }
+  });
 })();
 </script>
 </body>

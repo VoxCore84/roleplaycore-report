@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hotfix Redundancy Audit — VoxCore</title>
+<title>The Framework — VoxCore</title>
 <meta name="description" content="VoxCore — An AI-assisted open source MMO framework built on TrinityCore for WoW 12.x Midnight">
 <style>/* ══════════════════════════════════════════════════════════════════════════
    VoxCore Design System — Apple HIG x Warcraft Atmosphere
@@ -624,7 +624,7 @@ details .data-table { margin: 0 0 8px; }
 <nav class="site-nav" role="navigation" aria-label="Main">
 <div class="nav-inner">
 <a href="index.html" class="nav-logo">VoxCore</a>
-<div class="nav-links"><a href="framework.html">Framework</a><a href="data-import.html" class="active">Report</a><a href="tooling.html">Tooling</a><a href="ai-workflow.html">AI Workflow</a><a href="opensource.html">Open Source</a></div>
+<div class="nav-links"><a href="framework.html" class="active">Framework</a><a href="data-import.html">Report</a><a href="tooling.html">Tooling</a><a href="ai-workflow.html">AI Workflow</a><a href="opensource.html">Open Source</a></div>
 <div class="nav-end">
 <a href="https://github.com/VoxCore84/RoleplayCore" class="nav-github" aria-label="GitHub" target="_blank" rel="noopener"><svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg></a>
 <button class="nav-menu-btn" aria-label="Menu" aria-expanded="false">
@@ -636,43 +636,102 @@ details .data-table { margin: 0 0 8px; }
 <div class="mobile-nav" role="dialog" aria-label="Navigation"><a href="framework.html">The Framework</a><a href="tooling.html">Tooling</a><a href="ai-workflow.html">AI Workflow</a><a href="opensource.html">Open Source</a><div class="mobile-sep"></div><a href="data-import.html">Data Import & Hotfix Repair</a><a href="npc-audits.html">NPC Audits & Corrections</a><a href="quest-localization.html">Quests & Localization</a><a href="database-cleanup.html">Database Cleanup & Integrity</a><a href="performance.html">Performance & Build Diff</a><a href="placement.html">Placement Audits</a><a href="results.html">Tooling & Results</a><a href="hotfix-audit.html">Hotfix Redundancy Audit</a><a href="discoveries.html">Discoveries & Lessons</a><a href="reference.html">Timeline & Reference</a></div>
 <main>
 <header class="page-header">
-<nav class="breadcrumb"><a href="index.html">VoxCore</a> &rsaquo; <a href="index.html#report">Report</a> &rsaquo; Hotfix Redundancy Audit</nav>
-<h1>Hotfix Redundancy Audit</h1>
+<nav class="breadcrumb"><a href="index.html">VoxCore</a> &rsaquo; The Framework</nav>
+<h1>The Framework</h1>
 </header>
 <div class="page-layout">
-<button class="sidebar-toggle">Report sections</button><nav class="sidebar" aria-label="Report navigation"><div class="toc-section"><div class="toc-parent"><button class="toc-toggle" aria-label="Expand">&#9654;</button><a href="data-import.html" class="toc-page">Data Import & Hotfix Repair</a></div><div class="toc-children"><a href="data-import.html#lorewalkertdb-integration">LoreWalkerTDB Integration</a><a href="data-import.html#hotfix-repair-system">Hotfix Repair System</a></div></div><div class="toc-section"><div class="toc-parent"><button class="toc-toggle" aria-label="Expand">&#9654;</button><a href="npc-audits.html" class="toc-page">NPC Audits & Corrections</a></div><div class="toc-children"><a href="npc-audits.html#npc-audits-corrections">NPC Audits & Corrections</a></div></div><div class="toc-section"><div class="toc-parent"><button class="toc-toggle" aria-label="Expand">&#9654;</button><a href="quest-localization.html" class="toc-page">Quests & Localization</a></div><div class="toc-children"><a href="quest-localization.html#quest-system-enrichment">Quest System Enrichment</a><a href="quest-localization.html#localization">Localization</a></div></div><div class="toc-section"><div class="toc-parent"><button class="toc-toggle" aria-label="Expand">&#9654;</button><a href="database-cleanup.html" class="toc-page">Database Cleanup & Integrity</a></div><div class="toc-children"><a href="database-cleanup.html#database-cleanup-integrity">Database Cleanup & Integrity</a></div></div><div class="toc-section"><div class="toc-parent"><button class="toc-toggle" aria-label="Expand">&#9654;</button><a href="performance.html" class="toc-page">Performance & Build Diff</a></div><div class="toc-children"><a href="performance.html#mysql-server-performance">MySQL & Server Performance</a><a href="performance.html#build-diff-audit-5-builds">Build Diff Audit (5 Builds)</a></div></div><div class="toc-section"><div class="toc-parent"><button class="toc-toggle" aria-label="Expand">&#9654;</button><a href="placement.html" class="toc-page">Placement Audits</a></div><div class="toc-children"><a href="placement.html#placement-audits">Placement Audits</a></div></div><div class="toc-section"><div class="toc-parent"><button class="toc-toggle" aria-label="Expand">&#9654;</button><a href="results.html" class="toc-page">Tooling & Results</a></div><div class="toc-children"><a href="results.html#custom-tooling-summary">Custom Tooling Summary</a><a href="results.html#final-database-state">Final Database State</a><a href="results.html#what-it-all-means-for-players">What It All Means for Players</a></div></div><div class="toc-section expanded"><div class="toc-parent"><button class="toc-toggle" aria-label="Expand">&#9654;</button><a href="hotfix-audit.html" class="toc-page current">Hotfix Redundancy Audit</a></div><div class="toc-children"><a href="#hotfix-redundancy-audit-complete">Hotfix Redundancy Audit (Complete)</a><a href="#131-the-problem" class="toc-h3">13.1 The Problem</a><a href="#132-approach-3-round-audit" class="toc-h3">13.2 Approach: 3-Round Audit</a><a href="#133-round-1-discovery" class="toc-h3">13.3 Round 1 — Discovery</a><a href="#134-round-2-refined-diff" class="toc-h3">13.4 Round 2 — Refined Diff</a><a href="#135-round-3-type-aware-cleanup" class="toc-h3">13.5 Round 3 — Type-Aware Cleanup</a><a href="#136-final-results" class="toc-h3">13.6 Final Results</a><a href="#137-safety" class="toc-h3">13.7 Safety</a><a href="#138-what-this-fixed-in-game" class="toc-h3">13.8 What This Fixed In-Game</a><a href="#139-reproducibility" class="toc-h3">13.9 Reproducibility</a></div></div><div class="toc-section"><div class="toc-parent"><button class="toc-toggle" aria-label="Expand">&#9654;</button><a href="discoveries.html" class="toc-page">Discoveries & Lessons</a></div><div class="toc-children"><a href="discoveries.html#discoveries-lessons-useful-for-the-community">Discoveries & Lessons (Useful for the Community)</a></div></div><div class="toc-section"><div class="toc-parent"><button class="toc-toggle" aria-label="Expand">&#9654;</button><a href="reference.html" class="toc-page">Timeline & Reference</a></div><div class="toc-children"><a href="reference.html#timeline">Timeline</a><a href="reference.html#complete-tooling-catalog">Complete Tooling Catalog</a><a href="reference.html#appendix-a-data-sources">Appendix A: Data Sources</a><a href="reference.html#appendix-b-reproducibility">Appendix B: Reproducibility</a></div></div></nav>
+<button class="sidebar-toggle">On this page</button><nav class="sidebar" aria-label="Table of contents"><a href="#architecture">Architecture</a><a href="#five-databases">Five Databases</a><a href="#custom-systems">Custom Systems</a><a href="#sroleplay-singleton" class="toc-h3">sRoleplay Singleton</a><a href="#custom-npc-system" class="toc-h3">Custom NPC System</a><a href="#display-system" class="toc-h3">Display System</a><a href="#visual-effects" class="toc-h3">Visual Effects</a><a href="#companion-squad" class="toc-h3">Companion Squad</a><a href="#transmog-outfits" class="toc-h3">Transmog Outfits</a><a href="#transmogbridge-addon" class="toc-h3">TransmogBridge Addon</a><a href="#player-morph-scale" class="toc-h3">Player Morph & Scale</a><a href="#creatureoutfit" class="toc-h3">CreatureOutfit</a><a href="#utility-scripts" class="toc-h3">Utility Scripts</a><a href="#rp-vs-stock">RP vs Stock</a><a href="#in-game-commands">In-Game Commands</a><a href="#morph-scale" class="toc-h3">Morph & Scale</a><a href="#display" class="toc-h3">Display</a><a href="#visual-effects" class="toc-h3">Visual Effects</a><a href="#companion-squad" class="toc-h3">Companion Squad</a><a href="#custom-npcs" class="toc-h3">Custom NPCs</a><a href="#social-utility" class="toc-h3">Social & Utility</a></nav>
 <article>
-<h2 id="hotfix-redundancy-audit-complete">Hotfix Redundancy Audit (Complete)</h2>
-<h3 id="131-the-problem">13.1 The Problem</h3>
-<p>After the hotfix repair (<a href="data-import.html#part-2-hotfix-repair-system">Part 2</a>), the hotfix database carried <strong>~10.8M content rows</strong> across 517 tables. The hotfix system sends only <strong>corrections</strong> to client data — rows that override the client's built-in DBC/DB2 files. But 97.8% of those rows were <strong>identical</strong> to what the client already had. This:</p>
-<ul><li>Increased login time (every hotfix entry sent via SMSG_HOTFIX_CONNECT)</li><li>Required chunked packet delivery (<a href="performance.html#74-hotfix-pipeline-crash-fix-critical">Part 7.4</a>) just to avoid crashing</li><li>Wasted server memory caching duplicate data</li></ul>
-<h3 id="132-approach-3-round-audit">13.2 Approach: 3-Round Audit</h3>
-<p>A custom diff pipeline (<code>hotfix_audit/</code> in the repo) compares every hotfix row against DBC baselines extracted from the WoW 12.0.1.66220 client via <strong>wow.tools.local (WTL)</strong>. WTL extracts complete DB2 files from the client's CASC archive — more complete than Wago CSV exports, which can be partial.</p>
-<p>Each row is classified:</p>
-<div class="table-wrap"><table class="data-table"><thead><tr><th>Category</th><th>Meaning</th><th>Action</th></tr></thead><tbody><tr><td><strong>Redundant</strong></td><td>Identical to DBC baseline</td><td>DELETE</td></tr><tr><td><strong>Override</strong></td><td>Differs from baseline</td><td>KEEP (genuine correction)</td></tr><tr><td><strong>New</strong></td><td>Not in DBC at all</td><td>KEEP (custom/community content)</td></tr><tr><td><strong>Negative Build</strong></td><td>VerifiedBuild < 0</td><td>KEEP (TC deletion marker)</td></tr></tbody></table></div>
-<h3 id="133-round-1-discovery">13.3 Round 1 — Discovery</h3>
-<p>String-level comparison against DBC2CSV exports:</p>
-<div class="table-wrap"><table class="data-table"><thead><tr><th>Metric</th><th>Value</th></tr></thead><tbody><tr><td>Tables audited</td><td>388</td></tr><tr><td>Total rows examined</td><td>~10.8M</td></tr><tr><td>Redundant (string match)</td><td>~9.6M (88.9%)</td></tr><tr><td>Override</td><td>~468K</td></tr><tr><td>New (not in DBC)</td><td>~232K</td></tr></tbody></table></div>
-<h3 id="134-round-2-refined-diff">13.4 Round 2 — Refined Diff</h3>
-<div class="table-wrap"><table class="data-table"><thead><tr><th>Improvement</th><th>Details</th></tr></thead><tbody><tr><td>Better CSV baseline</td><td>WTL DBC2CSV instead of Wago partial exports</td></tr><tr><td>Column mapping fixes</td><td>Corrected array index off-by-one errors</td></tr><tr><td>Batch DELETE SQL</td><td>TRUNCATE for fully-redundant tables, IN-clause batches for partial</td></tr><tr><td>Orphan cleanup</td><td>175K orphaned hotfix_data entries (referencing deleted tables)</td></tr></tbody></table></div>
-<p>Removed ~204K additional redundant rows + 175K orphaned entries.</p>
-<h3 id="135-round-3-type-aware-cleanup">13.5 Round 3 — Type-Aware Cleanup</h3>
-<p>Introduced type-aware comparison to catch false negatives from string diffing:</p>
-<div class="table-wrap"><table class="data-table"><thead><tr><th>Fix</th><th>Details</th></tr></thead><tbody><tr><td><strong>Float32 precision</strong></td><td>IEEE 754 bit-level comparison via <code>struct.pack('f')</code> — MySQL FLOAT truncates to ~6 sig digits during serialization</td></tr><tr><td><strong>Signed/unsigned int32</strong></td><td>Same 32-bit pattern comparison (e.g., -1 == 4294967295 as uint32)</td></tr><tr><td><strong>Logical primary keys</strong></td><td><code>broadcast_text_duration</code> uses <code>(BroadcastTextID, Locale)</code> not <code>ID</code></td></tr><tr><td><strong>Array index mapping</strong></td><td>DB <code>Foo1</code> → CSV <code>Foo[0]</code> (1-indexed to 0-indexed)</td></tr></tbody></table></div>
-<p>Found 767,672 additional redundant rows across 109 tables.</p>
-<h3 id="136-final-results">13.6 Final Results</h3>
-<div class="table-wrap"><table class="data-table"><thead><tr><th>Metric</th><th>Before</th><th>After</th></tr></thead><tbody><tr><td><strong>Hotfix content rows</strong></td><td>~10.8M</td><td>~244,000</td></tr><tr><td><strong>Content reduction</strong></td><td>—</td><td><strong>97.8%</strong></td></tr><tr><td>hotfix_data entries</td><td>1,084,369</td><td>226,984</td></tr><tr><td>Hotfix DB on disk</td><td>1,309 MB</td><td>535 MB</td></tr></tbody></table></div>
-<div class="callout"><strong>Note.</strong> The content table cleanup (deleting redundant rows from tables like spell_name, spell_effect, etc.) was fully applied across all 3 rounds. The hotfix_data registry was cleaned through orphan removal in R2 and R3, reducing it from 1.08M to ~227K entries. These correspond to the ~244K genuine content rows (some content rows share hotfix_data entries).</div>
-<p><strong>Remaining ~244K content rows:</strong></p>
-<div class="table-wrap"><table class="data-table"><thead><tr><th>Category</th><th>Rows</th><th>Details</th></tr></thead><tbody><tr><td><strong>Overrides</strong></td><td>~8,400</td><td>Genuine corrections (chr_customization_choice, spell_item_enchantment, item_sparse, content_tuning, creature_display_info)</td></tr><tr><td><strong>New content</strong></td><td>~231,000</td><td>Not in client DBC — broadcast_text (~224K from TC community data), phase (~5,700), custom items (~400)</td></tr></tbody></table></div>
-<h3 id="137-safety">13.7 Safety</h3>
-<p>Three <code>db_snapshot.py</code> snapshots taken at each phase boundary. Each round's SQL applied only after verifying the previous round.</p>
-<h3 id="138-what-this-fixed-in-game">13.8 What This Fixed In-Game</h3>
-<ul><li><strong>Faster login</strong>: SMSG_HOTFIX_CONNECT sends far less data — ~244K content rows instead of 10.8M</li><li><strong>Eliminated crash risk</strong>: Payload now well within ByteBuffer limits without chunking</li><li><strong>Every remaining content row has a reason to exist</strong> — either a genuine correction or custom content</li></ul>
-<h3 id="139-reproducibility">13.9 Reproducibility</h3>
-<p>Tools in <code>hotfix_audit/</code> with full README. 3-step process: <code>build_table_info_r3.py</code> → <code>hotfix_differ_r3.py</code> → <code>gen_practical_sql_r3.py</code>.</p>
+<div class="arch-wrap reveal"><svg viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg" class="arch-diagram" role="img" aria-label="VoxCore architecture diagram">
+<rect x="30" y="20" width="170" height="56" rx="12" fill="var(--bg-alt)" stroke="var(--border)" stroke-width="1"/>
+<text x="115" y="44" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="14">WoW 12.x Client</text>
+<text x="115" y="62" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">Build 66220</text>
+<rect x="315" y="20" width="170" height="56" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1" stroke-opacity="0.4"/>
+<text x="400" y="44" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="14">Worldserver</text>
+<text x="400" y="62" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">C++20 &middot; 11 Systems</text>
+<rect x="600" y="20" width="170" height="56" rx="12" fill="var(--bg-alt)" stroke="var(--border)" stroke-width="1"/>
+<text x="685" y="44" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="14">MySQL 8.0</text>
+<text x="685" y="62" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">5 Databases</text>
+<rect x="30" y="136" width="170" height="56" rx="12" fill="var(--bg-alt)" stroke="var(--border)" stroke-width="1"/>
+<text x="115" y="160" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="14">Eluna Lua</text>
+<text x="115" y="178" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">Scripting Engine</text>
+<rect x="315" y="136" width="170" height="56" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1" stroke-opacity="0.4"/>
+<text x="400" y="160" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="14">Claude Code</text>
+<text x="400" y="178" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">17 Skills &middot; Agents</text>
+<rect x="600" y="136" width="170" height="56" rx="12" fill="var(--bg-alt)" stroke="var(--border)" stroke-width="1"/>
+<text x="685" y="160" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="14">MCP Servers</text>
+<text x="685" y="178" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">DB2 &middot; MySQL &middot; C++</text>
+<rect x="30" y="250" width="740" height="40" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1" stroke-opacity="0.2"/>
+<text x="400" y="275" text-anchor="middle" fill="var(--text-2)" font-family="var(--font-display)" font-weight="500" font-size="13">Python Pipeline &mdash; 60+ Tools</text>
+<line x1="200" y1="48" x2="315" y2="48" stroke="var(--border)" stroke-width="1.5"/>
+<line x1="485" y1="48" x2="600" y2="48" stroke="var(--border)" stroke-width="1.5"/>
+<line x1="115" y1="76" x2="115" y2="136" stroke="var(--border)" stroke-width="1.5"/>
+<line x1="400" y1="76" x2="400" y2="136" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.35"/>
+<line x1="685" y1="76" x2="685" y2="136" stroke="var(--border)" stroke-width="1.5"/>
+<line x1="200" y1="164" x2="315" y2="164" stroke="var(--border)" stroke-width="1.5"/>
+<line x1="485" y1="164" x2="600" y2="164" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.35"/>
+<line x1="115" y1="192" x2="115" y2="250" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="4 3"/>
+<line x1="400" y1="192" x2="400" y2="250" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.35" stroke-dasharray="4 3"/>
+<line x1="685" y1="192" x2="685" y2="250" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="4 3"/>
+</svg></div>
+<p>VoxCore is a TrinityCore fork targeting WoW 12.x / Midnight, built for roleplay. Eleven custom C++ systems transform stock GM debug tools into persistent, player-accessible features — morph, scale, visual effects, companion squads, custom NPCs, and a full transmog outfit system reverse-engineered from the 12.x client.</p>
+<h2 id="architecture">Architecture</h2>
+<p>Built on C++20 with CMake and Ninja. The server compiles in two configurations: Debug for development and RelWithDebInfo for runtime, where startup drops from 60 seconds to 17.</p>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Component</th><th>Detail</th></tr></thead><tbody><tr><td>Language</td><td>C++20 (structured bindings, <code>contains()</code>, <code>string_view</code>)</td></tr><tr><td>Build</td><td>CMake + Ninja, MSVC (Visual Studio 2022)</td></tr><tr><td>Scripting</td><td>Eluna Lua engine integrated</td></tr><tr><td>Runtime</td><td>17-second startup (RelWithDebInfo)</td></tr><tr><td>Database</td><td>MySQL 8.0 — five databases</td></tr></tbody></table></div>
+<p>All custom systems register through a single entry point (<code>custom_script_loader.cpp</code>) and share state through the <code>sRoleplay</code> singleton, backed by a dedicated fifth database.</p>
 <hr>
-<nav class="page-nav"><a href="results.html" class="prev"><span class="nav-label">Previous</span>← Tooling & Results</a><a href="discoveries.html" class="next"><span class="nav-label">Next</span>Discoveries & Lessons →</a></nav>
+<h2 id="five-databases">Five Databases</h2>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Database</th><th>Purpose</th></tr></thead><tbody><tr><td><code>auth</code></td><td>Accounts, RBAC permissions (custom range 1000+)</td></tr><tr><td><code>characters</code></td><td>Player data, inventories, companions, transmog outfits</td></tr><tr><td><code>world</code></td><td>Game world — creatures, items, spells, SmartAI, spawns</td></tr><tr><td><code>hotfixes</code></td><td>Client hotfix overrides (387 tables, ~227K registry entries)</td></tr><tr><td><code>roleplay</code></td><td>Custom: creature extras, custom NPCs, player morph, server settings</td></tr></tbody></table></div>
+<hr>
+<h2 id="custom-systems">Custom Systems</h2>
+<h3 id="sroleplay-singleton">sRoleplay Singleton</h3>
+<p>The central custom system. Loads at world startup, manages creature extras, custom NPCs, and player extras across all other systems. Located at <code>src/server/game/RolePlay/</code>.</p>
+<h3 id="custom-npc-system">Custom NPC System</h3>
+<p>Create fully customizable player-race NPCs from scratch — no pre-existing template required. Over 20 subcommands cover creation, equipment, appearance, and spawning.</p>
+<ul><li><strong>Command:</strong> <code>.cnpc</code> (alias: <code>.customnpc</code>)</li><li><strong>Workflow:</strong> <code>.cnpc add</code> → <code>.cnpc set</code> → <code>.cnpc equip</code> → <code>.cnpc spawn</code></li></ul>
+<h3 id="display-system">Display System</h3>
+<p>Per-slot item appearance overrides. Any item visual on any equipment slot, no collection required, no NPC visit needed. Fourteen slots supported.</p>
+<ul><li><strong>Command:</strong> <code>.display <slot> <itemId></code></li></ul>
+<h3 id="visual-effects">Visual Effects</h3>
+<p>Persistent SpellVisualKit effects that survive relog and automatically sync to late-joining observers. Ten subcommands across self and target variants including persistent add, timed cast, channel beams, and toggle.</p>
+<ul><li><strong>Command:</strong> <code>.effect self|target add|cast|channel|toggle|remove|reset</code></li></ul>
+<h3 id="companion-squad">Companion Squad</h3>
+<p>AI companion NPCs that follow and fight alongside you. Role-based AI with tank, healer, and DPS behaviors. Five seed companions across Warrior, Rogue, Hunter, Mage, and Priest classes.</p>
+<ul><li><strong>Command:</strong> <code>.comp</code></li><li><strong>Status:</strong> In progress</li></ul>
+<h3 id="transmog-outfits">Transmog Outfits</h3>
+<p>Full wardrobe outfit handling for the 12.x client. Four CMSG packet parsers reverse-engineered from hex dumps. Fourteen of fourteen manual transmog clicks working, thirteen of fourteen outfit loads confirmed.</p>
+<p>The critical discovery: all four outfit packets send the transmogrifier NPC's GUID, not the player's. This blocked all operations for over a day before being identified — the validation check silently rejected every request at DEBUG log level.</p>
+<ul><li><strong>Slot mapping:</strong> 15 slots including secondary shoulder</li><li><strong>Spell effect 347:</strong> <code>SPELL_EFFECT_EQUIP_TRANSMOG_OUTFIT</code></li></ul>
+<h3 id="transmogbridge-addon">TransmogBridge Addon</h3>
+<p>Client addon that patches a serializer bug in the 12.x wardrobe system. The client omits head, main-hand, off-hand, and enchant slots from outfit update packets. TransmogBridge intercepts the incomplete data, merges it with a pre-snapshot of the full outfit state, and sends the corrected payload via addon messaging.</p>
+<ul><li><strong>Three-layer hybrid merge</strong> with stale detection and timing guarantees</li><li><a href="https://github.com/VoxCore84/TransmogBridge">View on GitHub</a></li></ul>
+<h3 id="player-morph-scale">Player Morph & Scale</h3>
+<p>Persistent morph and scale with auto-restore on login. The <code>.remorph</code> command has no stock equivalent — it re-applies morph and scale after mount, shapeshift, or death from in-memory cache without touching the database.</p>
+<ul><li><strong>Commands:</strong> <code>.wmorph</code>, <code>.wscale</code>, <code>.remorph</code></li><li><strong>RBAC:</strong> Player-level permissions (no GM required)</li></ul>
+<h3 id="creatureoutfit">CreatureOutfit</h3>
+<p>NPC player-race appearance overlay. Used internally by the Custom NPC system to apply equipment and customization data to creature display models.</p>
+<h3 id="utility-scripts">Utility Scripts</h3>
+<p>Skyriding spell handling, toy item scripts, and social commands — barbershop anywhere, typing animation, group casting, and time control.</p>
+<hr>
+<h2 id="rp-vs-stock">RP vs Stock</h2>
+<p>Where stock TrinityCore provides temporary GM debug tools, VoxCore provides persistent, player-accessible roleplay features.</p>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Feature</th><th>Stock TrinityCore</th><th>VoxCore</th></tr></thead><tbody><tr><td><strong>Morph</strong></td><td><code>.morph</code> — GM only, lost on relog</td><td><code>.wmorph</code> — Player, persistent, <code>.remorph</code> restore</td></tr><tr><td><strong>Scale</strong></td><td><code>.modify scale</code> — GM, temporary</td><td><code>.wscale</code> — Player, persistent</td></tr><tr><td><strong>Appearance</strong></td><td>Wardrobe UI, requires collection</td><td><code>.display</code> — any item, anywhere</td></tr><tr><td><strong>Effects</strong></td><td><code>.cast</code> — actual spell, gameplay impact</td><td><code>.effect</code> — visual only, permanent, survives relog</td></tr><tr><td><strong>Barbershop</strong></td><td>Must visit NPC</td><td><code>.barbershop</code> — opens UI anywhere</td></tr><tr><td><strong>Typing</strong></td><td><code>/e types</code> — text only</td><td><code>.typing</code> — actual animation</td></tr><tr><td><strong>Companions</strong></td><td>No equivalent</td><td><code>.comp</code> — 5 squad slots, role-based AI</td></tr><tr><td><strong>Custom NPCs</strong></td><td><code>.npc add</code> — needs existing template</td><td><code>.cnpc</code> — creates from scratch, 20+ subcommands</td></tr></tbody></table></div>
+<hr>
+<h2 id="in-game-commands">In-Game Commands</h2>
+<h3 id="morph-scale">Morph & Scale</h3>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Command</th><th>What it does</th><th>Persists</th></tr></thead><tbody><tr><td><code>.wmorph <displayId></code></td><td>Morph to creature model</td><td>Yes</td></tr><tr><td><code>.wmorph 0</code></td><td>Remove morph</td><td>—</td></tr><tr><td><code>.wscale <0.1–10.0></code></td><td>Change visual scale</td><td>Yes</td></tr><tr><td><code>.remorph</code></td><td>Re-apply after mount/death</td><td>—</td></tr></tbody></table></div>
+<h3 id="display">Display</h3>
+<p><code>.display <slot> <itemId></code> — override any slot's appearance. <code>.display <slot> 0</code> — clear.</p>
+<p><strong>Slots:</strong> head, shoulders, lshoulder, shirt, chest, waist, legs, feet, wrists, hands, back, tabard, mainhand, offhand</p>
+<h3 id="visual-effects">Visual Effects</h3>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Command</th><th>What it does</th></tr></thead><tbody><tr><td><code>.effect self add <kitId> [mode]</code></td><td>Persistent SpellVisualKit</td></tr><tr><td><code>.effect self cast <kitId> <dur></code></td><td>Timed cast visual</td></tr><tr><td><code>.effect self channel <kitId></code></td><td>Channel beam to target</td></tr><tr><td><code>.effect self toggle <kitId></code></td><td>Toggle on/off</td></tr><tr><td><code>.effect self remove <kitId></code></td><td>Remove specific</td></tr><tr><td><code>.effect self reset</code></td><td>Remove all</td></tr></tbody></table></div>
+<p>Target variants: <code>.effect target add|toggle|remove|reset</code></p>
+<h3 id="companion-squad">Companion Squad</h3>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Command</th><th>What it does</th></tr></thead><tbody><tr><td><code>.comp roster</code></td><td>List companions</td></tr><tr><td><code>.comp set <slot> <name></code></td><td>Assign to slot</td></tr><tr><td><code>.comp summon</code> / <code>.comp dismiss</code></td><td>Summon or dismiss squad</td></tr><tr><td><code>.comp mode</code></td><td>Set behavior mode</td></tr></tbody></table></div>
+<h3 id="custom-npcs">Custom NPCs</h3>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Command</th><th>What it does</th></tr></thead><tbody><tr><td><code>.cnpc add</code></td><td>Create NPC (clones your character)</td></tr><tr><td><code>.cnpc spawn</code></td><td>Spawn persistently</td></tr><tr><td><code>.cnpc equip armor/right/left <itemId></code></td><td>Set equipment</td></tr><tr><td><code>.cnpc set race/gender/name/guild/scale</code></td><td>Customize appearance</td></tr><tr><td><code>.cnpc delete</code></td><td>Remove targeted NPC</td></tr></tbody></table></div>
+<h3 id="social-utility">Social & Utility</h3>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Command</th><th>What it does</th></tr></thead><tbody><tr><td><code>.barbershop</code></td><td>Open barbershop anywhere</td></tr><tr><td><code>.typing</code></td><td>Play typing animation</td></tr><tr><td><code>.castgroup <spellId></code></td><td>Cast on all group members</td></tr><tr><td><code>.settime <h> <m></code></td><td>Freeze server time (GM)</td></tr></tbody></table></div>
 </article>
 </div>
 </main>
