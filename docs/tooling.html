@@ -15,53 +15,32 @@
   --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-mono: "SF Mono", SFMono-Regular, ui-monospace, Menlo, Consolas, monospace;
 
-  --bg: #fff;
-  --bg-alt: #f5f5f7;
-  --bg-card: #fff;
-  --text: #1d1d1f;
-  --text-2: #6e6e73;
-  --text-3: #86868b;
-  --accent: #0071e3;
-  --accent-hover: #2997ff;
-  --border: #d2d2d7;
-  --code-bg: #f5f5f7;
-  --nav-bg: rgba(255,255,255,0.72);
-  --nav-border: rgba(0,0,0,0.08);
-  --card-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  --callout-bg: rgba(0,113,227,0.04);
-  --table-stripe: rgba(0,0,0,0.02);
+  --bg: #0c0a14;
+  --bg-alt: #14111f;
+  --bg-card: #1a1726;
+  --text: #e8e6f0;
+  --text-2: #9e9ab0;
+  --text-3: #706c82;
+  --accent: #9B8AFF;
+  --accent-hover: #b3a6ff;
+  --border: #2a2640;
+  --code-bg: #14111f;
+  --nav-bg: rgba(12,10,20,0.85);
+  --nav-border: rgba(123,104,238,0.12);
+  --card-shadow: 0 4px 20px rgba(123,104,238,0.12), 0 0 0 1px rgba(123,104,238,0.06);
+  --callout-bg: rgba(123,104,238,0.06);
+  --table-stripe: rgba(123,104,238,0.03);
 
   /* WoW accents */
   --arcane: #7B68EE;
+  --arcane-deep: #5B4FCF;
   --gold: #C9A84C;
-  --arcane-glow: rgba(123, 104, 238, 0.3);
-  --arcane-subtle: rgba(123, 104, 238, 0.08);
-  --gold-subtle: rgba(201, 168, 76, 0.1);
+  --gold-bright: #E4C263;
+  --arcane-glow: rgba(123, 104, 238, 0.45);
+  --arcane-subtle: rgba(123, 104, 238, 0.18);
+  --gold-subtle: rgba(201, 168, 76, 0.12);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #000;
-    --bg-alt: #1d1d1f;
-    --bg-card: #2d2d2d;
-    --text: #f5f5f7;
-    --text-2: #a1a1a6;
-    --text-3: #86868b;
-    --accent: #2997ff;
-    --accent-hover: #2997ff;
-    --border: #424245;
-    --code-bg: #1d1d1f;
-    --nav-bg: rgba(29,29,31,0.72);
-    --nav-border: rgba(255,255,255,0.08);
-    --card-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    --callout-bg: rgba(41,151,255,0.06);
-    --table-stripe: rgba(255,255,255,0.02);
-
-    --arcane-glow: rgba(123, 104, 238, 0.5);
-    --arcane-subtle: rgba(123, 104, 238, 0.15);
-    --gold-subtle: rgba(201, 168, 76, 0.15);
-  }
-}
 
 /* ── Reset ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -106,9 +85,18 @@ blockquote {
   margin: 24px 0; color: var(--text-2); font-style: italic;
 }
 
+/* ── Scroll Progress Bar ── */
+.scroll-progress {
+  position: fixed; top: 0; left: 0; z-index: 101;
+  height: 2px; width: 0%;
+  background: linear-gradient(90deg, var(--arcane) 0%, var(--gold) 100%);
+  box-shadow: 0 0 8px var(--arcane-glow);
+  transition: width 0.1s linear;
+}
+
 /* ── Navigation ── */
 .site-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 48px;
+  position: fixed; top: 2px; left: 0; right: 0; z-index: 100; height: 48px;
   background: var(--nav-bg);
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
@@ -138,7 +126,15 @@ blockquote {
   letter-spacing: 0.01em; transition: color 0.2s;
 }
 .nav-links a:hover { color: var(--text); }
+.nav-links a::after {
+  content: ''; display: block; height: 2px; margin-top: 2px;
+  background: var(--arcane); border-radius: 1px;
+  transform: scaleX(0); transition: transform 0.3s ease;
+  box-shadow: 0 0 6px var(--arcane-glow);
+}
+.nav-links a:hover::after { transform: scaleX(0.6); }
 .nav-links a.active { color: var(--text); font-weight: 600; }
+.nav-links a.active::after { transform: scaleX(1); }
 
 .nav-end {
   display: flex; align-items: center; gap: 16px;
@@ -172,24 +168,43 @@ blockquote {
 /* ── Hero ── */
 .hero-wrap {
   background: linear-gradient(180deg,
-    #0a0e1a 0%,
-    #12162e 30%,
-    #1a1530 55%,
-    #2a2444 70%,
-    #f5f5f7 100%
+    #06050e 0%,
+    #0e0c22 25%,
+    #1a1538 50%,
+    #150f28 75%,
+    #0c0a14 100%
   );
+  position: relative;
+  overflow: hidden;
 }
 
-@media (prefers-color-scheme: dark) {
-  .hero-wrap {
-    background: linear-gradient(180deg,
-      #0a0e1a 0%,
-      #12162e 30%,
-      #1a1530 55%,
-      #18122a 75%,
-      #000 100%
-    );
-  }
+
+/* ── Hero ambient particles ── */
+.hero-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.hero-particle {
+  position: absolute;
+  width: var(--size, 3px);
+  height: var(--size, 3px);
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--arcane) 0%, transparent 70%);
+  opacity: 0;
+  animation: particleFloat var(--duration, 8s) var(--delay, 0s) infinite ease-in-out;
+}
+@keyframes particleFloat {
+  0% { opacity: 0; transform: translateY(0) translateX(0); }
+  15% { opacity: 0.6; }
+  50% { opacity: 0.3; transform: translateY(calc(var(--drift-y, -80px))) translateX(calc(var(--drift-x, 20px))); }
+  85% { opacity: 0.5; }
+  100% { opacity: 0; transform: translateY(calc(var(--drift-y, -80px) * 2)) translateX(calc(var(--drift-x, 20px) * 1.5)); }
+}
+/* Gold accent particles */
+.hero-particle.gold {
+  background: radial-gradient(circle, var(--gold) 0%, transparent 70%);
 }
 
 .hero {
@@ -277,13 +292,14 @@ blockquote {
 .pillar-card {
   background: var(--bg-alt); border-radius: 18px; padding: 40px 36px;
   text-decoration: none; color: var(--text); display: block;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   border: 1px solid var(--arcane-subtle);
 }
 .pillar-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--card-shadow);
+  transform: translateY(-4px);
+  box-shadow: 0 4px 24px var(--arcane-glow), 0 0 0 1px rgba(123,104,238,0.15);
   color: var(--text);
+  border-color: rgba(123,104,238,0.25);
 }
 
 .pillar-icon {
@@ -313,9 +329,15 @@ blockquote {
 .card {
   background: var(--bg-card); border-radius: 18px; padding: 32px;
   text-decoration: none; color: var(--text); display: block;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  border: 1px solid var(--arcane-subtle);
 }
-.card:hover { transform: translateY(-2px); box-shadow: var(--card-shadow); color: var(--text); }
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 20px var(--arcane-glow), 0 0 0 1px rgba(123,104,238,0.12);
+  color: var(--text);
+  border-color: rgba(123,104,238,0.25);
+}
 .card-icon { color: var(--text-3); margin-bottom: 16px; display: block; }
 .card:hover .card-icon { color: var(--accent); }
 .card h3 { font-size: 20px; font-weight: 600; margin: 0 0 8px; letter-spacing: -0.01em; }
@@ -342,6 +364,10 @@ blockquote {
   letter-spacing: 0.02em;
 }
 .bw-dot { color: var(--border); }
+.built-with a {
+  color: var(--text-3); text-decoration: none; transition: color 0.2s;
+}
+.built-with a:hover { color: var(--gold); }
 
 /* ── Executive Summary Details ── */
 .exec-details { margin: 0 0 32px; }
@@ -366,15 +392,10 @@ article { min-width: 0; }
   overflow-y: auto;
   padding: 8px 0 40px;
   scrollbar-width: thin;
-  scrollbar-color: rgba(0,0,0,0.15) transparent;
+  scrollbar-color: rgba(255,255,255,0.15) transparent;
 }
 .sidebar::-webkit-scrollbar { width: 4px; }
-.sidebar::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 2px; }
-
-@media (prefers-color-scheme: dark) {
-  .sidebar { scrollbar-color: rgba(255,255,255,0.15) transparent; }
-  .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); }
-}
+.sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 2px; }
 
 /* ── Feature Sidebar (flat links) ── */
 .sidebar > a {
@@ -574,6 +595,248 @@ details .data-table { margin: 0 0 8px; }
   100% { opacity: 0; }
 }
 
+/* ── Gold milestone accent ── */
+.stat-num {
+  text-shadow: 0 0 20px rgba(201, 168, 76, 0.3);
+}
+.stat-item:hover .stat-num {
+  text-shadow: 0 0 30px rgba(201, 168, 76, 0.5);
+  color: var(--gold-bright, var(--gold));
+}
+.stat-item { transition: transform 0.3s ease; }
+.stat-item:hover { transform: translateY(-2px); }
+
+/* ── Pillar icon glow on hover ── */
+.pillar-card:hover .pillar-icon {
+  color: var(--arcane);
+  background: radial-gradient(circle, rgba(123,104,238,0.15) 0%, transparent 70%);
+}
+
+/* ── Pipeline SVG Animation ── */
+.pipeline-svg .pipeline-stage { opacity: 0.35; transition: opacity 0.6s ease, filter 0.6s ease; }
+.pipeline-svg .pipeline-arrow { opacity: 0.2; transition: opacity 0.6s ease; }
+.pipeline-svg.active .pipeline-stage { opacity: 1; }
+.pipeline-svg.active .pipeline-arrow { opacity: 1; }
+.pipeline-svg.active .pipeline-stage .stage-box { filter: url(#glow); }
+
+/* Staggered stage activation */
+.pipeline-svg.active .pipeline-stage[data-stage="1"] { transition-delay: 0s; }
+.pipeline-svg.active .pipeline-arrow[data-stage="1"] { transition-delay: 0.3s; }
+.pipeline-svg.active .pipeline-stage[data-stage="2"] { transition-delay: 0.5s; }
+.pipeline-svg.active .pipeline-arrow[data-stage="2"] { transition-delay: 0.8s; }
+.pipeline-svg.active .pipeline-stage[data-stage="3"] { transition-delay: 1.0s; }
+.pipeline-svg.active .pipeline-arrow[data-stage="3"] { transition-delay: 1.3s; }
+.pipeline-svg.active .pipeline-stage[data-stage="4"] { transition-delay: 1.5s; }
+
+/* Data dot flowing through arrows */
+@keyframes dotFlow {
+  0% { opacity: 0; transform: translateX(-15px); }
+  30% { opacity: 1; }
+  70% { opacity: 1; }
+  100% { opacity: 0; transform: translateX(15px); }
+}
+.pipeline-svg.active .data-dot {
+  animation: dotFlow 1.2s ease-in-out infinite;
+}
+.pipeline-svg.active .pipeline-arrow[data-stage="1"] .data-dot { animation-delay: 0.4s; }
+.pipeline-svg.active .pipeline-arrow[data-stage="2"] .data-dot { animation-delay: 0.9s; }
+.pipeline-svg.active .pipeline-arrow[data-stage="3"] .data-dot { animation-delay: 1.4s; }
+
+.pipeline-svg .pipeline-sources,
+.pipeline-svg .pipeline-sniffers { opacity: 0.4; transition: opacity 0.8s ease 1.8s; }
+.pipeline-svg.active .pipeline-sources,
+.pipeline-svg.active .pipeline-sniffers { opacity: 1; }
+
+/* ── Reduction Funnel ── */
+.funnel-wrap {
+  margin: 0 0 40px;
+  padding: 32px;
+  background: var(--bg-alt);
+  border-radius: 18px;
+  border: 1px solid var(--arcane-subtle);
+}
+.funnel-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 24px;
+}
+.funnel { display: flex; flex-direction: column; gap: 8px; }
+.funnel-bar {
+  position: relative;
+  height: 40px;
+  width: var(--width, 100%);
+  transition: width 1.2s cubic-bezier(0.25,0.46,0.45,0.94);
+  min-width: 200px;
+}
+.funnel-fill {
+  position: absolute;
+  inset: 0;
+  border-radius: 8px;
+  opacity: 0.9;
+}
+.funnel-start { background: linear-gradient(90deg, #7B68EE 0%, #9B8AFF 100%); }
+.funnel-r1 { background: linear-gradient(90deg, #6B5AD8 0%, #8B7AEF 100%); }
+.funnel-r2 { background: linear-gradient(90deg, #5B4AC8 0%, #7B6ADF 100%); }
+.funnel-r3 { background: linear-gradient(90deg, #C9A84C 0%, #E4C263 100%); }
+.funnel-final { background: linear-gradient(90deg, #C9A84C 0%, #D4B85A 80%, #E4C263 100%); box-shadow: 0 0 16px rgba(201,168,76,0.3); }
+.funnel-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  gap: 10px;
+  z-index: 1;
+}
+.funnel-label strong {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+}
+.funnel-label span {
+  font-size: 12px;
+  color: rgba(255,255,255,0.75);
+  white-space: nowrap;
+}
+.funnel-stat {
+  text-align: center;
+  margin-top: 20px;
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--gold);
+  text-shadow: 0 0 20px rgba(201,168,76,0.4);
+}
+
+/* ── Hero title glow ── */
+.hero h1 {
+  text-shadow: 0 0 40px rgba(123,104,238,0.25), 0 0 80px rgba(123,104,238,0.1);
+}
+.hero-label {
+  text-shadow: 0 0 16px rgba(123,104,238,0.4);
+}
+
+/* ── Tool Explorer ── */
+.tool-explorer { margin: 24px 0 40px; }
+.tool-search {
+  width: 100%; padding: 10px 16px; border-radius: 10px;
+  background: var(--bg-alt); border: 1px solid var(--border);
+  color: var(--text); font-family: var(--font-body); font-size: 15px;
+  outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+  margin-bottom: 16px;
+}
+.tool-search::placeholder { color: var(--text-3); }
+.tool-search:focus {
+  border-color: var(--arcane);
+  box-shadow: 0 0 0 3px rgba(123,104,238,0.15);
+}
+.tool-chips {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;
+}
+.tool-chip {
+  padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight: 500;
+  background: var(--bg-alt); border: 1px solid var(--border);
+  color: var(--text-2); cursor: pointer; transition: all 0.2s;
+  font-family: var(--font-body); user-select: none;
+}
+.tool-chip:hover { border-color: var(--arcane); color: var(--text); }
+.tool-chip.active {
+  background: var(--arcane); border-color: var(--arcane);
+  color: #fff; box-shadow: 0 0 8px var(--arcane-glow);
+}
+.tool-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+}
+.tool-card {
+  background: var(--bg-card); border: 1px solid var(--arcane-subtle);
+  border-radius: 12px; padding: 16px 20px;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s, opacity 0.3s;
+}
+.tool-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px var(--arcane-glow);
+  border-color: rgba(123,104,238,0.25);
+}
+.tool-card.hidden { display: none; }
+.tool-card-name {
+  font-family: var(--font-mono); font-size: 14px; font-weight: 600;
+  color: var(--accent); margin-bottom: 4px;
+}
+.tool-card-desc {
+  font-size: 13px; color: var(--text-2); line-height: 1.4; margin-bottom: 8px;
+}
+.tool-card-meta {
+  display: flex; gap: 8px; align-items: center;
+}
+.tool-lang {
+  font-size: 11px; font-weight: 600; padding: 2px 8px;
+  border-radius: 4px; letter-spacing: 0.02em;
+}
+.tool-lang.python { background: rgba(53,114,165,0.2); color: #6BA5D7; }
+.tool-lang.shell { background: rgba(80,200,120,0.15); color: #5EC98A; }
+.tool-lang.lua { background: rgba(0,0,128,0.15); color: #7B8FEE; }
+.tool-lang.csharp { background: rgba(104,33,122,0.15); color: #B86BD4; }
+.tool-lang.sql { background: rgba(201,168,76,0.15); color: var(--gold); }
+.tool-lang.http { background: rgba(201,168,76,0.1); color: var(--gold); }
+.tool-count {
+  font-size: 13px; color: var(--text-3); margin-top: 12px;
+  font-style: italic;
+}
+
+/* ── Achievement Toasts ── */
+.achievement-toast {
+  position: fixed; top: 60px; left: 50%; z-index: 200;
+  transform: translateX(-50%) translateY(-20px);
+  background: var(--bg-card); border: 1px solid var(--gold-subtle);
+  border-radius: 12px; padding: 12px 24px;
+  display: flex; align-items: center; gap: 12px;
+  box-shadow: 0 4px 24px rgba(201,168,76,0.2), 0 0 0 1px rgba(201,168,76,0.1);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.4s, transform 0.4s;
+}
+.achievement-toast.show {
+  opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto;
+}
+.achievement-toast .toast-icon {
+  font-size: 20px; flex-shrink: 0;
+}
+.achievement-toast .toast-text {
+  font-size: 14px; font-weight: 600; color: var(--gold);
+  white-space: nowrap;
+}
+.achievement-toast .toast-sub {
+  font-size: 12px; color: var(--text-2); font-weight: 400;
+}
+
+/* ── Page load fade-in ── */
+body { animation: pageIn 0.4s ease-out; }
+@keyframes pageIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ── Pulsing section divider ── */
+@keyframes dividerPulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+.section-divider {
+  animation: dividerPulse 4s ease-in-out infinite;
+}
+
+/* ── Arcane atmospheric defaults ── */
+.section-divider {
+  height: 2px;
+  box-shadow: 0 0 12px rgba(123,104,238,0.4), 0 0 30px rgba(123,104,238,0.15);
+}
+.card-icon { color: var(--arcane); }
+.banner { border: 1px solid var(--arcane-subtle); }
+
 /* ── Animations ── */
 .reveal {
   opacity: 0; transform: translateY(20px);
@@ -581,6 +844,9 @@ details .data-table { margin: 0 0 8px; }
               transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94);
 }
 .reveal.visible { opacity: 1; transform: none; }
+
+/* Staggered reveal for grids */
+.reveal-stagger { transition-delay: var(--stagger, 0s); }
 
 @media (prefers-reduced-motion: reduce) {
   .reveal { opacity: 1; transform: none; transition: none; }
@@ -621,6 +887,7 @@ details .data-table { margin: 0 0 8px; }
 </style>
 </head>
 <body>
+<div class="scroll-progress"></div>
 <nav class="site-nav" role="navigation" aria-label="Main">
 <div class="nav-inner">
 <a href="index.html" class="nav-logo">VoxCore</a>
@@ -642,7 +909,7 @@ details .data-table { margin: 0 0 8px; }
 <div class="page-layout">
 <button class="sidebar-toggle">On this page</button><nav class="sidebar" aria-label="Table of contents"><a href="#data-pipelines">Data Pipelines</a><a href="#audit-validation">Audit & Validation</a><a href="#hotfix-system">Hotfix System</a><a href="#transmog-tools">Transmog Tools</a><a href="#packet-analysis">Packet Analysis</a><a href="#extraction-reference">Extraction & Reference</a><a href="#build-operations">Build & Operations</a><a href="#by-the-numbers">By the Numbers</a></nav>
 <article>
-
+<div class="tool-explorer"><input type="text" class="tool-search" placeholder="Search tools..." autocomplete="off"><div class="tool-chips"><button class="tool-chip active" data-cat="all">All</button><button class="tool-chip" data-cat="pipeline">Pipeline</button><button class="tool-chip" data-cat="audit">Audit</button><button class="tool-chip" data-cat="hotfix">Hotfix</button><button class="tool-chip" data-cat="transmog">Transmog</button><button class="tool-chip" data-cat="packet">Packet</button><button class="tool-chip" data-cat="reference">Reference</button><button class="tool-chip" data-cat="scraper">Scraper</button><button class="tool-chip" data-cat="build">Build & Ops</button></div><div class="tool-grid"><div class="tool-card" data-name="tact_extract.py" data-cat="pipeline" data-desc="primary db2 source — bulk-extracts 1,097 tables from local casc via tactsharp"><div class="tool-card-name">tact_extract.py</div><div class="tool-card-desc">Primary DB2 source — bulk-extracts 1,097 tables from local CASC via TACTSharp</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="merge_csv_sources.py" data-cat="pipeline" data-desc="merges tact base csvs with wago cdn extras into best-of-both dataset"><div class="tool-card-name">merge_csv_sources.py</div><div class="tool-card-desc">Merges TACT base CSVs with Wago CDN extras into best-of-both dataset</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="repair_hotfix_tables.py" data-cat="hotfix" data-desc="compares 388 hotfix tables against db2 csvs, generates repair sql in 5 batches"><div class="tool-card-name">repair_hotfix_tables.py</div><div class="tool-card-desc">Compares 388 hotfix tables against DB2 CSVs, generates repair SQL in 5 batches</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="wago_db2_downloader.py" data-cat="pipeline" data-desc="threaded csv downloader for 1,097 db2 tables from wago.tools"><div class="tool-card-name">wago_db2_downloader.py</div><div class="tool-card-desc">Threaded CSV downloader for 1,097 DB2 tables from Wago.tools</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="extract_lw_world.py" data-cat="pipeline" data-desc="parses lorewalkertdb’s 941 mb world dump with dependency ordering"><div class="tool-card-name">extract_lw_world.py</div><div class="tool-card-desc">Parses LoreWalkerTDB’s 941 MB world dump with dependency ordering</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="fix_column_mismatch.py" data-cat="pipeline" data-desc="handles column count differences between tc forks"><div class="tool-card-name">fix_column_mismatch.py</div><div class="tool-card-desc">Handles column count differences between TC forks</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="run_all_imports.py" data-cat="pipeline" data-desc="orchestrator for the full raidbots/wago import pipeline"><div class="tool-card-name">run_all_imports.py</div><div class="tool-card-desc">Orchestrator for the full Raidbots/Wago import pipeline</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="import_item_names.py" data-cat="pipeline" data-desc="imports 171k item names across 10 languages (1.6m locale rows)"><div class="tool-card-name">import_item_names.py</div><div class="tool-card-desc">Imports 171K item names across 10 languages (1.6M locale rows)</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="quest_chain_gen.py" data-cat="pipeline" data-desc="generates 24,868 prevquestid/nextquestid chain links"><div class="tool-card-name">quest_chain_gen.py</div><div class="tool-card-desc">Generates 24,868 PrevQuestID/NextQuestID chain links</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="gen_quest_poi_sql.py" data-cat="pipeline" data-desc="generates quest poi and point data from wago csvs"><div class="tool-card-name">gen_quest_poi_sql.py</div><div class="tool-card-desc">Generates quest POI and point data from Wago CSVs</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="quest_objectives_import.py" data-cat="pipeline" data-desc="imports quest objective definitions"><div class="tool-card-name">quest_objectives_import.py</div><div class="tool-card-desc">Imports quest objective definitions</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="att_to_sqlite.py" data-cat="pipeline" data-desc="allthethings mega-parser — 60 sqlite tables, 174k items, 47k quests"><div class="tool-card-name">att_to_sqlite.py</div><div class="tool-card-desc">AllTheThings mega-parser — 60 SQLite tables, 174K items, 47K quests</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="att_parser.py" data-cat="pipeline" data-desc="lua tokenizer for allthethings database (1,576 files)"><div class="tool-card-name">att_parser.py</div><div class="tool-card-desc">Lua tokenizer for AllTheThings database (1,576 files)</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="att_generate_sql.py" data-cat="pipeline" data-desc="cross-references att data against mysql, generates validated sql"><div class="tool-card-name">att_generate_sql.py</div><div class="tool-card-desc">Cross-references ATT data against MySQL, generates validated SQL</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="coord_transformer.py" data-cat="pipeline" data-desc="transforms wowhead zone-percent coordinates to world xyz"><div class="tool-card-name">coord_transformer.py</div><div class="tool-card-desc">Transforms Wowhead zone-percent coordinates to world XYZ</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="npc_audit.py" data-cat="audit" data-desc="27-check npc validator — factions, models, levels, zones, flags, equipment"><div class="tool-card-name">npc_audit.py</div><div class="tool-card-desc">27-check NPC validator — factions, models, levels, zones, flags, equipment</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="go_audit.py" data-cat="audit" data-desc="15-check gameobject validator — duplicates, phases, display, type, loot"><div class="tool-card-name">go_audit.py</div><div class="tool-card-desc">15-check gameobject validator — duplicates, phases, display, type, loot</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="quest_audit.py" data-cat="audit" data-desc="15-check quest validator — chains, givers, enders, objectives, rewards"><div class="tool-card-name">quest_audit.py</div><div class="tool-card-desc">15-check quest validator — chains, givers, enders, objectives, rewards</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="wowhead_scraper.py" data-cat="scraper" data-desc="multi-entity wowhead scraper with curl_cffi chrome tls fingerprinting"><div class="tool-card-name">wowhead_scraper.py</div><div class="tool-card-desc">Multi-entity Wowhead scraper with curl_cffi Chrome TLS fingerprinting</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="world_health_check.py" data-cat="audit" data-desc="post-import integrity checker (15 cross-table validation checks)"><div class="tool-card-name">world_health_check.py</div><div class="tool-card-desc">Post-import integrity checker (15 cross-table validation checks)</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="xref_missing_spawns.py" data-cat="audit" data-desc="cross-references creature templates against spawn data"><div class="tool-card-name">xref_missing_spawns.py</div><div class="tool-card-desc">Cross-references creature templates against spawn data</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="validate_transmog.py" data-cat="transmog" data-desc="validates transmog outfit data against item and appearance tables"><div class="tool-card-name">validate_transmog.py</div><div class="tool-card-desc">Validates transmog outfit data against item and appearance tables</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="npc_model_validator.py" data-cat="audit" data-desc="validates creature display ids against db2 model data"><div class="tool-card-name">npc_model_validator.py</div><div class="tool-card-desc">Validates creature display IDs against DB2 model data</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="npc_faction_check.py" data-cat="audit" data-desc="cross-references npc factions against faction template db2"><div class="tool-card-name">npc_faction_check.py</div><div class="tool-card-desc">Cross-references NPC factions against faction template DB2</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="npc_level_range_audit.py" data-cat="audit" data-desc="validates creature min/max levels against content tuning"><div class="tool-card-name">npc_level_range_audit.py</div><div class="tool-card-desc">Validates creature min/max levels against content tuning</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="npc_equipment_audit.py" data-cat="audit" data-desc="validates creature equipment template references"><div class="tool-card-name">npc_equipment_audit.py</div><div class="tool-card-desc">Validates creature equipment template references</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="duplicate_spawn_finder.py" data-cat="audit" data-desc="finds exact-position duplicate creature/gameobject spawns"><div class="tool-card-name">duplicate_spawn_finder.py</div><div class="tool-card-desc">Finds exact-position duplicate creature/gameobject spawns</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="repair_scene_scripts.py" data-cat="hotfix" data-desc="fixes hex-encoded lua scene scripts (36 encoding errors, 224 new scripts)"><div class="tool-card-name">repair_scene_scripts.py</div><div class="tool-card-desc">Fixes hex-encoded Lua scene scripts (36 encoding errors, 224 new scripts)</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="hotfix_differ_r3.py" data-cat="hotfix" data-desc="type-aware differ for redundancy audit (float32, int32, logical pk)"><div class="tool-card-name">hotfix_differ_r3.py</div><div class="tool-card-desc">Type-aware differ for redundancy audit (float32, int32, logical PK)</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="gen_practical_sql_r3.py" data-cat="hotfix" data-desc="generates cleanup sql from redundancy audit results"><div class="tool-card-name">gen_practical_sql_r3.py</div><div class="tool-card-desc">Generates cleanup SQL from redundancy audit results</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="cleanup_hotfix_data_orphans.py" data-cat="hotfix" data-desc="removes orphaned hotfix_data registry entries (608k removed)"><div class="tool-card-name">cleanup_hotfix_data_orphans.py</div><div class="tool-card-desc">Removes orphaned hotfix_data registry entries (608K removed)</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="build_table_info_r3.py" data-cat="hotfix" data-desc="builds table metadata for the redundancy differ"><div class="tool-card-name">build_table_info_r3.py</div><div class="tool-card-desc">Builds table metadata for the redundancy differ</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="transmogbridge" data-cat="transmog" data-desc="client addon — patches 12.x serializer bug via 3-layer hybrid merge"><div class="tool-card-name">TransmogBridge</div><div class="tool-card-desc">Client addon — patches 12.x serializer bug via 3-layer hybrid merge</div><div class="tool-card-meta"><span class="tool-lang lua">Lua</span></div></div><div class="tool-card" data-name="transmogspy" data-cat="transmog" data-desc="debug addon — 14 event monitors, pre/post state capture (~930 lines)"><div class="tool-card-name">TransmogSpy</div><div class="tool-card-desc">Debug addon — 14 event monitors, pre/post state capture (~930 lines)</div><div class="tool-card-meta"><span class="tool-lang lua">Lua</span></div></div><div class="tool-card" data-name="transmog_debug.py" data-cat="transmog" data-desc="full transmog state debugger — character db, outfits, wago cross-ref"><div class="tool-card-name">transmog_debug.py</div><div class="tool-card-desc">Full transmog state debugger — character DB, outfits, Wago cross-ref</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="transmog_lookup.py" data-cat="transmog" data-desc="db2 cross-reference for ima ids, items, and visual chains"><div class="tool-card-name">transmog_lookup.py</div><div class="tool-card-desc">DB2 cross-reference for IMA IDs, items, and visual chains</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="extract_transmog_packets.py" data-cat="packet" data-desc="extracts transmog protocol packets and update fields from wpp output"><div class="tool-card-name">extract_transmog_packets.py</div><div class="tool-card-desc">Extracts transmog protocol packets and UPDATE fields from WPP output</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="opcode_analyzer.py" data-cat="packet" data-desc="trinitycore opcode dictionary + packet capture analyzer (991 opcodes)"><div class="tool-card-name">opcode_analyzer.py</div><div class="tool-card-desc">TrinityCore opcode dictionary + packet capture analyzer (991 opcodes)</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="start-worldserver.sh" data-cat="packet" data-desc="session lifecycle manager — archive, launch, auto-parse, summary"><div class="tool-card-name">start-worldserver.sh</div><div class="tool-card-desc">Session lifecycle manager — archive, launch, auto-parse, summary</div><div class="tool-card-meta"><span class="tool-lang shell">Shell</span></div></div><div class="tool-card" data-name="wpp-inspect.sh" data-cat="packet" data-desc="packet grep tool — 6 search modes (visible, transmog, trace, summary)"><div class="tool-card-name">wpp-inspect.sh</div><div class="tool-card-desc">Packet grep tool — 6 search modes (visible, transmog, trace, summary)</div><div class="tool-card-meta"><span class="tool-lang shell">Shell</span></div></div><div class="tool-card" data-name="wpp-add-build.sh" data-cat="packet" data-desc="adds new wow builds to wpp switch statements and rebuilds"><div class="tool-card-name">wpp-add-build.sh</div><div class="tool-card-desc">Adds new WoW builds to WPP switch statements and rebuilds</div><div class="tool-card-meta"><span class="tool-lang shell">Shell</span></div></div><div class="tool-card" data-name="wowpacketparser" data-cat="packet" data-desc="locally patched packet decoder for build 66220"><div class="tool-card-name">WowPacketParser</div><div class="tool-card-desc">Locally patched packet decoder for build 66220</div><div class="tool-card-meta"><span class="tool-lang csharp">C#</span></div></div><div class="tool-card" data-name="wow.tools.local" data-cat="reference" data-desc="self-hosted db2/dbc browser at localhost"><div class="tool-card-name">wow.tools.local</div><div class="tool-card-desc">Self-hosted DB2/DBC browser at localhost</div><div class="tool-card-meta"><span class="tool-lang csharp">C#</span></div></div><div class="tool-card" data-name="dbc2csv" data-cat="reference" data-desc="db2-to-csv converter with 1,315 table definition files"><div class="tool-card-name">DBC2CSV</div><div class="tool-card-desc">DB2-to-CSV converter with 1,315 table definition files</div><div class="tool-card-meta"><span class="tool-lang csharp">C#</span></div></div><div class="tool-card" data-name="db2query" data-cat="reference" data-desc="interactive db2 query cli for cross-referencing game data"><div class="tool-card-name">DB2Query</div><div class="tool-card-desc">Interactive DB2 query CLI for cross-referencing game data</div><div class="tool-card-meta"><span class="tool-lang csharp">C#</span></div></div><div class="tool-card" data-name="decode_dbcache.py" data-cat="reference" data-desc="decodes client dbcache.bin for hotfix comparison"><div class="tool-card-name">decode_dbcache.py</div><div class="tool-card-desc">Decodes client DBCache.bin for hotfix comparison</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="xref_dbcache.py" data-cat="reference" data-desc="cross-references client cache against server hotfix database"><div class="tool-card-name">xref_dbcache.py</div><div class="tool-card-desc">Cross-references client cache against server hotfix database</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="tactsharp" data-cat="reference" data-desc="blizzard casc storage extraction library — ground truth for db2"><div class="tool-card-name">TACTSharp</div><div class="tool-card-desc">Blizzard CASC storage extraction library — ground truth for DB2</div><div class="tool-card-meta"><span class="tool-lang csharp">C#</span></div></div><div class="tool-card" data-name="wago_enrich.py" data-cat="reference" data-desc="pre-joins db2 csvs into enriched analysis files"><div class="tool-card-name">wago_enrich.py</div><div class="tool-card-desc">Pre-joins DB2 CSVs into enriched analysis files</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="enrich_content_tuning.py" data-cat="pipeline" data-desc="zone-based contenttuningid enrichment for spawned creatures"><div class="tool-card-name">enrich_content_tuning.py</div><div class="tool-card-desc">Zone-based ContentTuningID enrichment for spawned creatures</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="diff_builds.py" data-cat="reference" data-desc="cross-build differ with wago export oscillation detection"><div class="tool-card-name">diff_builds.py</div><div class="tool-card-desc">Cross-build differ with Wago export oscillation detection</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="parse_dberrors.py" data-cat="build" data-desc="categorizes db error log entries by type with counts"><div class="tool-card-name">parse_dberrors.py</div><div class="tool-card-desc">Categorizes DB error log entries by type with counts</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="db_snapshot.py" data-cat="build" data-desc="database snapshot and comparison tool"><div class="tool-card-name">db_snapshot.py</div><div class="tool-card-desc">Database snapshot and comparison tool</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="wago_db2_server.py" data-cat="build" data-desc="mcp server — gives claude direct access to 1,097 db2 tables"><div class="tool-card-name">wago_db2_server.py</div><div class="tool-card-desc">MCP server — gives Claude direct access to 1,097 DB2 tables</div><div class="tool-card-meta"><span class="tool-lang python">Python</span></div></div><div class="tool-card" data-name="soap interface" data-cat="build" data-desc="remote gm commands without in-game login"><div class="tool-card-name">SOAP interface</div><div class="tool-card-desc">Remote GM commands without in-game login</div><div class="tool-card-meta"><span class="tool-lang http">HTTP</span></div></div></div><div class="tool-count">55 of 55 tools</div></div>
 <p>Over 60 custom tools built across Python, C++, Lua, SQL, Shell, and C#. Every data pipeline, audit, and repair operation is scripted and reproducible.</p>
 <h2 id="data-pipelines">Data Pipelines</h2>
 <div class="table-wrap"><table class="data-table"><thead><tr><th>Tool</th><th>Language</th><th>What it does</th></tr></thead><tbody><tr><td><code>tact_extract.py</code></td><td>Python</td><td>Primary DB2 source — bulk-extracts 1,097 tables from local CASC via TACTSharp in ~50s</td></tr><tr><td><code>merge_csv_sources.py</code></td><td>Python</td><td>Merges TACT base CSVs with Wago CDN extras into a single best-of-both dataset</td></tr><tr><td><code>repair_hotfix_tables.py</code></td><td>Python</td><td>Compares all 388 hotfix tables against merged DB2 CSVs, generates repair SQL in 5 batches</td></tr><tr><td><code>wago_db2_downloader.py</code></td><td>Python</td><td>Threaded CSV downloader for 1,097 DB2 tables from Wago.tools (fallback source)</td></tr><tr><td><code>extract_lw_world.py</code></td><td>Python</td><td>Parses LoreWalkerTDB's 941 MB world dump, extracts tables with dependency ordering</td></tr><tr><td><code>fix_column_mismatch.py</code></td><td>Python</td><td>Handles column count differences between TC forks (appends safe defaults)</td></tr><tr><td><code>run_all_imports.py</code></td><td>Python</td><td>Orchestrator for the full Raidbots/Wago import pipeline</td></tr><tr><td><code>import_item_names.py</code></td><td>Python</td><td>Imports 171K item names across 10 languages (1.6M locale rows)</td></tr><tr><td><code>quest_chain_gen.py</code></td><td>Python</td><td>Generates 24,868 PrevQuestID/NextQuestID chain links</td></tr><tr><td><code>gen_quest_poi_sql.py</code></td><td>Python</td><td>Generates quest POI and point data from Wago CSVs</td></tr><tr><td><code>quest_objectives_import.py</code></td><td>Python</td><td>Imports quest objective definitions</td></tr><tr><td><code>att_to_sqlite.py</code></td><td>Python</td><td>AllTheThings mega-parser — 60 SQLite tables from 30 data sources (52.6 MB, 174K items)</td></tr><tr><td><code>att_parser.py</code></td><td>Python</td><td>Lua tokenizer for the AllTheThings database (1,576 files, 47K quests)</td></tr><tr><td><code>att_generate_sql.py</code></td><td>Python</td><td>Cross-references ATT data against MySQL, generates validated SQL</td></tr><tr><td><code>coord_transformer.py</code></td><td>Python</td><td>Transforms Wowhead zone-percent coordinates to world XYZ for NPC spawns</td></tr></tbody></table></div>
@@ -680,12 +947,32 @@ details .data-table { margin: 0 0 8px; }
 <script>(function(){
   var rm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // ── Scroll reveal ──
+  // ── Scroll progress bar ──
+  var progressBar = document.querySelector('.scroll-progress');
+  if (progressBar) {
+    window.addEventListener('scroll', function() {
+      var h = document.documentElement.scrollHeight - window.innerHeight;
+      var pct = h > 0 ? (window.scrollY / h) * 100 : 0;
+      progressBar.style.width = pct + '%';
+    }, { passive: true });
+  }
+
+  // ── Scroll reveal with stagger ──
   if (!rm) {
     var obs = new IntersectionObserver(function(entries) {
       entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('visible'); });
     }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
     document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+
+    // Apply stagger delays to grid children
+    document.querySelectorAll('.pillars-grid, .cards-grid').forEach(function(grid) {
+      var children = grid.children;
+      for (var i = 0; i < children.length; i++) {
+        children[i].classList.add('reveal', 'reveal-stagger');
+        children[i].style.setProperty('--stagger', (i * 0.1) + 's');
+        obs.observe(children[i]);
+      }
+    });
   } else {
     document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('visible'); });
   }
@@ -717,6 +1004,126 @@ details .data-table { margin: 0 0 8px; }
     requestAnimationFrame(tick);
   }
 
+  // ── Hero particles ──
+  (function initParticles() {
+    if (rm) return;
+    var container = document.querySelector('.hero-particles');
+    if (!container) return;
+    var count = 18;
+    for (var i = 0; i < count; i++) {
+      var p = document.createElement('div');
+      p.className = 'hero-particle' + (Math.random() > 0.7 ? ' gold' : '');
+      var size = 2 + Math.random() * 4;
+      p.style.setProperty('--size', size + 'px');
+      p.style.setProperty('--duration', (6 + Math.random() * 8) + 's');
+      p.style.setProperty('--delay', (Math.random() * 6) + 's');
+      p.style.setProperty('--drift-y', (-60 - Math.random() * 120) + 'px');
+      p.style.setProperty('--drift-x', (-40 + Math.random() * 80) + 'px');
+      p.style.left = (5 + Math.random() * 90) + '%';
+      p.style.top = (10 + Math.random() * 80) + '%';
+      container.appendChild(p);
+    }
+  })();
+
+  // ── Pipeline SVG scroll activation ──
+  if (!rm) {
+    var pipelineSvg = document.querySelector('.pipeline-svg');
+    if (pipelineSvg) {
+      var pipeObs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+          if (e.isIntersecting) {
+            pipelineSvg.classList.add('active');
+            pipeObs.unobserve(pipelineSvg);
+          }
+        });
+      }, { threshold: 0.3 });
+      pipeObs.observe(pipelineSvg);
+    }
+  }
+
+  // ── Tool Explorer ──
+  (function initToolExplorer() {
+    var explorer = document.querySelector('.tool-explorer');
+    if (!explorer) return;
+
+    var search = explorer.querySelector('.tool-search');
+    var chips = explorer.querySelectorAll('.tool-chip');
+    var cards = explorer.querySelectorAll('.tool-card');
+    var countEl = explorer.querySelector('.tool-count');
+    var activeCategory = 'all';
+
+    function filterTools() {
+      var query = search ? search.value.toLowerCase() : '';
+      var visible = 0;
+      cards.forEach(function(card) {
+        var name = card.getAttribute('data-name') || '';
+        var cat = card.getAttribute('data-cat') || '';
+        var desc = card.getAttribute('data-desc') || '';
+        var matchCat = activeCategory === 'all' || cat === activeCategory;
+        var matchSearch = !query || name.indexOf(query) !== -1 || desc.indexOf(query) !== -1;
+        if (matchCat && matchSearch) {
+          card.classList.remove('hidden');
+          visible++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+      if (countEl) countEl.textContent = visible + ' of ' + cards.length + ' tools';
+    }
+
+    chips.forEach(function(chip) {
+      chip.addEventListener('click', function() {
+        chips.forEach(function(c) { c.classList.remove('active'); });
+        chip.classList.add('active');
+        activeCategory = chip.getAttribute('data-cat');
+        filterTools();
+      });
+    });
+
+    if (search) search.addEventListener('input', filterTools);
+    filterTools();
+  })();
+
+  // ── Achievement Toasts ──
+  (function initToasts() {
+    if (rm) return;
+    var toasts = [
+      { selector: '[data-countup="~1,004,000"]', text: '1M Rows Imported', icon: '\u2728' },
+      { selector: '[data-countup="97.8%"]', text: '97.8% Redundancy Eliminated', icon: '\u26A1' },
+      { selector: '[data-countup="~10.6M"]', text: '10.6M Dead Rows Purged', icon: '\uD83D\uDD25' },
+      { selector: '[data-countup="65+"]', text: '65+ Tools Built', icon: '\uD83D\uDEE0\uFE0F' },
+    ];
+    var shown = {};
+    toasts.forEach(function(t) {
+      var el = document.querySelector(t.selector);
+      if (!el) return;
+      var toastObs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+          if (e.isIntersecting && !shown[t.text]) {
+            shown[t.text] = true;
+            showToast(t.icon, t.text);
+            toastObs.unobserve(el);
+          }
+        });
+      }, { threshold: 0.8 });
+      toastObs.observe(el);
+    });
+
+    function showToast(icon, text) {
+      var toast = document.createElement('div');
+      toast.className = 'achievement-toast';
+      toast.innerHTML = '<span class="toast-icon">' + icon + '</span><div><div class="toast-text">' + text + '</div></div>';
+      document.body.appendChild(toast);
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() { toast.classList.add('show'); });
+      });
+      setTimeout(function() {
+        toast.classList.remove('show');
+        setTimeout(function() { toast.remove(); }, 500);
+      }, 3000);
+    }
+  })();
+
   // ── Mobile nav ──
   var btn = document.querySelector('.nav-menu-btn');
   var mn = document.querySelector('.mobile-nav');
@@ -733,7 +1140,6 @@ details .data-table { margin: 0 0 8px; }
     var sections = sidebar.querySelectorAll('.toc-section');
     var isReportSidebar = sections.length > 0;
 
-    // Toggle expand/collapse on triangle click (report sidebar)
     sections.forEach(function(section) {
       var toggle = section.querySelector('.toc-toggle');
       if (toggle) {
@@ -745,7 +1151,6 @@ details .data-table { margin: 0 0 8px; }
       }
     });
 
-    // Scroll-spy: collect all local anchor links
     var allLinks = sidebar.querySelectorAll('a[href^="#"]');
     var headings = [];
     allLinks.forEach(function(a) {
@@ -760,14 +1165,10 @@ details .data-table { margin: 0 0 8px; }
       var tocObs = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
           if (entry.isIntersecting) {
-            // Clear active on local links only
             allLinks.forEach(function(l) { l.classList.remove('active'); });
-
             headings.forEach(function(h) {
               if (h.el === entry.target) {
                 h.link.classList.add('active');
-
-                // Auto-expand the parent toc-section if in report sidebar
                 if (isReportSidebar) {
                   var parentSection = h.link.closest('.toc-section');
                   if (parentSection) parentSection.classList.add('expanded');
@@ -777,7 +1178,6 @@ details .data-table { margin: 0 0 8px; }
           }
         });
       }, { rootMargin: '-80px 0px -60% 0px' });
-
       headings.forEach(function(h) { tocObs.observe(h.el); });
     }
   }

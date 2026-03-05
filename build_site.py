@@ -147,102 +147,242 @@ ARCH_SVG = '''<div class="arch-wrap reveal"><svg viewBox="0 0 800 300" xmlns="ht
 <line x1="685" y1="192" x2="685" y2="250" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="4 3"/>
 </svg></div>'''
 
-PIPELINE_SVG = '''<div class="arch-wrap reveal"><svg viewBox="0 0 860 340" xmlns="http://www.w3.org/2000/svg" class="arch-diagram" role="img" aria-label="Data pipeline flow diagram">
+PIPELINE_SVG = '''<div class="arch-wrap reveal"><svg viewBox="0 0 860 340" xmlns="http://www.w3.org/2000/svg" class="arch-diagram pipeline-svg" role="img" aria-label="Data pipeline flow diagram">
+<defs>
+  <filter id="glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <filter id="glow-gold"><feGaussianBlur stdDeviation="2.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+
 <!-- Stage 1: Extract -->
-<rect x="20" y="20" width="180" height="80" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.6"/>
+<g class="pipeline-stage" data-stage="1">
+<rect x="20" y="20" width="180" height="80" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1.5" class="stage-box"/>
 <text x="110" y="46" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="15">1. Extract</text>
 <text x="110" y="66" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">TACTSharp / CASC</text>
 <text x="110" y="82" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">1,097 DB2 tables &middot; ~50s</text>
+</g>
 
 <!-- Arrow 1 -->
-<line x1="200" y1="60" x2="230" y2="60" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.5"/>
-<polygon points="230,55 240,60 230,65" fill="var(--arcane)" fill-opacity="0.5"/>
+<g class="pipeline-arrow" data-stage="1">
+<line x1="200" y1="60" x2="230" y2="60" stroke="var(--arcane)" stroke-width="1.5" class="arrow-line"/>
+<polygon points="230,55 240,60 230,65" fill="var(--arcane)" class="arrow-head"/>
+<circle cx="220" cy="60" r="2.5" fill="var(--arcane)" class="data-dot" opacity="0"/>
+</g>
 
 <!-- Stage 2: Merge -->
-<rect x="240" y="20" width="180" height="80" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.6"/>
+<g class="pipeline-stage" data-stage="2">
+<rect x="240" y="20" width="180" height="80" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1.5" class="stage-box"/>
 <text x="330" y="46" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="15">2. Merge</text>
 <text x="330" y="66" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">TACT base + Wago CDN</text>
 <text x="330" y="82" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">99 tables merged &middot; +7,183 rows</text>
+</g>
 
 <!-- Arrow 2 -->
-<line x1="420" y1="60" x2="450" y2="60" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.5"/>
-<polygon points="450,55 460,60 450,65" fill="var(--arcane)" fill-opacity="0.5"/>
+<g class="pipeline-arrow" data-stage="2">
+<line x1="420" y1="60" x2="450" y2="60" stroke="var(--arcane)" stroke-width="1.5" class="arrow-line"/>
+<polygon points="450,55 460,60 450,65" fill="var(--arcane)" class="arrow-head"/>
+<circle cx="440" cy="60" r="2.5" fill="var(--arcane)" class="data-dot" opacity="0"/>
+</g>
 
 <!-- Stage 3: Repair -->
-<rect x="460" y="20" width="180" height="80" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.6"/>
+<g class="pipeline-stage" data-stage="3">
+<rect x="460" y="20" width="180" height="80" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1.5" class="stage-box"/>
 <text x="550" y="46" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="15">3. Repair</text>
 <text x="550" y="66" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">103K inserts &middot; 5 batches</text>
 <text x="550" y="82" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">388 tables compared</text>
+</g>
 
 <!-- Arrow 3 -->
-<line x1="640" y1="60" x2="670" y2="60" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.5"/>
-<polygon points="670,55 680,60 670,65" fill="var(--arcane)" fill-opacity="0.5"/>
+<g class="pipeline-arrow" data-stage="3">
+<line x1="640" y1="60" x2="670" y2="60" stroke="var(--arcane)" stroke-width="1.5" class="arrow-line"/>
+<polygon points="670,55 680,60 670,65" fill="var(--arcane)" class="arrow-head"/>
+<circle cx="660" cy="60" r="2.5" fill="var(--arcane)" class="data-dot" opacity="0"/>
+</g>
 
 <!-- Stage 4: Validate -->
-<rect x="680" y="20" width="160" height="80" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1.5" stroke-opacity="0.6"/>
+<g class="pipeline-stage" data-stage="4">
+<rect x="680" y="20" width="160" height="80" rx="12" fill="var(--bg-alt)" stroke="var(--arcane)" stroke-width="1.5" class="stage-box"/>
 <text x="760" y="46" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="15">4. Validate</text>
 <text x="760" y="66" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="11">~244K genuine rows</text>
 <text x="760" y="82" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">97.8% redundancy removed</text>
+</g>
 
 <!-- Dashed line down to sources -->
 <line x1="430" y1="100" x2="430" y2="130" stroke="var(--border)" stroke-width="1" stroke-dasharray="4 3" stroke-opacity="0.4"/>
 
 <!-- Additional Sources: Row of boxes -->
-<!-- LoreWalkerTDB -->
+<g class="pipeline-sources">
 <rect x="20" y="135" width="155" height="56" rx="10" fill="var(--bg-alt)" stroke="var(--border)" stroke-width="1"/>
 <text x="97" y="157" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="12">LoreWalkerTDB</text>
 <text x="97" y="175" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">~1M world rows</text>
 
-<!-- AllTheThings -->
 <rect x="190" y="135" width="155" height="56" rx="10" fill="var(--bg-alt)" stroke="var(--border)" stroke-width="1"/>
 <text x="267" y="157" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="12">AllTheThings</text>
 <text x="267" y="175" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">+9,221 quest/vendor rows</text>
 
-<!-- Raidbots -->
 <rect x="360" y="135" width="140" height="56" rx="10" fill="var(--bg-alt)" stroke="var(--border)" stroke-width="1"/>
 <text x="430" y="157" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="12">Raidbots</text>
 <text x="430" y="175" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">1.6M locale rows</text>
 
-<!-- Wowhead -->
 <rect x="515" y="135" width="140" height="56" rx="10" fill="var(--bg-alt)" stroke="var(--border)" stroke-width="1"/>
 <text x="585" y="157" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="12">Wowhead</text>
 <text x="585" y="175" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">78K NPC fixes</text>
 
-<!-- TDB -->
 <rect x="670" y="135" width="170" height="56" rx="10" fill="var(--bg-alt)" stroke="var(--border)" stroke-width="1"/>
 <text x="755" y="157" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="12">TrinityCore TDB</text>
 <text x="755" y="175" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">+1,967 quest rewards</text>
+</g>
 
-<!-- Label -->
 <text x="20" y="215" fill="var(--text-3)" font-family="var(--font-body)" font-size="10" font-style="italic">Additional Data Sources</text>
 
 <!-- Dashed line down to sniffer row -->
 <line x1="430" y1="220" x2="430" y2="240" stroke="var(--border)" stroke-width="1" stroke-dasharray="4 3" stroke-opacity="0.4"/>
 
 <!-- Packet Sniffers row -->
-<!-- WPP -->
+<g class="pipeline-sniffers">
 <rect x="20" y="245" width="195" height="56" rx="10" fill="var(--bg-alt)" stroke="var(--gold)" stroke-width="1" stroke-opacity="0.4"/>
 <text x="117" y="267" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="12">WowPacketParser</text>
 <text x="117" y="285" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">Private server .pkt captures</text>
 
-<!-- Ymir -->
 <rect x="232" y="245" width="195" height="56" rx="10" fill="var(--bg-alt)" stroke="var(--gold)" stroke-width="1" stroke-opacity="0.4"/>
 <text x="329" y="267" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="12">Ymir (Retail Sniffer)</text>
 <text x="329" y="285" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">2.77M lines &middot; ground truth</text>
 
-<!-- wow.tools.local -->
 <rect x="444" y="245" width="195" height="56" rx="10" fill="var(--bg-alt)" stroke="var(--gold)" stroke-width="1" stroke-opacity="0.4"/>
 <text x="541" y="267" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="12">wow.tools.local</text>
 <text x="541" y="285" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">DB2 browser &middot; hotfix inspect</text>
 
-<!-- DBCache -->
 <rect x="656" y="245" width="184" height="56" rx="10" fill="var(--bg-alt)" stroke="var(--gold)" stroke-width="1" stroke-opacity="0.4"/>
 <text x="748" y="267" text-anchor="middle" fill="var(--text)" font-family="var(--font-display)" font-weight="600" font-size="12">Client DBCache</text>
 <text x="748" y="285" text-anchor="middle" fill="var(--text-3)" font-family="var(--font-body)" font-size="10">Hotfix cross-reference</text>
+</g>
 
-<!-- Label -->
 <text x="20" y="325" fill="var(--text-3)" font-family="var(--font-body)" font-size="10" font-style="italic">Packet Capture &amp; Client Analysis</text>
 </svg></div>'''
+
+FUNNEL_VIZ = '''<div class="funnel-wrap reveal">
+<div class="funnel-title">Redundancy Reduction</div>
+<div class="funnel">
+<div class="funnel-bar" style="--width: 100%; --delay: 0s">
+<div class="funnel-fill funnel-start"></div>
+<div class="funnel-label"><strong>10.8M</strong><span>Starting rows</span></div>
+</div>
+<div class="funnel-bar" style="--width: 89%; --delay: 0.15s">
+<div class="funnel-fill funnel-r1"></div>
+<div class="funnel-label"><strong>1.2M</strong><span>After Round 1 (string compare)</span></div>
+</div>
+<div class="funnel-bar" style="--width: 9.2%; --delay: 0.3s">
+<div class="funnel-fill funnel-r2"></div>
+<div class="funnel-label"><strong>996K</strong><span>After Round 2 (WTL DBC2CSV)</span></div>
+</div>
+<div class="funnel-bar" style="--width: 2.3%; --delay: 0.45s">
+<div class="funnel-fill funnel-r3"></div>
+<div class="funnel-label"><strong>~244K</strong><span>After Round 3 (type-aware)</span></div>
+</div>
+<div class="funnel-bar" style="--width: 2.1%; --delay: 0.6s">
+<div class="funnel-fill funnel-final"></div>
+<div class="funnel-label"><strong>227K</strong><span>Final hotfix_data entries</span></div>
+</div>
+</div>
+<div class="funnel-stat"><span data-countup="97.8%">97.8%</span> reduction</div>
+</div>'''
+
+# ── Tool Explorer Data ────────────────────────────────────────────────────────
+
+TOOL_DATA = [
+    # (name, language, category, description)
+    ("tact_extract.py", "Python", "pipeline", "Primary DB2 source \u2014 bulk-extracts 1,097 tables from local CASC via TACTSharp"),
+    ("merge_csv_sources.py", "Python", "pipeline", "Merges TACT base CSVs with Wago CDN extras into best-of-both dataset"),
+    ("repair_hotfix_tables.py", "Python", "hotfix", "Compares 388 hotfix tables against DB2 CSVs, generates repair SQL in 5 batches"),
+    ("wago_db2_downloader.py", "Python", "pipeline", "Threaded CSV downloader for 1,097 DB2 tables from Wago.tools"),
+    ("extract_lw_world.py", "Python", "pipeline", "Parses LoreWalkerTDB\u2019s 941 MB world dump with dependency ordering"),
+    ("fix_column_mismatch.py", "Python", "pipeline", "Handles column count differences between TC forks"),
+    ("run_all_imports.py", "Python", "pipeline", "Orchestrator for the full Raidbots/Wago import pipeline"),
+    ("import_item_names.py", "Python", "pipeline", "Imports 171K item names across 10 languages (1.6M locale rows)"),
+    ("quest_chain_gen.py", "Python", "pipeline", "Generates 24,868 PrevQuestID/NextQuestID chain links"),
+    ("gen_quest_poi_sql.py", "Python", "pipeline", "Generates quest POI and point data from Wago CSVs"),
+    ("quest_objectives_import.py", "Python", "pipeline", "Imports quest objective definitions"),
+    ("att_to_sqlite.py", "Python", "pipeline", "AllTheThings mega-parser \u2014 60 SQLite tables, 174K items, 47K quests"),
+    ("att_parser.py", "Python", "pipeline", "Lua tokenizer for AllTheThings database (1,576 files)"),
+    ("att_generate_sql.py", "Python", "pipeline", "Cross-references ATT data against MySQL, generates validated SQL"),
+    ("coord_transformer.py", "Python", "pipeline", "Transforms Wowhead zone-percent coordinates to world XYZ"),
+    ("npc_audit.py", "Python", "audit", "27-check NPC validator \u2014 factions, models, levels, zones, flags, equipment"),
+    ("go_audit.py", "Python", "audit", "15-check gameobject validator \u2014 duplicates, phases, display, type, loot"),
+    ("quest_audit.py", "Python", "audit", "15-check quest validator \u2014 chains, givers, enders, objectives, rewards"),
+    ("wowhead_scraper.py", "Python", "scraper", "Multi-entity Wowhead scraper with curl_cffi Chrome TLS fingerprinting"),
+    ("world_health_check.py", "Python", "audit", "Post-import integrity checker (15 cross-table validation checks)"),
+    ("xref_missing_spawns.py", "Python", "audit", "Cross-references creature templates against spawn data"),
+    ("validate_transmog.py", "Python", "transmog", "Validates transmog outfit data against item and appearance tables"),
+    ("npc_model_validator.py", "Python", "audit", "Validates creature display IDs against DB2 model data"),
+    ("npc_faction_check.py", "Python", "audit", "Cross-references NPC factions against faction template DB2"),
+    ("npc_level_range_audit.py", "Python", "audit", "Validates creature min/max levels against content tuning"),
+    ("npc_equipment_audit.py", "Python", "audit", "Validates creature equipment template references"),
+    ("duplicate_spawn_finder.py", "Python", "audit", "Finds exact-position duplicate creature/gameobject spawns"),
+    ("repair_scene_scripts.py", "Python", "hotfix", "Fixes hex-encoded Lua scene scripts (36 encoding errors, 224 new scripts)"),
+    ("hotfix_differ_r3.py", "Python", "hotfix", "Type-aware differ for redundancy audit (float32, int32, logical PK)"),
+    ("gen_practical_sql_r3.py", "Python", "hotfix", "Generates cleanup SQL from redundancy audit results"),
+    ("cleanup_hotfix_data_orphans.py", "Python", "hotfix", "Removes orphaned hotfix_data registry entries (608K removed)"),
+    ("build_table_info_r3.py", "Python", "hotfix", "Builds table metadata for the redundancy differ"),
+    ("TransmogBridge", "Lua", "transmog", "Client addon \u2014 patches 12.x serializer bug via 3-layer hybrid merge"),
+    ("TransmogSpy", "Lua", "transmog", "Debug addon \u2014 14 event monitors, pre/post state capture (~930 lines)"),
+    ("transmog_debug.py", "Python", "transmog", "Full transmog state debugger \u2014 character DB, outfits, Wago cross-ref"),
+    ("transmog_lookup.py", "Python", "transmog", "DB2 cross-reference for IMA IDs, items, and visual chains"),
+    ("extract_transmog_packets.py", "Python", "packet", "Extracts transmog protocol packets and UPDATE fields from WPP output"),
+    ("opcode_analyzer.py", "Python", "packet", "TrinityCore opcode dictionary + packet capture analyzer (991 opcodes)"),
+    ("start-worldserver.sh", "Shell", "packet", "Session lifecycle manager \u2014 archive, launch, auto-parse, summary"),
+    ("wpp-inspect.sh", "Shell", "packet", "Packet grep tool \u2014 6 search modes (visible, transmog, trace, summary)"),
+    ("wpp-add-build.sh", "Shell", "packet", "Adds new WoW builds to WPP switch statements and rebuilds"),
+    ("WowPacketParser", "C#", "packet", "Locally patched packet decoder for build 66220"),
+    ("wow.tools.local", "C#", "reference", "Self-hosted DB2/DBC browser at localhost"),
+    ("DBC2CSV", "C#", "reference", "DB2-to-CSV converter with 1,315 table definition files"),
+    ("DB2Query", "C#", "reference", "Interactive DB2 query CLI for cross-referencing game data"),
+    ("decode_dbcache.py", "Python", "reference", "Decodes client DBCache.bin for hotfix comparison"),
+    ("xref_dbcache.py", "Python", "reference", "Cross-references client cache against server hotfix database"),
+    ("TACTSharp", "C#", "reference", "Blizzard CASC storage extraction library \u2014 ground truth for DB2"),
+    ("wago_enrich.py", "Python", "reference", "Pre-joins DB2 CSVs into enriched analysis files"),
+    ("enrich_content_tuning.py", "Python", "pipeline", "Zone-based ContentTuningID enrichment for spawned creatures"),
+    ("diff_builds.py", "Python", "reference", "Cross-build differ with Wago export oscillation detection"),
+    ("parse_dberrors.py", "Python", "build", "Categorizes DB error log entries by type with counts"),
+    ("db_snapshot.py", "Python", "build", "Database snapshot and comparison tool"),
+    ("wago_db2_server.py", "Python", "build", "MCP server \u2014 gives Claude direct access to 1,097 DB2 tables"),
+    ("SOAP interface", "HTTP", "build", "Remote GM commands without in-game login"),
+]
+
+TOOL_CATEGORIES = [
+    ("all", "All"),
+    ("pipeline", "Pipeline"),
+    ("audit", "Audit"),
+    ("hotfix", "Hotfix"),
+    ("transmog", "Transmog"),
+    ("packet", "Packet"),
+    ("reference", "Reference"),
+    ("scraper", "Scraper"),
+    ("build", "Build & Ops"),
+]
+
+def build_tool_explorer():
+    chips = ''.join(
+        f'<button class="tool-chip{" active" if cat == "all" else ""}" data-cat="{cat}">{label}</button>'
+        for cat, label in TOOL_CATEGORIES
+    )
+    lang_class = {"Python": "python", "Shell": "shell", "Lua": "lua", "C#": "csharp", "SQL": "sql", "HTTP": "http"}
+    cards = ''.join(
+        f'<div class="tool-card" data-name="{name.lower()}" data-cat="{cat}" data-desc="{desc.lower()}">'
+        f'<div class="tool-card-name">{name}</div>'
+        f'<div class="tool-card-desc">{desc}</div>'
+        f'<div class="tool-card-meta"><span class="tool-lang {lang_class.get(lang, "")}">{lang}</span></div>'
+        f'</div>'
+        for name, lang, cat, desc in TOOL_DATA
+    )
+    return (
+        f'<div class="tool-explorer">'
+        f'<input type="text" class="tool-search" placeholder="Search tools..." autocomplete="off">'
+        f'<div class="tool-chips">{chips}</div>'
+        f'<div class="tool-grid">{cards}</div>'
+        f'<div class="tool-count">{len(TOOL_DATA)} of {len(TOOL_DATA)} tools</div>'
+        f'</div>'
+    )
+
+TOOL_EXPLORER_HTML = build_tool_explorer()
 
 # ── Markdown to HTML ──────────────────────────────────────────────────────────
 
@@ -609,6 +749,7 @@ def base_page(title, body, current_slug=None):
 <style>{CSS}</style>
 </head>
 <body>
+<div class="scroll-progress"></div>
 {nav_html(current_slug)}
 {body}
 {BACK_TO_TOP}
@@ -654,6 +795,7 @@ def build_index():
 
     body = f'''<main>
 <div class="hero-wrap">
+<div class="hero-particles" aria-hidden="true"></div>
 <section class="hero reveal">
 <p class="hero-label">WoW 12.x / Midnight</p>
 <h1>VoxCore</h1>
@@ -702,14 +844,14 @@ def build_index():
 </section>
 
 <div class="built-with reveal">
-<span>C++</span><span class="bw-dot">&middot;</span>
-<span>Python</span><span class="bw-dot">&middot;</span>
-<span>MySQL</span><span class="bw-dot">&middot;</span>
-<span>Lua</span><span class="bw-dot">&middot;</span>
-<span>Claude Code</span><span class="bw-dot">&middot;</span>
-<span>CMake</span><span class="bw-dot">&middot;</span>
-<span>Ninja</span><span class="bw-dot">&middot;</span>
-<span>Git</span>
+<a href="https://isocpp.org/" target="_blank" rel="noopener">C++</a><span class="bw-dot">&middot;</span>
+<a href="https://www.python.org/" target="_blank" rel="noopener">Python</a><span class="bw-dot">&middot;</span>
+<a href="https://www.mysql.com/" target="_blank" rel="noopener">MySQL</a><span class="bw-dot">&middot;</span>
+<a href="https://www.lua.org/" target="_blank" rel="noopener">Lua</a><span class="bw-dot">&middot;</span>
+<a href="https://docs.anthropic.com/en/docs/claude-code" target="_blank" rel="noopener">Claude Code</a><span class="bw-dot">&middot;</span>
+<a href="https://cmake.org/" target="_blank" rel="noopener">CMake</a><span class="bw-dot">&middot;</span>
+<a href="https://ninja-build.org/" target="_blank" rel="noopener">Ninja</a><span class="bw-dot">&middot;</span>
+<a href="https://git-scm.com/" target="_blank" rel="noopener">Git</a>
 </div>
 </main>'''
 
@@ -731,6 +873,10 @@ def build_feature_page(page):
         extra_top = ARCH_SVG
     elif page['slug'] == 'pipeline':
         extra_top = PIPELINE_SVG
+    elif page['slug'] == 'hotfix-audit':
+        extra_top = FUNNEL_VIZ
+    elif page['slug'] == 'tooling':
+        extra_top = TOOL_EXPLORER_HTML
 
     body = f'''<main>
 <header class="page-header">
