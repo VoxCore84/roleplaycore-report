@@ -62,7 +62,7 @@ With 1.08M hotfix_data rows (966K unique push IDs), the server crashed on client
 
 Relevant to any TC server running large hotfix datasets. Without it, 1M+ hotfix_data rows crash the server.
 
-> **Post-audit update**: The redundancy audit ([Part 13](#part-13-hotfix-redundancy-audit-complete)) reduced hotfix content tables from ~10.8M to ~244K rows and hotfix_data from 1.08M to ~835K entries. The chunked delivery system remains as a safety net, but the payload is now well within original limits.
+> **Post-audit update**: The redundancy audit ([Part 13](hotfix-audit)) reduced hotfix content tables from ~10.8M to ~244K rows and hotfix_data from 1.08M to ~835K entries. The chunked delivery system remains as a safety net, but the payload is now well within original limits.
 
 ### 7.5 Memory Leak Fixes
 

@@ -7,10 +7,10 @@ nav_order: 9
 
 ### 13.1 The Problem
 
-After the hotfix repair ([Part 2](#part-2-hotfix-repair-system)), the hotfix database carried **~10.8M content rows** across 517 tables. The hotfix system sends only **corrections** to client data — rows that override the client's built-in DBC/DB2 files. But 97.8% of those rows were **identical** to what the client already had. This:
+After the hotfix repair ([Part 2](data-import#part-2-hotfix-repair-system)), the hotfix database carried **~10.8M content rows** across 517 tables. The hotfix system sends only **corrections** to client data — rows that override the client's built-in DBC/DB2 files. But 97.8% of those rows were **identical** to what the client already had. This:
 
 - Increased login time (every hotfix entry sent via SMSG_HOTFIX_CONNECT)
-- Required chunked packet delivery ([Part 7.4](#74-hotfix-pipeline-crash-fix-critical)) just to avoid crashing
+- Required chunked packet delivery ([Part 7.4](performance#74-hotfix-pipeline-crash-fix-critical)) just to avoid crashing
 - Wasted server memory caching duplicate data
 
 ### 13.2 Approach: 3-Round Audit
