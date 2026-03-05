@@ -6,8 +6,11 @@ import os
 import shutil
 
 SCRIPT_BLOCK = """<script>
+// Scroll reveal
 const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible')}),{threshold:0.1,rootMargin:'0px 0px -50px 0px'});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// Count-up animation
 document.querySelectorAll('[data-countup]').forEach(el=>{
 const o=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){animate(el,el.getAttribute('data-countup'));o.unobserve(el)}}),{threshold:0.5});
 o.observe(el);
@@ -20,6 +23,15 @@ const p=Math.min((now-start)/1500,1),e=1-Math.pow(1-p,3),c=num*e;
 let d=hasDot?c.toFixed(1):num>=1000?Math.floor(c).toLocaleString():Math.floor(c).toString();
 el.textContent=pfx+d+sfx;if(p<1)requestAnimationFrame(up)}
 requestAnimationFrame(up)}
+
+// Nav dropdown
+const toggle=document.getElementById('nav-toggle');
+const dropdown=document.getElementById('nav-dropdown');
+if(toggle&&dropdown){
+toggle.addEventListener('click',e=>{e.stopPropagation();dropdown.classList.toggle('open')});
+document.addEventListener('click',()=>dropdown.classList.remove('open'));
+dropdown.addEventListener('click',e=>e.stopPropagation());
+}
 </script>"""
 
 SITE_DIR = os.path.join(os.path.dirname(__file__), "site")
@@ -320,8 +332,8 @@ def style_tables_in_html(html):
 
 
 def base_html(title, body, is_index=False):
-    nav_links = ''.join(
-        f'<a href="{p["slug"]}.html" class="text-white/50 hover:text-amber-400 transition-colors text-sm whitespace-nowrap">{p["title"]}</a>'
+    nav_items = ''.join(
+        f'<a href="{p["slug"]}.html" class="block px-4 py-2.5 text-sm text-white/60 hover:text-amber-400 hover:bg-white/[0.03] transition-colors rounded-lg">{p["parts"]} &mdash; {p["title"]}</a>'
         for p in PAGES
     )
     back = '' if is_index else '<a href="index.html" class="inline-flex items-center gap-2 text-amber-400/70 hover:text-amber-400 transition-colors text-sm mb-8"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>Back to Overview</a>'
@@ -346,6 +358,8 @@ h1,h2,h3,h4,h5,h6 {{ font-family: 'Clash Display', 'Satoshi', system-ui, sans-se
 .reveal.visible {{ opacity: 1; transform: translateY(0); }}
 .nav-card {{ transition: all 0.3s ease; }}
 .nav-card:hover {{ transform: translateY(-2px); box-shadow: 0 8px 30px rgba(245,158,11,0.08); border-color: rgba(245,158,11,0.3); }}
+.nav-dropdown {{ opacity: 0; transform: translateY(-8px); pointer-events: none; transition: opacity 0.2s ease, transform 0.2s ease; }}
+.nav-dropdown.open {{ opacity: 1; transform: translateY(0); pointer-events: auto; }}
 details summary::-webkit-details-marker {{ display: none; }}
 details summary {{ list-style: none; }}
 ::-webkit-scrollbar {{ width: 8px; }}
@@ -358,12 +372,21 @@ details summary {{ list-style: none; }}
 <nav class="glass-nav fixed top-0 left-0 right-0 z-50">
 <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
 <a href="index.html" class="text-lg font-semibold tracking-tight" style="font-family:'Clash Display',sans-serif"><span class="text-amber-400">Roleplay</span><span class="text-white/90">Core</span></a>
-<div class="hidden lg:flex items-center gap-5 overflow-x-auto">{nav_links}</div>
-<button onclick="document.getElementById('mm').classList.toggle('hidden')" class="lg:hidden text-white/60 hover:text-white">
-<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+<div class="flex items-center gap-4">
+<a href="https://github.com/VoxCore84/roleplaycore-report" class="text-white/40 hover:text-white/70 transition-colors" aria-label="GitHub">
+<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+</a>
+<div class="relative">
+<button id="nav-toggle" class="flex items-center gap-2 text-sm text-white/60 hover:text-white/90 transition-colors px-3 py-1.5 rounded-lg border border-white/10 hover:border-white/20">
+<span>Sections</span>
+<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
 </button>
+<div id="nav-dropdown" class="nav-dropdown absolute right-0 top-full mt-2 w-72 py-2 rounded-xl border border-white/10 bg-[#0a0a0b]/95 backdrop-blur-xl shadow-2xl shadow-black/50">
+{nav_items}
 </div>
-<div id="mm" class="hidden lg:hidden px-6 pb-4 flex flex-col gap-3">{nav_links}</div>
+</div>
+</div>
+</div>
 </nav>
 <main class="max-w-4xl mx-auto px-6 pt-24 pb-20">{back}{body}</main>
 <footer class="border-t border-white/5 mt-20">
