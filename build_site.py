@@ -80,10 +80,8 @@ EXEC_GROUPS = [
         ("Quest chain links", "21,758 updates"),
         ("Quest POI/objectives", "2,880 POI + 5,199 pts + 633 obj"),
     ]),
-    ("Data Corrected", [
-        ("NPC fixes", "78,475 total"),
-    ]),
-    ("Data Cleaned", [
+    ("Corrected & Cleaned", [
+        ("NPC fixes (audit + Wowhead)", "78,475 corrections"),
         ("Hotfix redundancy audit", "10.6M rows removed (97.8%)"),
         ("Pre-existing dead rows", "~412,000"),
         ("Duplicate loot rows", "193,542"),
@@ -332,8 +330,17 @@ def style_tables_in_html(html):
 
 
 def base_html(title, body, is_index=False):
+    def nav_num(parts_str):
+        """Extract just the number portion for the nav badge."""
+        s = parts_str.replace("Parts ", "").replace("Part ", "")
+        if "," in s:
+            s = s.split(",")[0]  # "15–16, Appendices" → "15–16"
+        return s
+
     nav_items = ''.join(
-        f'<a href="{p["slug"]}.html" class="block px-4 py-2.5 text-sm text-white/60 hover:text-amber-400 hover:bg-white/[0.03] transition-colors rounded-lg">{p["parts"]} &mdash; {p["title"]}</a>'
+        f'<a href="{p["slug"]}.html" class="flex items-center gap-3 px-3 py-2.5 text-sm hover:bg-white/[0.04] transition-colors rounded-lg group">'
+        f'<span class="w-10 shrink-0 text-[11px] font-medium text-amber-400/50 group-hover:text-amber-400 tabular-nums text-right">{nav_num(p["parts"])}</span>'
+        f'<span class="text-white/60 group-hover:text-white/90 transition-colors">{p["title"]}</span></a>'
         for p in PAGES
     )
     back = '' if is_index else '<a href="index.html" class="inline-flex items-center gap-2 text-amber-400/70 hover:text-amber-400 transition-colors text-sm mb-8"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>Back to Overview</a>'
@@ -381,7 +388,7 @@ details summary {{ list-style: none; }}
 <span>Sections</span>
 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
 </button>
-<div id="nav-dropdown" class="nav-dropdown absolute right-0 top-full mt-2 w-72 py-2 rounded-xl border border-white/10 bg-[#0a0a0b]/95 backdrop-blur-xl shadow-2xl shadow-black/50">
+<div id="nav-dropdown" class="nav-dropdown absolute right-0 top-full mt-2 w-80 p-2 rounded-2xl border border-white/10 bg-[#141415]/95 backdrop-blur-2xl shadow-2xl shadow-black/60">
 {nav_items}
 </div>
 </div>
