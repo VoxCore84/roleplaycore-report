@@ -28,6 +28,6 @@ TC's ByteBuffer asserts at 100MB. With 1M+ hotfix_data rows, SMSG_HOTFIX_CONNECT
 LW import places old-framework quest boards (entries 206294/206116) at exact coordinates of modern boards. The old boards may be the ones actually serving quests (via `gameobject_queststarter`), while modern boards have zero associations. Deleting the "duplicate" breaks quest functionality. Always check quest associations first.
 
 ### 14.9 Hotfix Redundancy Is the Norm
-97.8% of TC hotfix content rows were identical to the client's DBC baseline. Likely representative of any TC server that has run repair tools or imported LW hotfix data. The hotfix system is for corrections, not duplication. Any TC server can dramatically improve login speed by running a similar audit. Tools are in the RoleplayCore repo.
+97.8% of TC hotfix content rows were identical to the client's DBC baseline. Likely representative of any TC server that has run repair tools or imported LW hotfix data. The hotfix system is for corrections, not duplication. Any TC server can dramatically improve login speed by running a similar audit. Tools are in the VoxCore repo.
 
 ---

@@ -213,7 +213,7 @@ All scripts version-controlled in private GitHub repositories.
 
 ---
 
-*Updated March 5, 2026 | RoleplayCore — VoxCore84/RoleplayCore*
+*Updated March 5, 2026 | VoxCore — VoxCore84*
 *Tools: VoxCore84/wago-tooling, VoxCore84/tc-packet-tools, VoxCore84/code-intel, VoxCore84/trinitycore-claude-skills*
 
 ---

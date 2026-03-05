@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the RoleplayCore Report static site from markdown content."""
+"""Build the VoxCore Report static site from markdown content."""
 
 import re
 import os
@@ -343,8 +343,8 @@ def base_html(title, body, is_index=False):
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{title} — RoleplayCore</title>
-<meta name="description" content="RoleplayCore Database Report — Data Quality & Optimization Summary">
+<title>{title} — VoxCore</title>
+<meta name="description" content="VoxCore Database Report — Data Quality & Optimization Summary">
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://api.fontshare.com">
 <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400;500;600;700&f[]=satoshi@400;500;700&display=swap" rel="stylesheet">
@@ -371,7 +371,7 @@ details summary {{ list-style: none; }}
 <body class="min-h-screen">
 <nav class="glass-nav fixed top-0 left-0 right-0 z-50">
 <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-<a href="index.html" class="text-lg font-semibold tracking-tight" style="font-family:'Clash Display',sans-serif"><span class="text-amber-400">Roleplay</span><span class="text-white/90">Core</span></a>
+<a href="index.html" class="text-lg font-semibold tracking-tight" style="font-family:'Clash Display',sans-serif"><span class="text-amber-400">Vox</span><span class="text-white/90">Core</span></a>
 <div class="flex items-center gap-4">
 <a href="https://github.com/VoxCore84/roleplaycore-report" class="text-white/40 hover:text-white/70 transition-colors" aria-label="GitHub">
 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
@@ -391,7 +391,7 @@ details summary {{ list-style: none; }}
 <main class="max-w-4xl mx-auto px-6 pt-24 pb-20">{back}{body}</main>
 <footer class="border-t border-white/5 mt-20">
 <div class="max-w-6xl mx-auto px-6 py-12 flex flex-col md:flex-row items-center justify-between gap-4">
-<div class="text-white/30 text-sm"><span class="text-amber-400/60">RoleplayCore</span> &mdash; March 2026 &mdash; VoxCore84</div>
+<div class="text-white/30 text-sm"><span class="text-amber-400/60">VoxCore</span> &mdash; March 2026 &mdash; VoxCore84</div>
 <div class="flex gap-6 text-white/30 text-sm">
 <a href="https://github.com/VoxCore84/roleplaycore-report" class="hover:text-amber-400 transition-colors">GitHub</a>
 <a href="reference.html" class="hover:text-amber-400 transition-colors">Reference</a>
@@ -430,7 +430,7 @@ def build_index():
     body = f'''
 <div class="text-center pt-16 pb-12 reveal">
 <p class="text-amber-400/60 text-sm font-semibold uppercase tracking-[0.2em] mb-4">Database Report</p>
-<h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-4" style="font-family:'Clash Display',sans-serif"><span class="text-white">Roleplay</span><span class="text-amber-400">Core</span></h1>
+<h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-4" style="font-family:'Clash Display',sans-serif"><span class="text-white">Vox</span><span class="text-amber-400">Core</span></h1>
 <p class="text-white/50 text-lg max-w-xl mx-auto mb-2">Data Quality & Optimization Summary</p>
 <p class="text-white/30 text-sm">Prepared for CaptainCore (LoreWalkerTDB) &middot; March 2026 &middot; WoW 12.x Midnight &middot; Build 66220</p>
 </div>
@@ -442,7 +442,7 @@ def build_index():
 </div></div></div>
 <section class="my-20 reveal">
 <h2 class="text-3xl font-bold tracking-tight mb-3" style="font-family:'Clash Display',sans-serif">Executive Summary</h2>
-<p class="text-white/50 text-sm mb-8">Over February\u2013March 2026, RoleplayCore imported, validated, and repaired data from four major sources, performed multi-pass audits across all five databases, and built a Python tooling pipeline to make the process repeatable.</p>
+<p class="text-white/50 text-sm mb-8">Over February\u2013March 2026, VoxCore imported, validated, and repaired data from four major sources, performed multi-pass audits across all five databases, and built a Python tooling pipeline to make the process repeatable.</p>
 <div class="grid md:grid-cols-2 gap-4">{exec_html}</div>
 </section>
 <section class="my-20">

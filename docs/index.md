@@ -14,7 +14,7 @@ hide:
 .stat-card .label { font-size: 0.85em; opacity: 0.7; margin-top: 0.3em; display: block; }
 </style>
 
-# RoleplayCore Database Report
+# VoxCore Database Report
 
 <p class="hero-sub">Data Quality & Optimization Summary</p>
 <p class="hero-meta">Prepared for CaptainCore (LoreWalkerTDB) · March 2026 · WoW 12.x Midnight · Build 66220</p>
@@ -60,7 +60,7 @@ hide:
 
 ## Executive Summary
 
-Over February–March 2026, RoleplayCore imported, validated, and repaired data from **four major sources** (LoreWalkerTDB, Wago DB2, Raidbots, and Wowhead), performed multi-pass audits across all five databases, and built a Python tooling pipeline to make the process repeatable.
+Over February–March 2026, VoxCore imported, validated, and repaired data from **four major sources** (LoreWalkerTDB, Wago DB2, Raidbots, and Wowhead), performed multi-pass audits across all five databases, and built a Python tooling pipeline to make the process repeatable.
 
 ### By the Numbers
 

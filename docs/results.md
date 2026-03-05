@@ -131,7 +131,7 @@ Over 50 Python scripts, MCP servers, audit tools, and SQL generators were built 
 **Collaboration opportunities:**
 - `fix_column_mismatch.py` and `validate_import.py` could help anyone consuming LW data
 - The hotfix repair system is build-agnostic — works for any TC hotfix database
-- The hotfix redundancy audit tools are in the RoleplayCore repo (`hotfix_audit/`)
+- The hotfix redundancy audit tools are in the VoxCore repo (`hotfix_audit/`)
 - If LW added composite PKs to loot tables, it would prevent the INSERT IGNORE duplication trap for all consumers
 
 ---

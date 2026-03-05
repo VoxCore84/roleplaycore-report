@@ -3,7 +3,7 @@
 
 ### 1.1 Hotfixes Import
 
-LoreWalkerTDB's `hotfixes.sql` (322MB) was parsed and selectively imported. Blind import wasn't possible — RoleplayCore has custom entries (e.g., `broadcast_text` entries at 999999997+, custom `chr_customization_choice` data).
+LoreWalkerTDB's `hotfixes.sql` (322MB) was parsed and selectively imported. Blind import wasn't possible — VoxCore has custom entries (e.g., `broadcast_text` entries at 999999997+, custom `chr_customization_choice` data).
 
 **Key gains:**
 
