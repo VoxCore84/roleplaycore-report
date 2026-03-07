@@ -17,7 +17,7 @@ hide:
 # VoxCore Database Report
 
 <p class="hero-sub">Data Quality & Optimization Summary</p>
-<p class="hero-meta">Prepared for CaptainCore (LoreWalkerTDB) · March 2026 · WoW 12.x Midnight · Build 66263</p>
+<p class="hero-meta">Prepared for CaptainCore (LoreWalkerTDB) · March 7, 2026 · WoW 12.x Midnight · Build 66263</p>
 
 <div class="stat-grid">
 <div class="stat-card"><span class="num">~1M</span><span class="label">rows imported from LoreWalkerTDB</span></div>
@@ -60,7 +60,7 @@ hide:
 
 ## Executive Summary
 
-Over February–March 2026, VoxCore imported, validated, and repaired data from **four major sources** (LoreWalkerTDB, Wago DB2, Raidbots, and Wowhead), performed multi-pass audits across all five databases, and built a Python tooling pipeline to make the process repeatable.
+Over February–March 7, 2026, VoxCore imported, validated, and repaired data from **four major sources** (LoreWalkerTDB, Wago DB2, Raidbots, and Wowhead), performed multi-pass audits across all five databases, and built a Python tooling pipeline to make the process repeatable.
 
 ### By the Numbers
 

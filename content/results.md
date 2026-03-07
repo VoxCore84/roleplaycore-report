@@ -22,37 +22,39 @@ Over 75 Python scripts, MCP servers, audit tools, and SQL generators were built 
 
 ## Part 11: Final Database State
 
-### 11.1 Table Counts (March 5, 2026)
+### 11.1 Table Counts (March 7, 2026)
 
-**World database:**
-
-| Table | Rows | Notes |
-|-------|------|-------|
-| creature | 665,776 | NPC spawn instances |
-| gameobject | 175,368 | World object spawn instances |
-| creature_loot_template | 2,904,341 | NPC loot tables (deduplicated, with PKs) |
-| smart_scripts | 294,416 | NPC AI behavior scripts (validated — see [Section 6.3](database-cleanup.md#63-post-import-cleanup-47478-rows)) |
-| npc_vendor | 173,855 | Vendor inventory entries |
-| waypoint_path_node | 130,654 | NPC patrol path nodes (30K orphans removed) |
-| quest_template_addon | 47,164 | Quest chain/config data (+3,081 ATT chain links) |
-| quest_poi | 134,856 | Quest map markers |
-| quest_poi_points | 292,977 | Quest map marker geometry |
-| quest_objectives | 60,199 | Quest objective definitions |
-
-**Hotfixes database (post-audit):**
+**World database (1,054 MB):**
 
 | Table | Rows | Notes |
 |-------|------|-------|
-| hotfix_data | 227,377 | Client correction registry |
-| broadcast_text | 224,233 | TC community + custom text entries |
-| hotfix_blob | 6,766 | Binary hotfix data |
-| phase | 5,714 | Phase definitions |
-| chr_customization_choice | 2,837 | Custom character options |
-| broadcast_text_duration | 1,593 | Text timing data |
-| item_sparse | 1,418 | Custom/override item data |
-| spell_item_enchantment | 1,181 | Enchant effect overrides |
-| spell_effect | 176 | Spell effect overrides |
-| spell_name | 15 | Custom/override spell entries |
+| creature_template | 225,968 | NPC template definitions |
+| creature | 611,359 | NPC spawn instances |
+| creature_template_difficulty | 532,346 | Difficulty scaling (0 missing DifficultyID=0) |
+| creature_template_spell | 171,590 | NPC spell assignments |
+| smart_scripts | 286,436 | NPC AI behavior scripts |
+| gameobject | 188,069 | World object spawn instances |
+| npc_vendor | 174,364 | Vendor inventory entries |
+| quest_template | 47,536 | Quest definitions |
+| quest_poi | 133,026 | Quest map markers |
+| creature_queststarter | 30,659 | Quest givers |
+| creature_questender | 37,698 | Quest turn-ins |
+| trainer_spell | 40,305 | Trainer spell offerings |
+| spell_script_names | 5,467 | C++ spell script bindings |
+| serverside_spell | 4,503 | Custom serverside spells |
+| conditions | 25,566 | Conditional logic entries |
+| creature_text | 52,700 | NPC dialogue/yell text |
+
+**Hotfixes database (273 MB):**
+
+| Table | Rows | Notes |
+|-------|------|-------|
+| spell_misc | 403,631 | Spell metadata |
+| spell_name | 400,104 | Spell name registry |
+| broadcast_text | 234,089 | TC community + custom text entries |
+| item_sparse | 175,670 | Item data (full + overrides) |
+| hotfix_blob | 60,471 | Binary hotfix data |
+| hotfix_data | 22,532 | Client correction registry |
 
 \!\!\! note
     Most hotfix tables (spell_name, spell_effect, creature_display_info, content_tuning, area_table, etc.) were nearly emptied by the redundancy audit — their data matched the client's DBC baseline and was unnecessary. The tables above show only genuine overrides and custom content. Pre-audit counts were 10-1,000x larger (see [Part 2.3](data-import.md#23-results-build-66220--march-3-2026)).
@@ -66,13 +68,13 @@ Over 75 Python scripts, MCP servers, audit tools, and SQL generators were built 
 
 ### 11.2 Database Sizes
 
-| Database | Tables | Size |
-|----------|--------|------|
-| world | 259 | 1,267 MB |
-| hotfixes | 517 | 535 MB |
-| characters | 151 | 7.6 MB |
-| auth | 50 | 1.9 MB |
-| roleplay | 5 | 0.1 MB |
+| Database | Size |
+|----------|------|
+| world | 1,054 MB |
+| hotfixes | 273 MB |
+| characters | 4 MB |
+| auth | 1.2 MB |
+| roleplay | 0.1 MB |
 
 ---
 

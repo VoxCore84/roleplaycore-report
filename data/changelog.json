@@ -1,8 +1,10 @@
 [
+  {"date": "Mar 7", "title": "Documentation & SQL Audit", "summary": "Doc audit (20 to 13 files), SQL directory audit (12 issues fixed, 19K old TDB files pruned from git)"},
+  {"date": "Mar 7", "title": "Spell Audit Pipeline", "summary": "1,842 C++ stubs, 114 serverside stubs, 18 proc entries, 1,888 script names generated for all 13 classes"},
+  {"date": "Mar 7", "title": "Grand Consolidation QA", "summary": "200+ old path refs fixed, memory files consolidated (28 to 23), .gitignore updated, GitHub repo/gists cleaned"},
+  {"date": "Mar 6", "title": "Grand Consolidation", "summary": "Moved everything to ~/VoxCore/, organized personal docs, rebuilt all paths"},
+  {"date": "Mar 6", "title": "Windows Performance Tuning", "summary": "30+ registry tweaks — Hyper-V/VBS off, Spectre mitigations off, NVIDIA MSI, GameDVR off, timer 0.5ms"},
   {"date": "Mar 5", "title": "Arcane Codex Visual Overhaul", "summary": "Dark-only arcane theme, Tool Explorer (54 tools/9 chips), pipeline animation, reduction funnel, scroll progress, achievement toasts"},
-  {"date": "Mar 5", "title": "Transmog Audit Complete", "summary": "5-phase audit \u2014 26/26 items across Bridge/Spy/Server/Player.cpp. All 5 bugs fixed, system ready for testing"},
-  {"date": "Mar 5", "title": "BtWQuests + Gap Scrape", "summary": "1,062 quest starters from BtWQuests addon, 8,799 vendor items + 592 quest starters from Wowhead gap scrape"},
-  {"date": "Mar 5", "title": "Quest Reward Text Import", "summary": "30-worker Tor scraper \u2014 13,494 quest_offer_reward + 6,792 quest_request_items rows from Wowhead"},
-  {"date": "Mar 5", "title": "Midnight Expansion Data", "summary": "38 guide + 586 entity pages scraped \u2014 58 starters, 60 enders, 819 loot entries, 526 boss abilities"},
+  {"date": "Mar 5", "title": "Transmog Audit Complete", "summary": "5-phase audit — 26/26 items across Bridge/Spy/Server/Player.cpp. All 5 bugs fixed, system ready for testing"},
   {"date": "Mar 5", "title": "Build 66263 + High-Tier Spawns", "summary": "New client build, 1,094 DB2 tables extracted. 1,492 high-tier service NPC spawns deployed"}
 ]

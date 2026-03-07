@@ -4,21 +4,35 @@ Current state of the VoxCore project — database health, recent activity, and o
 
 ## Database Health
 
-### Size & Row Counts (March 5, 2026)
+### Size & Row Counts (March 7, 2026)
 
-| Database | Tables | Size | Key Table | Rows |
-|----------|--------|------|-----------|------|
-| **world** | 259 | 1,267 MB | creature | 665,776 |
-| | | | smart_scripts | 294,416 |
-| | | | creature_loot_template | 2,904,341 |
-| | | | npc_vendor | 173,855 |
-| | | | quest_template_addon | 47,164 |
-| **hotfixes** | 517 | 535 MB | hotfix_data | 227,377 |
-| | | | broadcast_text | 224,233 |
-| | | | item_sparse | 1,418 |
-| **characters** | 151 | 7.6 MB | | |
-| **auth** | 50 | 1.9 MB | | |
-| **roleplay** | 5 | 0.1 MB | | |
+| Database | Size | Key Table | Rows |
+|----------|------|-----------|------|
+| **world** | 1,054 MB | creature_template | 225,968 |
+| | | creature | 611,359 |
+| | | creature_template_difficulty | 532,346 |
+| | | creature_template_spell | 171,590 |
+| | | smart_scripts | 286,436 |
+| | | gameobject | 188,069 |
+| | | npc_vendor | 174,364 |
+| | | quest_template | 47,536 |
+| | | quest_poi | 133,026 |
+| | | creature_queststarter | 30,659 |
+| | | creature_questender | 37,698 |
+| | | trainer_spell | 40,305 |
+| | | spell_script_names | 5,467 |
+| | | serverside_spell | 4,503 |
+| | | conditions | 25,566 |
+| | | creature_text | 52,700 |
+| **hotfixes** | 273 MB | spell_name | 400,104 |
+| | | spell_misc | 403,631 |
+| | | broadcast_text | 234,089 |
+| | | item_sparse | 175,670 |
+| | | hotfix_blob | 60,471 |
+| | | hotfix_data | 22,532 |
+| **characters** | 4 MB | | |
+| **auth** | 1.2 MB | | |
+| **roleplay** | 0.1 MB | | |
 
 ### Data Quality Indicators
 
@@ -27,11 +41,12 @@ Current state of the VoxCore project — database health, recent activity, and o
 | Hotfix redundancy | Clean | 97.8% redundant rows removed (10.6M to 244K) |
 | SmartAI integrity | Clean | 0 orphans (5,894 cleared, 181 GUID-based restored) |
 | ContentTuningID coverage | 98% | 4,820 of 4,918 spawned CT=0 creatures enriched |
-| DifficultyID=0 coverage | 100% | 26,745 missing Diff0 rows filled |
+| DifficultyID=0 coverage | 100% | 0 missing DifficultyID=0 rows (532,346 total) |
 | Broadcast text coverage | 100% | 393 missing entries filled from Wago DB2 |
 | Hotfix_data orphans | Clean | 608K orphaned entries removed |
 | Loot table PKs | Enforced | 193K pre-existing duplicates removed |
 | NPC model validation | Clean | 78,475 corrections applied |
+| SQL updates | Current | All 212 SQL files applied |
 
 ---
 
@@ -39,16 +54,28 @@ Current state of the VoxCore project — database health, recent activity, and o
 
 | # | Date | Focus | Key Result |
 |---|------|-------|------------|
+| 91 | Mar 7 | Doc Audit | doc/ 20 to 13 files, deleted 7 obsolete, fixed mojibake DB report |
+| 90 | Mar 7 | SQL Directory Audit | 12 issues fixed, pruned 19,416 old TDB files from git (3.8 GB) |
+| 88 | Mar 7 | Spell Audit Pipeline | 1,842 C++ stubs + SQL for all 13 classes, 3 classification bugs fixed |
+| 86 | Mar 7 | Grand Consolidation QA | 200+ old path refs fixed, memory files consolidated, GitHub cleaned |
+| 85 | Mar 6 | Grand Consolidation | Moved everything to ~/VoxCore/, organized personal docs, rebuilt |
+| 84 | Mar 6 | Windows Performance Tuning | 30+ registry tweaks, NVIDIA App config, system hardened |
 | 64 | Mar 5 | Build 66263 | New client build, 1,094 DB2 tables extracted, 1,492 high-tier spawns |
 | 63 | Mar 5 | Transmog Audit | 5-phase audit — 26/26 items across Bridge/Spy/Server/Player.cpp |
 | 62 | Mar 5 | Gap Scrape | 8,799 vendor items + 592 quest starters from Wowhead |
 | 61 | Mar 5 | Quest Reward Text | 30-worker Tor scraper — 13,494 offer_reward + 6,792 request_items |
-| 60 | Mar 5 | Midnight Data | 38 guide + 586 entity pages — 58 starters, 819 loot, 526 abilities |
-| 59 | Mar 5 | Missing Spawns | 3,240 NPCs deployed (quest + service tiers), phase-dupes resolved |
-| 58 | Mar 5 | Website Assets | wow-export pipeline config, 83-asset checklist |
-| 57 | Mar 5 | Arcane Codex | Dark-only arcane theme, Tool Explorer, pipeline animation, toasts |
-| 56 | Mar 5 | BtWQuests Import | 1,062 quest starters from addon, 14,670 chain connections |
-| 55 | Mar 5 | Website QA | Cross-page sidebar, accuracy audit (30/30 verified) |
+
+---
+
+## Project Metrics
+
+| Metric | Value |
+|--------|-------|
+| Commits this week | 154 |
+| Total sessions | 99 |
+| Build config | RelWithDebInfo (current) |
+| Custom slash commands | 19 |
+| SQL files applied | 212 |
 
 ---
 
@@ -68,6 +95,10 @@ Current state of the VoxCore project — database health, recent activity, and o
 
 ### COMPLETED (since last update)
 
+- Spell Audit Pipeline — 1,842 C++ stubs, 114 serverside stubs, 18 proc entries generated
+- Doc Audit — doc/ cleaned from 20 to 13 files
+- SQL Directory Audit — 12 issues fixed, 19K old TDB files pruned (3.8 GB saved)
+- Grand Consolidation — all paths moved to ~/VoxCore/, 200+ refs updated
 - Missing Spawns High Tier — 1,492 service NPC spawns deployed
 - Quest Reward Text Scrape — 13,494 offer_reward + 6,792 request_items imported
 - Transmog 5-Phase Audit — 26/26 items fixed across 4 source files
@@ -77,13 +108,13 @@ Current state of the VoxCore project — database health, recent activity, and o
 
 ## Repository Activity
 
-| Repository | Latest Commit | Recent Work |
-|-----------|--------------|-------------|
-| VoxCore84/RoleplayCore | `fcf1cf2738` | Phase-duplicate spawn fix, transmog audit |
-| VoxCore84/wago-tooling | `966e0eb` | Midnight scraper, gap scrape, ATT mega-parser |
-| VoxCore84/tc-packet-tools | `821e74f` | WPP script hardening |
-| VoxCore84/roleplaycore-report | latest | Arcane Codex visual overhaul, data accuracy audit |
-| VoxCore84/trinitycore-claude-skills | `25967f7` | 17 custom slash commands |
+| Repository | Recent Work |
+|-----------|-------------|
+| VoxCore84/RoleplayCore | Spell audit pipeline, doc/SQL audit, desktop shortcuts, code quality pass |
+| VoxCore84/wago-tooling | Midnight scraper, gap scrape, ATT mega-parser |
+| VoxCore84/tc-packet-tools | WPP script hardening |
+| VoxCore84/roleplaycore-report | Data update — March 7, 2026 |
+| VoxCore84/trinitycore-claude-skills | 19 custom slash commands |
 
 ---
 
@@ -106,6 +137,6 @@ Current state of the VoxCore project — database health, recent activity, and o
 ## Public Resources
 
 - [Operations Runbook](https://gist.github.com/VoxCore84/84656ef0960c699927e3a555e8248f7b) — 22-section reference for every tool and pipeline
-- [Session Changelog](https://gist.github.com/VoxCore84/4c63baf8154753d2a89475d9a4f5b2cc) — 64+ sessions with commit hashes
+- [Session Changelog](https://gist.github.com/VoxCore84/4c63baf8154753d2a89475d9a4f5b2cc) — 99 sessions with commit hashes
 - [Database Report](https://gist.github.com/VoxCore84/528e801b53f6c62ce2e5c2ffe7e63e29) — Full 16-part data quality report
 - [Open Issues](https://gist.github.com/VoxCore84/2b69757faa2a53172c7acb5bfa3ad3c4) — Prioritized issue tracker
